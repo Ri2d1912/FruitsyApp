@@ -4,6 +4,145 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
     tools:context=".CustomerCreateAcc">
+
+    <!-- Header Section with "Create your Account" title -->
+    <LinearLayout
+        android:id="@+id/linearLayoutReg"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/nobackground"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:paddingHorizontal="16dp">
+
+        <!-- Blue line on the left -->
+        <View
+            android:id="@+id/fill"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.15"
+            android:background="#006FFD" />
+
+        <!-- Centered TextView -->
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:gravity="center"
+            android:text="Create your Account"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- CardView containing the form -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="352dp"
+        android:layout_height="468dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayoutReg"
+        app:layout_constraintBottom_toTopOf="@id/linearLayoutBelow"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="28dp"
+        android:backgroundTint="@android:color/white">
+
+        <!-- Inner LinearLayout for organizing UI components inside CardView -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical">
+            <!-- Username Label -->
+            <TextView
+                android:id="@+id/userLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Username"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_gravity="start"/>
+
+            <!-- Username EditText -->
+            <EditText
+                android:id="@+id/editUsername"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:hint="Enter username"
+                android:layout_marginTop="16dp"
+                android:inputType="text"/>
+
+            <!-- Password Label -->
+            <TextView
+                android:id="@+id/passLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Password"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="start"/>
+
+            <!-- Password EditText -->
+            <EditText
+                android:id="@+id/editPassword"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Enter password"
+                android:inputType="textPassword" />
+
+            <TextView
+                android:id="@+id/forgotPasswordLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Forgot Password?"
+                android:textColor="#FFA710"
+                android:textSize="14sp"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="end"
+                android:clickable="true"
+                android:focusable="true" />
+        </LinearLayout>
+
+        <!-- LinearLayout for the "Log In" button positioned at the bottom of the CardView -->
+        <LinearLayout
+            android:id="@+id/linearLayoutBelow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardView"
+            android:layout_marginTop="16dp"
+            android:gravity="center">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnLogin"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="Log In"
+                android:textSize="18sp"
+                android:textAllCaps="false"
+                android:background="@drawable/btnorange"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
