@@ -131,10 +131,6 @@ public class CustomerCreateAcc extends AppCompatActivity {
                 }
             }
         });
-
-
-
-
     }
 
     // Method to replace the fragment in the FrameLayout with the given fragment
