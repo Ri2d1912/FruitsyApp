@@ -57,7 +57,7 @@ android {
     sourceSets {
         main {
             java {
-                srcDirs 'src\\main\\java', 'src\\main\\java\\Model'
+                srcDirs 'src\\main\\java', 'src\\main\\java\\Model', 'src\\main\\java\\RegistrationFragment'
             }
         }
     }

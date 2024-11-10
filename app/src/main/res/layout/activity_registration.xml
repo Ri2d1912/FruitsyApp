@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    tools:context=".Registration">
+
+    <!-- Header Section with "Log In" title -->
+    <LinearLayout
+        android:id="@+id/linearLayoutReg"
+        android:layout_width="138dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/nobackground"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <View
+            android:id="@+id/fill"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:background="#006FFD" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.75"
+            android:gravity="center"
+            android:textColor="#FFFF"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:text="Sign Up" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:padding="32dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCustomerSign"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Customer"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            android:textColor="#FFA710"
+            android:background="@drawable/btnwhite"
+            android:layout_marginTop="24dp"
+            android:layout_gravity="center_horizontal" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnVendorSign"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Fruit Shop Vendor"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            android:textColor="#FFA710"
+            android:background="@drawable/btnwhite"
+            android:layout_marginTop="24dp"
+            android:layout_gravity="center_horizontal" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
