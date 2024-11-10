@@ -1,6 +1,7 @@
 package com.example.fruitidentification.Model;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -177,6 +178,35 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS orders_items");
         db.execSQL("DROP TABLE IF EXISTS shop_reports");
         onCreate(db);
+    }
+
+    // ------------------ Account Data -------------------------------------
+
+    public String getPassword(String username) {
+        // Get a readable database instance to perform the query
+        SQLiteDatabase db = this.getReadableDatabase();
+        String password = null;
+        // Define the SQL query to retrieve the password from the user_account table based on the provided username
+        String query = "SELECT password FROM users WHERE username = ?";
+        // Specify the username as the selection argument for the query
+        String[] selectionArgs = { username };
+        // Execute the raw SQL query
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        try {
+            // Check if the cursor contains any results
+            if (cursor != null && cursor.moveToFirst()) {
+                // Retrieve the password from the cursor
+                password = cursor.getString(0);
+            }
+        } finally {
+            // Close the cursor to release resources
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        // Return the retrieved password, or null if the username was not found in the database
+        return password;
     }
 
 }
