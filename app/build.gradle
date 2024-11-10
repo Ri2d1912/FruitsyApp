@@ -59,6 +59,9 @@ android {
             java {
                 srcDirs 'src\\main\\java', 'src\\main\\java\\Model', 'src\\main\\java\\RegistrationFragment'
             }
+            res {
+                srcDirs 'src\\main\\res', 'src\\main\\res\\CameraLayoutFragment'
+            }
         }
     }
 }
