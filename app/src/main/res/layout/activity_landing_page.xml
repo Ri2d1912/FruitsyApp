@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    tools:context=".LandingPage">
+
+    <ImageView
+        android:id="@+id/fruitLogo"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        app:srcCompat="@drawable/fruitdylogo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="56dp"
+        android:scaleType="centerInside" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/login_btn"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:text="Log in"
+        android:background="@drawable/white_btnbg"
+        android:textColor="#FFA710"
+        android:textAllCaps="false"
+        app:layout_constraintTop_toBottomOf="@id/fruitLogo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/signup_btn"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:text="Sign Up"
+        android:background="@drawable/white_btnbg"
+        android:textColor="#FFA710"
+        android:textAllCaps="false"
+        app:layout_constraintTop_toBottomOf="@id/login_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/guest_btn"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:text="Enter as guest"
+        android:background="@drawable/trans_borderbg"
+        android:textColor="#FFFF"
+        android:textAllCaps="false"
+        app:layout_constraintTop_toBottomOf="@id/signup_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/btnLoginFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/guest_btn"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
