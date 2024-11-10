@@ -1,9 +1,11 @@
 package com.example.fruitidentification.Model;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -207,6 +209,30 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         // Return the retrieved password, or null if the username was not found in the database
         return password;
+    }
+
+    public boolean insertUserInfo(Context context, String username, String firstname, String midname, String surname, String email, byte[] userImage) {
+        // Get a writable database
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            // Prepare the data to be inserted
+            ContentValues cv = new ContentValues();
+            cv.put("username", username);
+            cv.put("firstname", firstname);
+            cv.put("midname", midname);
+            cv.put("surname", surname);
+            cv.put("email", email);
+            cv.put("userImage", userImage);
+            // Insert the data into the table
+            long result = db.insertOrThrow("user_info", null, cv);
+            // If we reach this point, insertion was successful
+            return true;
+        } catch (Exception e) {
+            // Log the error message
+            Toast.makeText(context, "Failed to insert user info: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            // Return false to indicate failure
+            return false;
+        }
     }
 
 }

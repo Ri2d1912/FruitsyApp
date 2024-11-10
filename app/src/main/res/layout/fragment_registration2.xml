@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegistrationFragment.RegistrationFragment2">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="335dp"
+        android:layout_gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/userLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profile picture"
+                android:textColor="#FFA710"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_gravity="start"/>
+
+            <!-- Container for Profile Image and Camera Icon -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="16dp">
+
+                <!-- Profile Image -->
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/profile_userimage"
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
+                    app:shapeAppearanceOverlay="@style/circular"
+                    app:strokeColor="@color/white"
+                    app:strokeWidth="7dp"
+                    android:src="@drawable/upimg"/>
+
+                <!-- Camera Icon below Profile Image, aligned to the right -->
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="-42dp"
+                    android:layout_gravity="end"
+                    app:srcCompat="@drawable/camera"/>
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/userLabelName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textColor="#FFA710"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="start"/>
+
+            <TextView
+                android:id="@+id/userLabelFname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="First Name"
+                android:textColor="#FFA710"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_gravity="start"/>
+
+            <EditText
+                android:id="@+id/editFname"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:hint="Enter your first name"
+                android:inputType="text"
+                android:layout_marginLeft="24dp"/>
+
+            <TextView
+                android:id="@+id/userLabelMname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Middle Name"
+                android:textColor="#FFA710"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_gravity="start"/>
+
+            <EditText
+                android:id="@+id/editMname"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:hint="Enter your middle name"
+                android:inputType="text"
+                android:layout_marginLeft="24dp"/>
+
+            <TextView
+                android:id="@+id/userLabelLname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last Name"
+                android:textColor="#FFA710"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_gravity="start"/>
+
+            <EditText
+                android:id="@+id/editLname"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:hint="Enter your last name"
+                android:inputType="text"
+                android:layout_marginLeft="24dp"/>
+
+            <TextView
+                android:id="@+id/userLabelGender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gender"
+                android:textColor="#FFA710"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="start"/>
+
+            <Spinner
+                android:id="@+id/spinnerGender"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:entries="@array/gender_options"/>
+
+            <TextView
+                android:id="@+id/userLabelBday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Birthday"
+                android:textColor="#FFA710"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="start"/>
+
+            <!-- Birthday Input with Mask -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutBday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editBday"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:hint="MM/DD/YYYY"
+                    android:inputType="date"
+                    android:maxLength="10"
+                    android:importantForAccessibility="yes"
+                    android:contentDescription="Birthday input field"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <TextView
+                android:id="@+id/userLabelAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Address"
+                android:textColor="#FFA710"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="start"/>
+
+            <TextView
+                android:id="@+id/userLabelStreet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Street"
+                android:textColor="#FFA710"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_gravity="start"/>
+
+            <EditText
+                android:id="@+id/editStreet"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:hint="Enter your street"
+                android:inputType="text"
+                android:layout_marginLeft="24dp"/>
+
+            <TextView
+                android:id="@+id/userLabelBarangay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Barangay"
+                android:textColor="#FFA710"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_gravity="start"/>
+
+            <EditText
+                android:id="@+id/editBarangay"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:hint="Enter your barangay"
+                android:inputType="text"
+                android:layout_marginLeft="24dp"/>
+
+            <TextView
+                android:id="@+id/userLabelCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="City"
+                android:textColor="#FFA710"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_gravity="start"/>
+
+            <EditText
+                android:id="@+id/editCity"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:hint="Enter your city"
+                android:inputType="text"
+                android:layout_marginLeft="24dp"/>
+
+            <TextView
+                android:id="@+id/userLabelProvince"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Province"
+                android:textColor="#FFA710"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_gravity="start"/>
+
+            <EditText
+                android:id="@+id/editProvince"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:hint="Enter your province"
+                android:inputType="text"
+                android:layout_marginLeft="24dp"/>
+
+            <TextView
+                android:id="@+id/userLabelPostal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Postal"
+                android:textColor="#FFA710"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_gravity="start"/>
+
+            <EditText
+                android:id="@+id/editPostal"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:hint="Enter your postal code"
+                android:inputType="text"
+                android:layout_marginLeft="24dp"/>
+
+            <TextView
+                android:id="@+id/userLabelMobileNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mobile Number"
+                android:textColor="#FFA710"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="start"/>
+
+            <EditText
+                android:id="@+id/editMobileNo"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:hint="Enter your mobile number"
+                android:inputType="text"
+                android:layout_marginLeft="24dp"/>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>
