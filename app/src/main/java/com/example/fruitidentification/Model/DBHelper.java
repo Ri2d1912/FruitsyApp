@@ -66,7 +66,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "    city TEXT,\n" +
                 "    province TEXT,\n" +
                 "    postal_code TEXT,\n" +
-                "    profile_picture TEXT,\n" +
+                "    profile_picture BLOB,\n" +
                 "    FOREIGN KEY (customer_id) REFERENCES users (user_id)\n" +
                 ");");
 

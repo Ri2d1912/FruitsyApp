@@ -1,11 +1,13 @@
 package com.example.fruitidentification;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
@@ -14,6 +16,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -24,7 +27,13 @@ import com.example.fruitidentification.Model.DBHelper;
 import com.example.fruitidentification.RegistrationFragment.RegistrationFragment1;
 import com.example.fruitidentification.RegistrationFragment.RegistrationFragment2;
 import com.example.fruitidentification.RegistrationFragment.RegistrationFragment3;
+import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class CustomerCreateAcc extends AppCompatActivity {
 
@@ -32,12 +41,15 @@ public class CustomerCreateAcc extends AppCompatActivity {
     Button btncreate1, btncreate2, btncreate3, btnBack,btnNext,btnNext2,btnNext3;
     TextView labelAccountDetails;
     LinearLayout LayoutbackAndCreate;
+    ImageView imageViewUser;
 
     private DBHelper myDB;
 
     //For userAccount in fragment1
     String username, password, confirmPassword, role;
+    FloatingActionButton imgCamera;
 
+    byte[] profile_picture;
     String fname, mname, lname, street, barangay, city, province, postal, mobileNo, gender, bday;
 
     @Override
@@ -55,6 +67,7 @@ public class CustomerCreateAcc extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
         btnNext2 = findViewById(R.id.btnNext2);
         btnNext3 = findViewById(R.id.btnNext3);
+
         labelAccountDetails = findViewById(R.id.LabelAccountdetails);
         LayoutbackAndCreate = findViewById(R.id.LayoutbackAndCreate);
 
@@ -137,8 +150,17 @@ public class CustomerCreateAcc extends AppCompatActivity {
                     mobileNo = ((EditText) registrationFragment2.getView().findViewById(R.id.editMobileNo)).getText().toString();
                     gender = ((Spinner) registrationFragment2.getView().findViewById(R.id.spinnerGender)).getSelectedItem().toString();
                     bday = ((TextInputEditText) registrationFragment2.getView().findViewById(R.id.editBday)).getText().toString();
+                    imgCamera = (FloatingActionButton) registrationFragment2.getView().findViewById(R.id.imgCamera);
 
-                    // Replace the current fragment with RegistrationFragment3
+                    // Convert the image URI to a byte array
+                       profile_picture = null;
+                    if (imageViewUser.getTag() != null) { // Check if URI is not null
+                        Uri imageUri = (Uri) imageViewUser.getTag();
+                        profile_picture = uriToByteArray(imageUri);
+                    }
+
+
+
                     replaceFragment(new RegistrationFragment3());
                     changeButtons(3);
                 }
@@ -158,7 +180,7 @@ public class CustomerCreateAcc extends AppCompatActivity {
                     if (isChecked) {
                         // Insert customer info and user data if checkbox is checked
                         Boolean checkInsertCustInfo = myDB.insertCustomerInfo(CustomerCreateAcc.this, username, fname, mname, lname, "", bday, gender, mobileNo,
-                                street, barangay, city, province, postal, null);
+                                street, barangay, city, province, postal, profile_picture);
 
                         Boolean checkInsertData = myDB.insertUsers(CustomerCreateAcc.this, username, password, role);
 
@@ -274,6 +296,32 @@ public class CustomerCreateAcc extends AppCompatActivity {
                 btnNext3.setVisibility(View.VISIBLE);
 
                 break;
+        }
+    }
+
+    // This method converts a Uri to a byte array.
+    private byte[] uriToByteArray(Uri uri) {
+        try {
+            // Open an InputStream from the Uri.
+            InputStream inputStream = getContentResolver().openInputStream(uri);
+            // Create a ByteArrayOutputStream to hold the data.
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            // Create a buffer to read the data in chunks.
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            // Read data from the InputStream into the buffer.
+            // Write the buffer data into the ByteArrayOutputStream until no more data is left.
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, bytesRead);
+            }
+            // Return the ByteArrayOutputStream's data as a byte array.
+            return byteArrayOutputStream.toByteArray();
+        } catch (IOException e) {
+            // Print the stack trace if there's an exception.
+            e.printStackTrace();
+
+            // Return null if an error occurs.
+            return null;
         }
     }
 

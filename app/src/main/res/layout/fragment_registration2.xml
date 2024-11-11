@@ -37,7 +37,7 @@
 
                 <!-- Profile Image -->
                 <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/profile_userimage"
+                    android:id="@+id/imageViewUser"
                     android:layout_width="125dp"
                     android:layout_height="125dp"
                     app:shapeAppearanceOverlay="@style/circular"
@@ -45,14 +45,15 @@
                     app:strokeWidth="7dp"
                     android:src="@drawable/upimg"/>
 
-                <!-- Camera Icon below Profile Image, aligned to the right -->
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/imgCamera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="-42dp"
                     android:layout_gravity="end"
-                    app:srcCompat="@drawable/camera"/>
+                    app:srcCompat="@drawable/camera"
+                    android:clickable="true" />
+
             </LinearLayout>
 
 
@@ -125,6 +126,25 @@
                 android:layout_marginLeft="24dp"/>
 
             <TextView
+                android:id="@+id/userLabelExname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Extension Name"
+                android:textColor="#FFA710"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_gravity="start"/>
+
+            <EditText
+                android:id="@+id/editExname"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:hint="Enter your extension name"
+                android:inputType="text"
+                android:layout_marginLeft="24dp"/>
+
+            <TextView
                 android:id="@+id/userLabelGender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -153,7 +173,6 @@
                 android:layout_marginTop="8dp"
                 android:layout_gravity="start"/>
 
-            <!-- Birthday Input with Mask -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayoutBday"
                 android:layout_width="match_parent"
@@ -163,14 +182,15 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editBday"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="match_parent"
                     android:hint="MM/DD/YYYY"
-                    android:inputType="date"
+                    android:inputType="none"
                     android:maxLength="10"
                     android:importantForAccessibility="yes"
-                    android:contentDescription="Birthday input field"/>
+                    android:contentDescription="Birthday input field"
+                    android:focusable="false"
+                    android:clickable="true"/>
             </com.google.android.material.textfield.TextInputLayout>
-
 
             <TextView
                 android:id="@+id/userLabelAddress"
