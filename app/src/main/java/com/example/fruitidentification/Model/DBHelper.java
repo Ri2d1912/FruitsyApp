@@ -7,6 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class DBHelper extends SQLiteOpenHelper {
 
     // Define the database name
@@ -24,19 +28,19 @@ public class DBHelper extends SQLiteOpenHelper {
                 "    user_id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "    username TEXT NOT NULL UNIQUE,\n" +
                 "    password TEXT NOT NULL,\n" +
-                "    email TEXT,\n" +
                 "    role TEXT CHECK(role IN ('admin', 'vendor', 'customer', 'guest')),\n" +
                 "    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n" +
                 ");");
 
         db.execSQL("CREATE TABLE vendors (\n" +
                 "    vendor_id INTEGER PRIMARY KEY,\n" +
+                "    username TEXT NOT NULL UNIQUE,\n" +
                 "    first_name TEXT NOT NULL,\n" +
                 "    middle_name TEXT,\n" +
                 "    last_name TEXT NOT NULL,\n" +
                 "    extension_name TEXT,\n" +
                 "    date_of_birth DATE,\n" +
-                "    gender TEXT CHECK(gender IN ('male', 'female', 'other')),\n" +
+                "    gender TEXT ,\n" +
                 "    street_address TEXT,\n" +
                 "    barangay TEXT,\n" +
                 "    city TEXT,\n" +
@@ -49,12 +53,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE customers (\n" +
                 "    customer_id INTEGER PRIMARY KEY,\n" +
+                "    username TEXT NOT NULL UNIQUE,\n" +
                 "    first_name TEXT NOT NULL,\n" +
                 "    middle_name TEXT,\n" +
                 "    last_name TEXT NOT NULL,\n" +
                 "    extension_name TEXT,\n" +
                 "    date_of_birth DATE,\n" +
-                "    gender TEXT CHECK(gender IN ('male', 'female', 'other')),\n" +
+                "    gender TEXT ,\n" +
                 "    phone_number TEXT,\n" +
                 "    street_address TEXT,\n" +
                 "    barangay TEXT,\n" +
@@ -211,28 +216,77 @@ public class DBHelper extends SQLiteOpenHelper {
         return password;
     }
 
-    public boolean insertUserInfo(Context context, String username, String firstname, String midname, String surname, String email, byte[] userImage) {
+    public boolean insertUsers(Context context, String username, String password, String role) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Format the current date and time in the desired format
+        String timestamp = new SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.getDefault()).format(new Date());
+
+        try {
+            // Prepare the data to be inserted
+            ContentValues cv = new ContentValues();
+            cv.put("username", username);
+            cv.put("password", password);
+            cv.put("role", role);
+            cv.put("created_at", timestamp);  // Use "created_at" to match the column name in onCreate
+
+            // Insert the data into the table
+            long result = db.insertOrThrow("users", null, cv);
+
+            // If we reach this point, insertion was successful
+            return result != -1; // Inserting returns -1 on failure, so we check for success
+        } catch (Exception e) {
+            // Log the error message
+            Toast.makeText(context, "Failed to insert user account: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            return false;
+        } finally {
+            // Close the database to release resources
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+
+    public boolean insertCustomerInfo(Context context, String username, String firstName, String middleName, String lastName, String extensionName,
+                                      String dateOfBirth, String gender, String phoneNumber, String streetAddress, String barangay, String city,
+                                      String province, String postalCode, byte[] profilePicture) {
         // Get a writable database
         SQLiteDatabase db = this.getWritableDatabase();
         try {
             // Prepare the data to be inserted
             ContentValues cv = new ContentValues();
             cv.put("username", username);
-            cv.put("firstname", firstname);
-            cv.put("midname", midname);
-            cv.put("surname", surname);
-            cv.put("email", email);
-            cv.put("userImage", userImage);
+            cv.put("first_name", firstName);
+            cv.put("middle_name", middleName);
+            cv.put("last_name", lastName);
+            cv.put("extension_name", extensionName);
+            cv.put("date_of_birth", dateOfBirth);
+            cv.put("gender", gender);
+            cv.put("phone_number", phoneNumber);
+            cv.put("street_address", streetAddress);
+            cv.put("barangay", barangay);
+            cv.put("city", city);
+            cv.put("province", province);
+            cv.put("postal_code", postalCode);
+            cv.put("profile_picture", profilePicture);
+
             // Insert the data into the table
-            long result = db.insertOrThrow("user_info", null, cv);
-            // If we reach this point, insertion was successful
-            return true;
+            long result = db.insertOrThrow("customers", null, cv);
+
+            // Return true if insertion was successful
+            return result != -1;
         } catch (Exception e) {
             // Log the error message
-            Toast.makeText(context, "Failed to insert user info: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Failed to insert customer info: " + e.getMessage(), Toast.LENGTH_LONG).show();
             // Return false to indicate failure
             return false;
+        } finally {
+            // Close the database connection
+            db.close();
         }
     }
+
+
 
 }

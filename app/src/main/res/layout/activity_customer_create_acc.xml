@@ -188,6 +188,17 @@
                     android:background="@drawable/btnorangeradius"
                     android:textColor="@android:color/white"/>
 
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnNext3"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:text="Create Account"
+                    android:visibility="gone"
+                    android:textSize="18sp"
+                    android:textAllCaps="false"
+                    android:background="@drawable/btnorangeradius"
+                    android:textColor="@android:color/white"/>
+
             </LinearLayout>
 
 
