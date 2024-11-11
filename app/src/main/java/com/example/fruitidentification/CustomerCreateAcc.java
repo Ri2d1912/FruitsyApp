@@ -124,6 +124,7 @@ public class CustomerCreateAcc extends AppCompatActivity {
                     if (myDB.isUsernameExists(username)) {
                         Toast.makeText(CustomerCreateAcc.this, "Username already exists", Toast.LENGTH_LONG).show();
                     } else if (password.equals(confirmPassword)) {
+                        btncreate2.setEnabled(true);
                         changeButtons(2);
                         replaceFragment(new RegistrationFragment2());
                     } else {
@@ -166,6 +167,7 @@ public class CustomerCreateAcc extends AppCompatActivity {
                 if (fname != null && !fname.isEmpty() && lname != null && !lname.isEmpty()) {
                     // Proceed to the next fragment if validation passes
                     replaceFragment(new RegistrationFragment3());
+                    btncreate3.setEnabled(true);
                     changeButtons(3);
                 } else {
                     // Show an error message if First Name or Last Name is missing
