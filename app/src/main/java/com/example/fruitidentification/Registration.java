@@ -21,8 +21,14 @@ public class Registration extends AppCompatActivity {
         // Click listener for Login Button
         btnCustomerSign.setOnClickListener(view -> {
             // Navigate to LoginActivity
-            Intent loginIntent = new Intent(Registration.this, CustomerCreateAcc.class);
-            startActivity(loginIntent);
+            Intent goCreate = new Intent(Registration.this, CustomerCreateAcc.class);
+            startActivity(goCreate);
+        });
+
+        btnVendorSign.setOnClickListener(view -> {
+            // Navigate to LoginActivity
+            Intent goVendorCreate = new Intent(Registration.this, VendorCreateAcc.class);
+            startActivity(goVendorCreate);
         });
     }
 }

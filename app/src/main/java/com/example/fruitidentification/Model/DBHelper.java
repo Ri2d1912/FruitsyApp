@@ -47,7 +47,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "    province TEXT,\n" +
                 "    postal_code TEXT,\n" +
                 "    mobile_number TEXT,\n" +
-                "    valid_id TEXT,\n" +
+                "    valid_id BLOB,\n" +
                 "    FOREIGN KEY (vendor_id) REFERENCES users (user_id)\n" +
                 ");");
 
@@ -187,6 +187,9 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    // --------------------------------------------------- Customer Side ------------------------------------------------------------
+
+
     // ------------------ Account Data -------------------------------------
 
     public String getPassword(String username) {
@@ -316,6 +319,46 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    // --------------------------------------------------- Vendor Side ------------------------------------------------------------
+
+    public boolean insertVendorInfo(Context context, String username, String firstName, String middleName, String lastName, String extensionName,
+                                    String dateOfBirth, String gender, String mobileNumber, String streetAddress, String barangay, String city,
+                                    String province, String postalCode, byte[] validId) {
+        // Get a writable database
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            // Prepare the data to be inserted
+            ContentValues cv = new ContentValues();
+            cv.put("username", username);
+            cv.put("first_name", firstName);
+            cv.put("middle_name", middleName);
+            cv.put("last_name", lastName);
+            cv.put("extension_name", extensionName);
+            cv.put("date_of_birth", dateOfBirth);
+            cv.put("gender", gender);
+            cv.put("mobile_number", mobileNumber);
+            cv.put("street_address", streetAddress);
+            cv.put("barangay", barangay);
+            cv.put("city", city);
+            cv.put("province", province);
+            cv.put("postal_code", postalCode);
+            cv.put("valid_id", validId);  // Store as BLOB
+
+            // Insert the data into the vendors table
+            long result = db.insertOrThrow("vendors", null, cv);
+
+            // Return true if insertion was successful
+            return result != -1;
+        } catch (Exception e) {
+            // Log the error message
+            Toast.makeText(context, "Failed to insert vendor info: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            // Return false to indicate failure
+            return false;
+        } finally {
+            // Close the database connection
+            db.close();
+        }
+    }
 
 
 }

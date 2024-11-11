@@ -28,7 +28,11 @@ import com.example.fruitidentification.Model.DBHelper;
 import com.example.fruitidentification.RegistrationFragment.RegistrationFragment1;
 import com.example.fruitidentification.RegistrationFragment.RegistrationFragment2;
 import com.example.fruitidentification.RegistrationFragment.RegistrationFragment3;
+import com.example.fruitidentification.RegistrationFragment.VendorRegistrationFragment1;
+import com.example.fruitidentification.RegistrationFragment.VendorRegistrationFragment2;
+import com.example.fruitidentification.RegistrationFragment.VendorRegistrationFragment3;
 import com.example.fruitidentification.ViewModel.regFrag1VM;
+import com.example.fruitidentification.ViewModel.vendorRegFragVM;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -37,10 +41,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class CustomerCreateAcc extends AppCompatActivity {
+public class VendorCreateAcc extends AppCompatActivity {
 
-    FrameLayout RegisterFrameLayoutUserName;
-    Button btncreate1, btncreate2, btncreate3, btnBack,btnNext,btnNext2,btnNext3;
+    FrameLayout VendorRegisterFrameLayoutUserName;
+    Button btncreate1, btncreate2, btncreate3,btncreate4, btnBack,btnNext,btnNext2,btnNext3;
     TextView labelAccountDetails;
     LinearLayout LayoutbackAndCreate;
     ImageView imageViewUser;
@@ -51,17 +55,17 @@ public class CustomerCreateAcc extends AppCompatActivity {
     String username, password, confirmPassword, role;
     FloatingActionButton imgCamera;
 
-    byte[] profile_picture;
-    String fname, mname, lname,exname, street, barangay, city, province, postal, mobileNo, gender, bday;
+    byte[] validId_picture;
+    String fname, mname, lname, exname, street, barangay, city, province, postal, mobileNo, gender, bday;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_customer_create_acc);
+        setContentView(R.layout.activity_vendor_create_acc);
         myDB =new DBHelper(this);
 
         // Initialize views
-        RegisterFrameLayoutUserName = findViewById(R.id.RegisterFrameLayoutUserName);
+        VendorRegisterFrameLayoutUserName = findViewById(R.id.VendorRegisterFrameLayoutUserName);
         btncreate1 = findViewById(R.id.btncreate1);
         btncreate2 = findViewById(R.id.btncreate2);
         btncreate3 = findViewById(R.id.btncreate3);
@@ -74,14 +78,14 @@ public class CustomerCreateAcc extends AppCompatActivity {
         LayoutbackAndCreate = findViewById(R.id.LayoutbackAndCreate);
 
         // Set the default fragment (RegistrationFragment1) when the activity is opened
-        replaceFragment(new RegistrationFragment1());
+        replaceFragment(new VendorRegistrationFragment1());
 
         // Set onClickListener for btncreate1
         btncreate1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Switch to RegistrationFragment1
-                replaceFragment(new RegistrationFragment1());
+                replaceFragment(new VendorRegistrationFragment1());
                 changeButtons(1);
             }
         });
@@ -91,7 +95,7 @@ public class CustomerCreateAcc extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Switch to RegistrationFragment2
-                replaceFragment(new RegistrationFragment2());
+                replaceFragment(new VendorRegistrationFragment2());
                 changeButtons(2);
             }
         });
@@ -101,7 +105,7 @@ public class CustomerCreateAcc extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Switch to RegistrationFragment3
-                replaceFragment(new RegistrationFragment3());
+                replaceFragment(new VendorRegistrationFragment3());
 
                 changeButtons(3);
             }
@@ -111,27 +115,27 @@ public class CustomerCreateAcc extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Retrieve the ViewModel shared between fragments
-                regFrag1VM viewModel = new ViewModelProvider(CustomerCreateAcc.this).get(regFrag1VM.class);
+                vendorRegFragVM viewModel = new ViewModelProvider(VendorCreateAcc.this).get(vendorRegFragVM.class);
 
                 // Retrieve the data from the ViewModel
                 username = viewModel.getUsername().getValue();
                 password = viewModel.getPassword().getValue();
                 confirmPassword = viewModel.getConfirmPassword().getValue();
-                role = "customer";
+                role = "vendor";
 
                 // Check if username and password are non-empty and not null
                 if (username != null && !username.isEmpty() && password != null && !password.isEmpty()) {
                     if (myDB.isUsernameExists(username)) {
-                        Toast.makeText(CustomerCreateAcc.this, "Username already exists", Toast.LENGTH_LONG).show();
+                        Toast.makeText(VendorCreateAcc.this, "Username already exists", Toast.LENGTH_LONG).show();
                     } else if (password.equals(confirmPassword)) {
                         btncreate2.setEnabled(true);
                         changeButtons(2);
-                        replaceFragment(new RegistrationFragment2());
+                        replaceFragment(new VendorRegistrationFragment2());
                     } else {
-                        Toast.makeText(CustomerCreateAcc.this, "Passwords do not match", Toast.LENGTH_LONG).show();
+                        Toast.makeText(VendorCreateAcc.this, "Passwords do not match", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(CustomerCreateAcc.this, "Please Input Username / Password", Toast.LENGTH_LONG).show();
+                    Toast.makeText(VendorCreateAcc.this, "Please Input Username / Password", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -142,7 +146,7 @@ public class CustomerCreateAcc extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Retrieve the ViewModel shared between fragments
-                regFrag1VM viewModel = new ViewModelProvider(CustomerCreateAcc.this).get(regFrag1VM.class);
+                vendorRegFragVM viewModel = new ViewModelProvider(VendorCreateAcc.this).get(vendorRegFragVM.class);
 
                 // Retrieve data from the ViewModel instead of directly from fragment views
                 fname = viewModel.getFName().getValue();
@@ -150,64 +154,72 @@ public class CustomerCreateAcc extends AppCompatActivity {
                 lname = viewModel.getLName().getValue();
                 exname = viewModel.getExName().getValue();
                 gender = viewModel.getGender().getValue();
+                bday = viewModel.getBday().getValue();
                 street = viewModel.getStreet().getValue();
                 barangay = viewModel.getBarangay().getValue();
                 city = viewModel.getCity().getValue();
                 province = viewModel.getProvince().getValue();
                 postal = viewModel.getPostal().getValue();
                 mobileNo = viewModel.getMobile().getValue();
-                bday = viewModel.getBday().getValue();
 
                 // Handle the image selection if it exists in the ViewModel
-                Uri imageUri = viewModel.getImageUri().getValue();  // Use getValue() to access the actual Uri from LiveData
-                if (imageUri != null) {
-                    profile_picture = uriToByteArray(imageUri);  // Convert image URI to byte array
+                Uri validIdImageUri = viewModel.getValidIdImageUri().getValue();  // Use getValue() to access the actual Uri from LiveData
+                if (validIdImageUri != null) {
+                    validId_picture = uriToByteArray(validIdImageUri);  // Convert image URI to byte array
                 }
 
                 // Validate required fields
                 if (fname != null && !fname.isEmpty() && lname != null && !lname.isEmpty()) {
-                    // Proceed to the next fragment if validation passes
-                    replaceFragment(new RegistrationFragment3());
-                    btncreate3.setEnabled(true);
-                    changeButtons(3);
+
+                    Boolean checkInsertVendorInfo = myDB.insertVendorInfo(VendorCreateAcc.this, username, fname, mname, lname, exname, bday, gender, mobileNo,
+                            street, barangay, city, province, postal, validId_picture);
+                    Boolean checkInsertData = myDB.insertUsers(VendorCreateAcc.this, username, password, role);
+
+                    if (checkInsertVendorInfo && checkInsertData) {
+                        replaceFragment(new RegistrationFragment3());
+                        btncreate3.setEnabled(true);
+                        changeButtons(3);
+                    } else {
+                        Toast.makeText(VendorCreateAcc.this, "Record Failed", Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     // Show an error message if First Name or Last Name is missing
-                    Toast.makeText(CustomerCreateAcc.this, "Please Input First Name / Last Name", Toast.LENGTH_LONG).show();
+                    Toast.makeText(VendorCreateAcc.this, "Please Input First Name / Last Name", Toast.LENGTH_LONG).show();
                 }
             }
         });
 
 
-        btnNext3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment registrationFragment3 = getSupportFragmentManager().findFragmentByTag(RegistrationFragment3.class.getSimpleName());
-
-                if (registrationFragment3 != null) {
-                    CheckBox checkAgree = registrationFragment3.getView().findViewById(R.id.checkAgree);
-
-                    // Check if the checkbox is checked
-                    boolean isChecked = checkAgree.isChecked();
-                    if (isChecked) {
-                        // Insert customer info and user data if checkbox is checked
-                        Boolean checkInsertCustInfo = myDB.insertCustomerInfo(CustomerCreateAcc.this, username, fname, mname, lname, exname, bday, gender, mobileNo,
-                                street, barangay, city, province, postal, profile_picture);
-
-                        Boolean checkInsertData = myDB.insertUsers(CustomerCreateAcc.this, username, password, role);
-
-                        if (checkInsertCustInfo && checkInsertData) {
-                            Intent goLog = new Intent(CustomerCreateAcc.this, login.class);
-                            startActivity(goLog);
-                        } else {
-                            Toast.makeText(CustomerCreateAcc.this, "Record Failed", Toast.LENGTH_LONG).show();
-                        }
-                    } else {
-                        // If checkbox is not checked, show a message
-                        Toast.makeText(CustomerCreateAcc.this, "Please agree to the terms", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
+//        btnNext3.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Fragment registrationFragment3 = getSupportFragmentManager().findFragmentByTag(RegistrationFragment3.class.getSimpleName());
+//
+//                if (registrationFragment3 != null) {
+//                    CheckBox checkAgree = registrationFragment3.getView().findViewById(R.id.checkAgree);
+//
+//                    // Check if the checkbox is checked
+//                    boolean isChecked = checkAgree.isChecked();
+//                    if (isChecked) {
+//                        // Insert customer info and user data if checkbox is checked
+//                        Boolean checkInsertCustInfo = myDB.insertCustomerInfo(VendorCreateAcc.this, username, fname, mname, lname, "", bday, gender, mobileNo,
+//                                street, barangay, city, province, postal, profile_picture);
+//
+//                        Boolean checkInsertData = myDB.insertUsers(VendorCreateAcc.this, username, password, role);
+//
+//                        if (checkInsertCustInfo && checkInsertData) {
+//                            Intent goLog = new Intent(VendorCreateAcc.this, login.class);
+//                            startActivity(goLog);
+//                        } else {
+//                            Toast.makeText(VendorCreateAcc.this, "Record Failed", Toast.LENGTH_LONG).show();
+//                        }
+//                    } else {
+//                        // If checkbox is not checked, show a message
+//                        Toast.makeText(VendorCreateAcc.this, "Please agree to the terms", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            }
+//        });
 
 
 
@@ -236,7 +248,7 @@ public class CustomerCreateAcc extends AppCompatActivity {
 
         // Replace the current fragment in the FrameLayout with the new fragment
         // Use the fragment's class name as a tag for reference.
-        transaction.replace(R.id.RegisterFrameLayoutUserName, fragment, fragment.getClass().getSimpleName());
+        transaction.replace(R.id.VendorRegisterFrameLayoutUserName, fragment, fragment.getClass().getSimpleName());
 
         // Commit the transaction to apply the fragment replacement
         transaction.commit();
