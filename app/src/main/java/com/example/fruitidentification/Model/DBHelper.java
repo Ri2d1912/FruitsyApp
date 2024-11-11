@@ -216,6 +216,35 @@ public class DBHelper extends SQLiteOpenHelper {
         return password;
     }
 
+    public boolean isUsernameExists(String username) {
+        // Get a readable database instance to perform the query
+        SQLiteDatabase db = this.getReadableDatabase();
+        boolean exists = false;
+
+        // Define the SQL query to check if the username exists in the users table
+        String query = "SELECT username FROM users WHERE username = ?";
+
+        // Specify the username as the selection argument for the query
+        String[] selectionArgs = { username };
+
+        // Execute the raw SQL query
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        try {
+            // Check if the cursor contains any results
+            if (cursor != null && cursor.moveToFirst()) {
+                exists = true;  // Username exists
+            }
+        } finally {
+            // Close the cursor to release resources
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return exists;
+    }
+
+
     public boolean insertUsers(Context context, String username, String password, String role) {
         SQLiteDatabase db = this.getWritableDatabase();
 

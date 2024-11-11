@@ -3,9 +3,14 @@
     xmlns:dist="http://schemas.android.com/apk/distribution"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.fruitidentification">
+
     <!-- Enable instant app support -->
-    <dist:module dist:instant="true" /> <!-- Declare features -->
-    <uses-feature android:name="android.hardware.camera" /> <!-- Declare permissions -->
+    <dist:module dist:instant="true" />
+
+    <!-- Declare features -->
+    <uses-feature android:name="android.hardware.camera" />
+
+    <!-- Declare permissions -->
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -20,27 +25,29 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FruitIdentification"
         tools:targetApi="31">
-        <activity
-            android:name=".CustomerCreateAcc"
-            android:exported="false" />
-        <activity
-            android:name=".Registration"
-            android:exported="false" /> <!-- Login Activity -->
-        <activity
-            android:name=".login"
-            android:exported="false" /> <!-- Main Activity -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" /> <!-- Define the main entry point for the app -->
-        <activity
-            android:name=".LandingPage"
-            android:exported="true"> <!-- Set exported to true for launcher activity -->
+
+        <!-- Other activities -->
+        <activity android:name=".CustomerCreateAcc" android:exported="false" />
+        <activity android:name=".Registration" android:exported="false" />
+        <activity android:name=".login" android:exported="false" />
+        <activity android:name=".MainActivity" android:exported="false" />
+        <activity android:name=".LandingPage" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+        <!-- Add FileProvider here -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+    </application>
 </manifest>

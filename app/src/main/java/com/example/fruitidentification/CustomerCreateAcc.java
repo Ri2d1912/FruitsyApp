@@ -118,19 +118,24 @@ public class CustomerCreateAcc extends AppCompatActivity {
                     confirmPassword = ((EditText) registrationFragment.getView().findViewById(R.id.editConPasswordCreate)).getText().toString();
                     role = "customer";
 
-                    if(password.equals(confirmPassword)){
-                        changeButtons(2);
-                        replaceFragment(new RegistrationFragment2());
+                    // Check if username and password are non-empty and not null
+                    if (username != null && !username.isEmpty() && password != null && !password.isEmpty()) {
+                        if (myDB.isUsernameExists(username)) {
+                            Toast.makeText(CustomerCreateAcc.this, "Username already exists", Toast.LENGTH_LONG).show();
+                        } else if (password.equals(confirmPassword)) {
+                            changeButtons(2);
+                            replaceFragment(new RegistrationFragment2());
+                        } else {
+                            Toast.makeText(CustomerCreateAcc.this, "Passwords do not match", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(CustomerCreateAcc.this, "Please Input Username / Password", Toast.LENGTH_LONG).show();
                     }
-
-                    else{
-                        Toast.makeText(CustomerCreateAcc.this, "Passwords do not match", Toast.LENGTH_LONG).show();
-
-                    }
-
                 }
             }
         });
+
+
 
         btnNext2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,18 +156,15 @@ public class CustomerCreateAcc extends AppCompatActivity {
                     gender = ((Spinner) registrationFragment2.getView().findViewById(R.id.spinnerGender)).getSelectedItem().toString();
                     bday = ((TextInputEditText) registrationFragment2.getView().findViewById(R.id.editBday)).getText().toString();
                     imgCamera = (FloatingActionButton) registrationFragment2.getView().findViewById(R.id.imgCamera);
+                    imageViewUser = ((ImageView) registrationFragment2.getView().findViewById(R.id.imageViewUser));
 
-                    // Convert the image URI to a byte array
-                       profile_picture = null;
-                    if (imageViewUser.getTag() != null) { // Check if URI is not null
+                    if (imageViewUser.getTag() != null) {
                         Uri imageUri = (Uri) imageViewUser.getTag();
                         profile_picture = uriToByteArray(imageUri);
                     }
-
-
-
                     replaceFragment(new RegistrationFragment3());
                     changeButtons(3);
+
                 }
             }
         });
@@ -299,30 +301,23 @@ public class CustomerCreateAcc extends AppCompatActivity {
         }
     }
 
-    // This method converts a Uri to a byte array.
-    private byte[] uriToByteArray(Uri uri) {
+    public byte[] uriToByteArray(Uri uri) {
         try {
-            // Open an InputStream from the Uri.
+            // Use 'this' for Activity context
             InputStream inputStream = getContentResolver().openInputStream(uri);
-            // Create a ByteArrayOutputStream to hold the data.
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            // Create a buffer to read the data in chunks.
             byte[] buffer = new byte[1024];
-            int bytesRead;
-            // Read data from the InputStream into the buffer.
-            // Write the buffer data into the ByteArrayOutputStream until no more data is left.
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                byteArrayOutputStream.write(buffer, 0, bytesRead);
+            int len;
+            while ((len = inputStream.read(buffer)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, len);
             }
-            // Return the ByteArrayOutputStream's data as a byte array.
+            // Convert to byte array
             return byteArrayOutputStream.toByteArray();
         } catch (IOException e) {
-            // Print the stack trace if there's an exception.
             e.printStackTrace();
-
-            // Return null if an error occurs.
             return null;
         }
     }
+
 
 }
