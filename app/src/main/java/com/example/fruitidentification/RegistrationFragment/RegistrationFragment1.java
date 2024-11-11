@@ -1,66 +1,103 @@
 package com.example.fruitidentification.RegistrationFragment;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.EditText;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import com.example.fruitidentification.R;
+import com.example.fruitidentification.ViewModel.regFrag1VM;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RegistrationFragment1#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class RegistrationFragment1 extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private regFrag1VM viewModel;
+    private EditText editUsernameCreate, editPasswordCreate, editConPasswordCreate;
 
     public RegistrationFragment1() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RegistrationFragment1.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RegistrationFragment1 newInstance(String param1, String param2) {
-        RegistrationFragment1 fragment = new RegistrationFragment1();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_registration1, container, false);
+        View view = inflater.inflate(R.layout.fragment_registration1, container, false);
+
+        // Initialize the ViewModel
+        viewModel = new ViewModelProvider(requireActivity()).get(regFrag1VM.class);
+
+        // Find the EditText fields
+        editUsernameCreate = view.findViewById(R.id.editUsernameCreate);
+        editPasswordCreate = view.findViewById(R.id.editPasswordCreate);
+        editConPasswordCreate = view.findViewById(R.id.editConPasswordCreate);
+
+            // Observe the LiveData from ViewModel to retrieve the saved username
+            viewModel.getUsername().observe(getViewLifecycleOwner(), input -> {
+                if (input != null && !input.equals(editUsernameCreate.getText().toString())) {
+                    editUsernameCreate.setText(input);  // Restore the username when the data changes
+                }
+            });
+
+            // Observe the LiveData from ViewModel for password and confirm password
+            viewModel.getPassword().observe(getViewLifecycleOwner(), input -> {
+                if (input != null && !input.equals(editPasswordCreate.getText().toString())) {
+                    editPasswordCreate.setText(input);
+                }
+            });
+
+            viewModel.getConfirmPassword().observe(getViewLifecycleOwner(), input -> {
+                if (input != null && !input.equals(editConPasswordCreate.getText().toString())) {
+                    editConPasswordCreate.setText(input);
+                }
+            });
+
+            // Set a TextWatcher to save input data when the user types
+            editUsernameCreate.addTextChangedListener(new android.text.TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                    // Save the username input to ViewModel
+                    viewModel.setUsername(charSequence.toString());
+                }
+
+                @Override
+                public void afterTextChanged(android.text.Editable editable) {}
+            });
+
+        // Set TextWatchers for password fields to save data
+        editPasswordCreate.addTextChangedListener(new android.text.TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                // Save the password input to ViewModel
+                viewModel.setPassword(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(android.text.Editable editable) {}
+        });
+
+        editConPasswordCreate.addTextChangedListener(new android.text.TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                // Save the confirm password input to ViewModel
+                viewModel.setConfirmPassword(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(android.text.Editable editable) {}
+        });
+
+        return view;
     }
 }

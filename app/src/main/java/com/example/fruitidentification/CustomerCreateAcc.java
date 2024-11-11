@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -27,6 +28,7 @@ import com.example.fruitidentification.Model.DBHelper;
 import com.example.fruitidentification.RegistrationFragment.RegistrationFragment1;
 import com.example.fruitidentification.RegistrationFragment.RegistrationFragment2;
 import com.example.fruitidentification.RegistrationFragment.RegistrationFragment3;
+import com.example.fruitidentification.ViewModel.regFrag1VM;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -108,29 +110,27 @@ public class CustomerCreateAcc extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Retrieve the active fragment using the tag of the current fragment
-                Fragment registrationFragment = getSupportFragmentManager().findFragmentByTag(RegistrationFragment1.class.getSimpleName());
+                // Retrieve the ViewModel shared between fragments
+                regFrag1VM viewModel = new ViewModelProvider(CustomerCreateAcc.this).get(regFrag1VM.class);
 
-                if (registrationFragment != null) {
-                    // Retrieve data from the fragment
-                    username = ((EditText) registrationFragment.getView().findViewById(R.id.editUsernameCreate)).getText().toString();
-                    password = ((EditText) registrationFragment.getView().findViewById(R.id.editPasswordCreate)).getText().toString();
-                    confirmPassword = ((EditText) registrationFragment.getView().findViewById(R.id.editConPasswordCreate)).getText().toString();
-                    role = "customer";
+                // Retrieve the data from the ViewModel
+                username = viewModel.getUsername().getValue();  // Get the username from ViewModel
+                password = ((EditText) findViewById(R.id.editPasswordCreate)).getText().toString();
+                confirmPassword = ((EditText) findViewById(R.id.editConPasswordCreate)).getText().toString();
+                role = "customer";
 
-                    // Check if username and password are non-empty and not null
-                    if (username != null && !username.isEmpty() && password != null && !password.isEmpty()) {
-                        if (myDB.isUsernameExists(username)) {
-                            Toast.makeText(CustomerCreateAcc.this, "Username already exists", Toast.LENGTH_LONG).show();
-                        } else if (password.equals(confirmPassword)) {
-                            changeButtons(2);
-                            replaceFragment(new RegistrationFragment2());
-                        } else {
-                            Toast.makeText(CustomerCreateAcc.this, "Passwords do not match", Toast.LENGTH_LONG).show();
-                        }
+                // Check if username and password are non-empty and not null
+                if (username != null && !username.isEmpty() && password != null && !password.isEmpty()) {
+                    if (myDB.isUsernameExists(username)) {
+                        Toast.makeText(CustomerCreateAcc.this, "Username already exists", Toast.LENGTH_LONG).show();
+                    } else if (password.equals(confirmPassword)) {
+                        changeButtons(2);
+                        replaceFragment(new RegistrationFragment2());
                     } else {
-                        Toast.makeText(CustomerCreateAcc.this, "Please Input Username / Password", Toast.LENGTH_LONG).show();
+                        Toast.makeText(CustomerCreateAcc.this, "Passwords do not match", Toast.LENGTH_LONG).show();
                     }
+                } else {
+                    Toast.makeText(CustomerCreateAcc.this, "Please Input Username / Password", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -140,34 +140,40 @@ public class CustomerCreateAcc extends AppCompatActivity {
         btnNext2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment registrationFragment2 = getSupportFragmentManager().findFragmentByTag(RegistrationFragment2.class.getSimpleName());
+                // Retrieve the ViewModel shared between fragments
+                regFrag1VM viewModel = new ViewModelProvider(CustomerCreateAcc.this).get(regFrag1VM.class);
 
-                if (registrationFragment2 != null) {
-                    // Retrieve data from the fragment
-                    fname = ((EditText) registrationFragment2.getView().findViewById(R.id.editFname)).getText().toString();
-                    mname = ((EditText) registrationFragment2.getView().findViewById(R.id.editMname)).getText().toString();
-                    lname = ((EditText) registrationFragment2.getView().findViewById(R.id.editLname)).getText().toString();
-                    street = ((EditText) registrationFragment2.getView().findViewById(R.id.editStreet)).getText().toString();
-                    barangay = ((EditText) registrationFragment2.getView().findViewById(R.id.editBarangay)).getText().toString();
-                    city = ((EditText) registrationFragment2.getView().findViewById(R.id.editCity)).getText().toString();
-                    province = ((EditText) registrationFragment2.getView().findViewById(R.id.editProvince)).getText().toString();
-                    postal = ((EditText) registrationFragment2.getView().findViewById(R.id.editPostal)).getText().toString();
-                    mobileNo = ((EditText) registrationFragment2.getView().findViewById(R.id.editMobileNo)).getText().toString();
-                    gender = ((Spinner) registrationFragment2.getView().findViewById(R.id.spinnerGender)).getSelectedItem().toString();
-                    bday = ((TextInputEditText) registrationFragment2.getView().findViewById(R.id.editBday)).getText().toString();
-                    imgCamera = (FloatingActionButton) registrationFragment2.getView().findViewById(R.id.imgCamera);
-                    imageViewUser = ((ImageView) registrationFragment2.getView().findViewById(R.id.imageViewUser));
+                // Retrieve data from the ViewModel instead of directly from fragment views
+                fname = viewModel.getFName().getValue();  // Assuming the ViewModel has methods like getFirstName()
+                mname = viewModel.getMName().getValue();
+                lname = viewModel.getLName().getValue();
+                street = viewModel.getStreet().getValue();
+                barangay = viewModel.getBarangay().getValue();
+                city = viewModel.getCity().getValue();
+                province = viewModel.getProvince().getValue();
+                postal = viewModel.getPostal().getValue();
+                mobileNo = viewModel.getMobile().getValue();
+                gender = viewModel.getGender().getValue();
+                bday = viewModel.getBday().getValue();
 
-                    if (imageViewUser.getTag() != null) {
-                        Uri imageUri = (Uri) imageViewUser.getTag();
-                        profile_picture = uriToByteArray(imageUri);
-                    }
+                // Handle the image selection if it exists in the ViewModel
+                Uri imageUri = viewModel.getImageUri().getValue();  // Use getValue() to access the actual Uri from LiveData
+                if (imageUri != null) {
+                    profile_picture = uriToByteArray(imageUri);  // Convert image URI to byte array
+                }
+
+                // Validate required fields
+                if (fname != null && !fname.isEmpty() && lname != null && !lname.isEmpty()) {
+                    // Proceed to the next fragment if validation passes
                     replaceFragment(new RegistrationFragment3());
                     changeButtons(3);
-
+                } else {
+                    // Show an error message if First Name or Last Name is missing
+                    Toast.makeText(CustomerCreateAcc.this, "Please Input First Name / Last Name", Toast.LENGTH_LONG).show();
                 }
             }
         });
+
 
         btnNext3.setOnClickListener(new View.OnClickListener() {
             @Override
