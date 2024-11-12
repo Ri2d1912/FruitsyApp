@@ -48,15 +48,20 @@ public class VendorCreateAcc extends AppCompatActivity {
     TextView labelAccountDetails;
     LinearLayout LayoutbackAndCreate;
     ImageView imageViewUser;
-
+    vendorRegFragVM vendorViewModel;
     private DBHelper myDB;
 
     //For userAccount in fragment1
     String username, password, confirmPassword, role;
     FloatingActionButton imgCamera;
 
-    byte[] validId_picture;
+    byte[] validId_picture, shopProfilePic;
     String fname, mname, lname, exname, street, barangay, city, province, postal, mobileNo, gender, bday;
+
+    // vendor side
+
+    String shopName, shopStreet, shopBarangay, shopCity, shopProvince, shopPostal, shopMobileNo, shopTelephoneNo, shopEmail, storeHours, description, orderPolicy,reservePolicy;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +81,8 @@ public class VendorCreateAcc extends AppCompatActivity {
 
         labelAccountDetails = findViewById(R.id.LabelAccountdetails);
         LayoutbackAndCreate = findViewById(R.id.LayoutbackAndCreate);
+
+        vendorViewModel = new ViewModelProvider(VendorCreateAcc.this).get(vendorRegFragVM.class);
 
         // Set the default fragment (RegistrationFragment1) when the activity is opened
         replaceFragment(new VendorRegistrationFragment1());
@@ -114,13 +121,10 @@ public class VendorCreateAcc extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Retrieve the ViewModel shared between fragments
-                vendorRegFragVM viewModel = new ViewModelProvider(VendorCreateAcc.this).get(vendorRegFragVM.class);
-
                 // Retrieve the data from the ViewModel
-                username = viewModel.getUsername().getValue();
-                password = viewModel.getPassword().getValue();
-                confirmPassword = viewModel.getConfirmPassword().getValue();
+                username = vendorViewModel.getUsername().getValue();
+                password = vendorViewModel.getPassword().getValue();
+                confirmPassword = vendorViewModel.getConfirmPassword().getValue();
                 role = "vendor";
 
                 // Check if username and password are non-empty and not null
@@ -145,43 +149,33 @@ public class VendorCreateAcc extends AppCompatActivity {
         btnNext2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Retrieve the ViewModel shared between fragments
-                vendorRegFragVM viewModel = new ViewModelProvider(VendorCreateAcc.this).get(vendorRegFragVM.class);
 
                 // Retrieve data from the ViewModel instead of directly from fragment views
-                fname = viewModel.getFName().getValue();
-                mname = viewModel.getMName().getValue();
-                lname = viewModel.getLName().getValue();
-                exname = viewModel.getExName().getValue();
-                gender = viewModel.getGender().getValue();
-                bday = viewModel.getBday().getValue();
-                street = viewModel.getStreet().getValue();
-                barangay = viewModel.getBarangay().getValue();
-                city = viewModel.getCity().getValue();
-                province = viewModel.getProvince().getValue();
-                postal = viewModel.getPostal().getValue();
-                mobileNo = viewModel.getMobile().getValue();
+                fname = vendorViewModel.getFName().getValue();
+                mname = vendorViewModel.getMName().getValue();
+                lname = vendorViewModel.getLName().getValue();
+                exname = vendorViewModel.getExName().getValue();
+                gender = vendorViewModel.getGender().getValue();
+                bday = vendorViewModel.getBday().getValue();
+                street = vendorViewModel.getStreet().getValue();
+                barangay = vendorViewModel.getBarangay().getValue();
+                city = vendorViewModel.getCity().getValue();
+                province = vendorViewModel.getProvince().getValue();
+                postal = vendorViewModel.getPostal().getValue();
+                mobileNo = vendorViewModel.getMobile().getValue();
 
                 // Handle the image selection if it exists in the ViewModel
-                Uri validIdImageUri = viewModel.getValidIdImageUri().getValue();  // Use getValue() to access the actual Uri from LiveData
+                Uri validIdImageUri = vendorViewModel.getValidIdImageUri().getValue();  // Use getValue() to access the actual Uri from LiveData
                 if (validIdImageUri != null) {
                     validId_picture = uriToByteArray(validIdImageUri);  // Convert image URI to byte array
                 }
 
                 // Validate required fields
                 if (fname != null && !fname.isEmpty() && lname != null && !lname.isEmpty()) {
+                     replaceFragment(new VendorRegistrationFragment3());
+                     btncreate3.setEnabled(true);
+                     changeButtons(3);
 
-                    Boolean checkInsertVendorInfo = myDB.insertVendorInfo(VendorCreateAcc.this, username, fname, mname, lname, exname, bday, gender, mobileNo,
-                            street, barangay, city, province, postal, validId_picture);
-                    Boolean checkInsertData = myDB.insertUsers(VendorCreateAcc.this, username, password, role);
-
-                    if (checkInsertVendorInfo && checkInsertData) {
-                        replaceFragment(new RegistrationFragment3());
-                        btncreate3.setEnabled(true);
-                        changeButtons(3);
-                    } else {
-                        Toast.makeText(VendorCreateAcc.this, "Record Failed", Toast.LENGTH_LONG).show();
-                    }
                 } else {
                     // Show an error message if First Name or Last Name is missing
                     Toast.makeText(VendorCreateAcc.this, "Please Input First Name / Last Name", Toast.LENGTH_LONG).show();
@@ -190,36 +184,56 @@ public class VendorCreateAcc extends AppCompatActivity {
         });
 
 
-//        btnNext3.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Fragment registrationFragment3 = getSupportFragmentManager().findFragmentByTag(RegistrationFragment3.class.getSimpleName());
-//
-//                if (registrationFragment3 != null) {
-//                    CheckBox checkAgree = registrationFragment3.getView().findViewById(R.id.checkAgree);
-//
-//                    // Check if the checkbox is checked
-//                    boolean isChecked = checkAgree.isChecked();
-//                    if (isChecked) {
-//                        // Insert customer info and user data if checkbox is checked
-//                        Boolean checkInsertCustInfo = myDB.insertCustomerInfo(VendorCreateAcc.this, username, fname, mname, lname, "", bday, gender, mobileNo,
-//                                street, barangay, city, province, postal, profile_picture);
-//
-//                        Boolean checkInsertData = myDB.insertUsers(VendorCreateAcc.this, username, password, role);
-//
-//                        if (checkInsertCustInfo && checkInsertData) {
-//                            Intent goLog = new Intent(VendorCreateAcc.this, login.class);
-//                            startActivity(goLog);
-//                        } else {
-//                            Toast.makeText(VendorCreateAcc.this, "Record Failed", Toast.LENGTH_LONG).show();
-//                        }
-//                    } else {
-//                        // If checkbox is not checked, show a message
-//                        Toast.makeText(VendorCreateAcc.this, "Please agree to the terms", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            }
-//        });
+        btnNext3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Retrieve all data from the ViewModel
+                shopName = vendorViewModel.getShopName().getValue();
+                shopStreet = vendorViewModel.getShopStreet().getValue();
+                shopBarangay = vendorViewModel.getShopBarangay().getValue();
+                shopCity = vendorViewModel.getShopCity().getValue();
+                shopProvince = vendorViewModel.getShopProvince().getValue();
+                shopPostal = vendorViewModel.getShopPostal().getValue();
+                shopMobileNo = vendorViewModel.getshopNo().getValue();
+                shopTelephoneNo = vendorViewModel.getTelNo().getValue();
+                shopEmail = vendorViewModel.getShopEmail().getValue();
+                storeHours = vendorViewModel.getStoreHrs().getValue();
+                description = vendorViewModel.getEditDesc().getValue();
+                orderPolicy = vendorViewModel.getOrderPolicy().getValue();
+                reservePolicy = vendorViewModel.getReservePolicy().getValue();
+
+                // Handle the image selection if it exists in the ViewModel
+                Uri shopProfileImageUri = vendorViewModel.getshopProfileImageUri().getValue();
+                if (shopProfileImageUri != null) {
+                    shopProfilePic = uriToByteArray(shopProfileImageUri);  // Convert image URI to byte array
+                }
+
+                // Set the status, e.g., "open"
+                String status = "open";
+
+                // Retrieve vendorId from ViewModel or other source
+                int vendorId = 2;  // Ensure vendorId is available
+
+                // Insert data into the database
+                Boolean checkInsertData = myDB.insertUsers(VendorCreateAcc.this, username, password, role);
+                Boolean checkInsertVendorInfo = myDB.insertVendorInfo(VendorCreateAcc.this, username, fname, mname, lname, exname, bday, gender, mobileNo,
+                        street, barangay, city, province, postal, validId_picture);
+
+                // Pass all required data to insertFruitShopInfo, including vendorId
+                Boolean checkInsertFruitShopInfo = myDB.insertFruitShopInfo(VendorCreateAcc.this, vendorId, shopName, shopStreet,
+                        shopBarangay, shopCity, shopProvince, shopPostal, shopMobileNo,
+                        shopTelephoneNo, shopEmail, description, storeHours, status,
+                        orderPolicy, reservePolicy, shopProfilePic);
+
+                // Check if all insertions were successful
+                if (checkInsertVendorInfo && checkInsertFruitShopInfo && checkInsertData) {
+                    Intent goLog = new Intent(VendorCreateAcc.this, login.class);
+                    startActivity(goLog);
+                } else {
+                    Toast.makeText(VendorCreateAcc.this, "Record Failed", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
 
 

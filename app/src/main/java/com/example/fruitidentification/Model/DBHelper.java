@@ -80,7 +80,11 @@ public class DBHelper extends SQLiteOpenHelper {
                 "    shop_id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "    vendor_id INTEGER NOT NULL,\n" +
                 "    shop_name TEXT NOT NULL,\n" +
-                "    address TEXT,\n" +
+                "    shop_street TEXT,\n" +
+                "    shop_barangay TEXT,\n" +
+                "    shop_city TEXT,\n" +
+                "    shop_province TEXT,\n" +
+                "    shop_postal TEXT,\n" +
                 "    mobile_number TEXT,\n" +
                 "    telephone_number TEXT,\n" +
                 "    email TEXT,\n" +
@@ -90,10 +94,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 "    status TEXT CHECK(status IN ('open', 'closed')),\n" +
                 "    immediate_order_policy TEXT CHECK(immediate_order_policy IN ('Payment Upon Pickup', 'Deposit Required', 'Full Payment in Advance', 'Flexible')),\n" +
                 "    advance_reservation_policy TEXT CHECK(advance_reservation_policy IN ('Payment Upon Pickup', 'Deposit Required', 'Full Payment in Advance', 'Flexible')),\n" +
-                "    profile_picture TEXT,\n" +
-                "    shop_picture TEXT,\n" +
+                "    Shop_profile_picture BLOB,\n" +
                 "    FOREIGN KEY (vendor_id) REFERENCES vendors (vendor_id)\n" +
                 ");");
+
 
         db.execSQL("CREATE TABLE shop_locations (\n" +
                 "    location_id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
@@ -359,6 +363,49 @@ public class DBHelper extends SQLiteOpenHelper {
             db.close();
         }
     }
+
+    public boolean insertFruitShopInfo(Context context, int vendorId, String shopName, String shopStreet, String shopBarangay,
+                                       String shopCity, String shopProvince, String shopPostal, String mobileNumber,
+                                       String telephoneNumber, String email, String description,String openingHours,
+                                       String status, String immediateOrderPolicy, String advanceReservationPolicy,
+                                       byte[] shopProfilePicture) {
+
+        String registrationDate = new SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.getDefault()).format(new Date());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put("vendor_id", vendorId);
+            cv.put("shop_name", shopName);
+            cv.put("shop_street", shopStreet);
+            cv.put("shop_barangay", shopBarangay);
+            cv.put("shop_city", shopCity);
+            cv.put("shop_province", shopProvince);
+            cv.put("shop_postal", shopPostal);
+            cv.put("mobile_number", mobileNumber);
+            cv.put("telephone_number", telephoneNumber);
+            cv.put("email", email);
+            cv.put("description", description);
+            cv.put("registration_date", registrationDate);
+            cv.put("opening_hours", openingHours);
+            cv.put("status", status);
+            cv.put("immediate_order_policy", immediateOrderPolicy);
+            cv.put("advance_reservation_policy", advanceReservationPolicy);
+            cv.put("Shop_profile_picture", shopProfilePicture);  // Store as BLOB
+
+            long result = db.insertOrThrow("fruit_shop", null, cv);
+
+            return result != -1;
+        } catch (Exception e) {
+            Toast.makeText(context, "Failed to insert fruit shop info: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            return false;
+        } finally {
+            db.close();
+        }
+    }
+
+
+
 
 
 }
