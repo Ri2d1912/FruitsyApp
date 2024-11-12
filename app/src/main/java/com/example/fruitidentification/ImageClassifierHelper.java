@@ -125,23 +125,7 @@ public class ImageClassifierHelper {
                 baseOptionsBuilder.useNnapi();
         }
 
-        String modelName;
-        switch (currentModel) {
-            case MODEL_MOBILENETV1:
-                modelName = "mobilenetv1.tflite";
-                break;
-            case MODEL_EFFICIENTNETV0:
-                modelName = "efficientnet-lite0.tflite";
-                break;
-            case MODEL_EFFICIENTNETV1:
-                modelName = "efficientnet-lite1.tflite";
-                break;
-            case MODEL_EFFICIENTNETV2:
-                modelName = "efficientnet-lite2.tflite";
-                break;
-            default:
-                modelName = "mobilenetv1.tflite";
-        }
+        String modelName = "mobilenetv1.tflite";
         try {
             imageClassifier =
                     ImageClassifier.createFromFileAndOptions(

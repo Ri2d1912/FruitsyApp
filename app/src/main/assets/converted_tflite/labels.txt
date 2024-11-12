@@ -1,0 +1,6 @@
+0 rottenoranges
+1 rottenbanana
+2 rottenapples
+3 freshoranges
+4 freshbanana
+5 freshapples
