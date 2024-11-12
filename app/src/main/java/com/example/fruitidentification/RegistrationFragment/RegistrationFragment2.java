@@ -1,7 +1,9 @@
 package com.example.fruitidentification.RegistrationFragment;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +18,8 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AlertDialog;
@@ -45,7 +49,7 @@ public class RegistrationFragment2 extends Fragment {
     private Spinner genderSpinner;
 
     private regFrag1VM viewModel;
-
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
 
     // ActivityResultLauncher for gallery selection
     private final ActivityResultLauncher<String> imagePickerLauncher =
@@ -71,8 +75,6 @@ public class RegistrationFragment2 extends Fragment {
                     Toast.makeText(getContext(), "Image capture failed", Toast.LENGTH_SHORT).show();
                 }
             });
-
-
 
     public RegistrationFragment2() {
         // Required empty public constructor
@@ -103,7 +105,6 @@ public class RegistrationFragment2 extends Fragment {
         imgCamera.setOnClickListener(v -> showImageSourceDialog());
         editBday.setOnClickListener(v -> showDatePickerDialog());
 
-
         liveData();
         textWatcher();
         return view;
@@ -132,11 +133,18 @@ public class RegistrationFragment2 extends Fragment {
 
     // Launch the camera and create a temporary URI for saving the captured image
     private void uploadPhotoWithCamera() {
-        imageUri = getTempImageUri();  // Get a temporary URI for storing the image
-        if (imageUri != null) {
-            cameraLauncher.launch(imageUri);
+        // Check if camera permission is granted
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            // If not, request the permission
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
         } else {
-            Toast.makeText(getContext(), "Failed to create image file", Toast.LENGTH_SHORT).show();
+            // Permission granted, proceed with opening the camera
+            imageUri = getTempImageUri();  // Get a temporary URI for storing the image
+            if (imageUri != null) {
+                cameraLauncher.launch(imageUri);  // Launch camera with the URI
+            } else {
+                Toast.makeText(getContext(), "Failed to create image file", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -151,6 +159,21 @@ public class RegistrationFragment2 extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    // Handle permission request result
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, proceed with opening the camera
+                uploadPhotoWithCamera();
+            } else {
+                // Permission denied, show a toast message
+                Toast.makeText(getContext(), "Camera permission is required to take a photo", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

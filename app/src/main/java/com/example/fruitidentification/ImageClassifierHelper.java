@@ -21,10 +21,9 @@ public class ImageClassifierHelper {
     private static final int DELEGATE_CPU = 0;
     private static final int DELEGATE_GPU = 1;
     private static final int DELEGATE_NNAPI = 2;
-    private static final int MODEL_MOBILENETV1 = 0;
-    private static final int MODEL_EFFICIENTNETV0 = 1;
-    private static final int MODEL_EFFICIENTNETV1 = 2;
-    private static final int MODEL_EFFICIENTNETV2 = 3;
+    private static final int MY_CUSTOM_MODEL = 0;
+    private static final int MY_CUSTOM_QUANT_MODEL = 1;
+
 
     private float threshold;
     private int numThreads;
@@ -125,7 +124,17 @@ public class ImageClassifierHelper {
                 baseOptionsBuilder.useNnapi();
         }
 
-        String modelName = "mobilenetv1.tflite";
+        String modelName;
+        switch (currentModel) {
+            case MY_CUSTOM_MODEL:
+                modelName = "model.tflite";
+                break;
+            case MY_CUSTOM_QUANT_MODEL:
+                modelName = "model_quant.tflite";
+                break;
+            default:
+                modelName = "model.tflite";
+        }
         try {
             imageClassifier =
                     ImageClassifier.createFromFileAndOptions(

@@ -1,7 +1,9 @@
 package com.example.fruitidentification.RegistrationFragment;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AlertDialog;
@@ -72,6 +75,18 @@ public class VendorRegistrationFragment3 extends Fragment {
                 }
             });
 
+    // ActivityResultLauncher to request camera permission
+    private final ActivityResultLauncher<String> cameraPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    // Permission granted, proceed with launching the camera
+                    launchCamera();
+                } else {
+                    // Permission denied, notify the user
+                    Toast.makeText(getContext(), "Camera permission is required to take photos", Toast.LENGTH_SHORT).show();
+                }
+            });
+
 
 
     public VendorRegistrationFragment3() {
@@ -116,14 +131,16 @@ public class VendorRegistrationFragment3 extends Fragment {
         return view;
     }
 
+
+
     // Show dialog to choose between camera or gallery
     private void showImageSourceDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Choose Image Source")
                 .setItems(new String[]{"Take Photo", "Choose from Gallery"}, (dialog, which) -> {
                     if (which == 0) {
-                        // Launch the camera to take a photo
-                        uploadPhotoWithCamera();
+                        // Check for camera permission before launching the camera
+                        checkCameraPermission();
                     } else {
                         // Launch the gallery to select an image
                         launchGallery();
@@ -137,8 +154,19 @@ public class VendorRegistrationFragment3 extends Fragment {
         imagePickerLauncher.launch("image/*");  // Launch image picker for selecting image from gallery
     }
 
-    // Launch the camera and create a temporary URI for saving the captured image
-    private void uploadPhotoWithCamera() {
+    // Check for camera permission and request it if not granted
+    private void checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            // Permission is granted, proceed with launching the camera
+            launchCamera();
+        } else {
+            // Request camera permission
+            cameraPermissionLauncher.launch(Manifest.permission.CAMERA);
+        }
+    }
+
+    // Launch the camera to take a photo
+    private void launchCamera() {
         shopProfileImageUri = getTempImageUri();  // Get a temporary URI for storing the image
         if (shopProfileImageUri != null) {
             cameraLauncher.launch(shopProfileImageUri);
