@@ -127,13 +127,13 @@ public class ImageClassifierHelper {
         String modelName;
         switch (currentModel) {
             case MY_CUSTOM_MODEL:
-                modelName = "model.tflite";
+                modelName = "modelfruit.tflite";
                 break;
             case MY_CUSTOM_QUANT_MODEL:
                 modelName = "model_quant.tflite";
                 break;
             default:
-                modelName = "model.tflite";
+                modelName = "modelfruit.tflite";
         }
         try {
             imageClassifier =

@@ -252,36 +252,28 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public boolean insertUsers(Context context, String username, String password, String role) {
+    public long insertUsers(Context context, String username, String password, String role) {
         SQLiteDatabase db = this.getWritableDatabase();
-
-        // Format the current date and time in the desired format
         String timestamp = new SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.getDefault()).format(new Date());
 
         try {
-            // Prepare the data to be inserted
             ContentValues cv = new ContentValues();
             cv.put("username", username);
             cv.put("password", password);
             cv.put("role", role);
-            cv.put("created_at", timestamp);  // Use "created_at" to match the column name in onCreate
+            cv.put("created_at", timestamp);
 
-            // Insert the data into the table
-            long result = db.insertOrThrow("users", null, cv);
-
-            // If we reach this point, insertion was successful
-            return result != -1; // Inserting returns -1 on failure, so we check for success
+            // Insert and retrieve the vendorId of the new row
+            long vendorId = db.insertOrThrow("users", null, cv);
+            return vendorId;
         } catch (Exception e) {
-            // Log the error message
             Toast.makeText(context, "Failed to insert user account: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            return false;
+            return -1;
         } finally {
-            // Close the database to release resources
-            if (db != null) {
-                db.close();
-            }
+            db.close();
         }
     }
+
 
 
     public boolean insertCustomerInfo(Context context, String username, String firstName, String middleName, String lastName, String extensionName,
@@ -403,9 +395,5 @@ public class DBHelper extends SQLiteOpenHelper {
             db.close();
         }
     }
-
-
-
-
 
 }

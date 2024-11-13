@@ -1,66 +1,115 @@
 package com.example.fruitidentification.RegistrationFragment;
 
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
-
+import android.provider.MediaStore;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.example.fruitidentification.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link VendorRegistrationFragment4#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class VendorRegistrationFragment4 extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    // Declare buttons for attaching image and PDF files
+    AppCompatButton btnAttachFileImage, btnAttachFileDti, btnAttachFileBir;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    // Declare the file picker result launcher
+    private final ActivityResultLauncher<String> filePickerLauncher =
+            registerForActivityResult(new ActivityResultContracts.GetContent(),
+                    new ActivityResultCallback<Uri>() {
+                        @Override
+                        public void onActivityResult(Uri result) {
+                            if (result != null) {
+                                // Get the file name from the URI
+                                String fileName = getFileNameFromUri(result);
+
+                                // Store the file URI for later use (you can save it in a variable or database)
+                                storeFileUri(result);
+
+                                // Check which button was clicked and update its text
+                                if (currentButton != null) {
+                                    currentButton.setText(fileName);
+                                }
+
+                                // Optionally show the file name in a toast
+                                Toast.makeText(getContext(), "File selected: " + fileName, Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+
+    private AppCompatButton currentButton; // Variable to store the current button clicked
+
+    // Variable to store the selected file URI (you can use this for later use)
+    private Uri selectedFileUri;
 
     public VendorRegistrationFragment4() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment VendorRegistrationFragment4.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static VendorRegistrationFragment4 newInstance(String param1, String param2) {
-        VendorRegistrationFragment4 fragment = new VendorRegistrationFragment4();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_vendor_registration4, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_vendor_registration4, container, false);
+
+        // Initialize buttons
+        btnAttachFileImage = rootView.findViewById(R.id.buttonAttachFileImage);
+        btnAttachFileDti = rootView.findViewById(R.id.buttonAttachFileDti);
+        btnAttachFileBir = rootView.findViewById(R.id.buttonAttachFileBir);
+
+        // Set click listeners for each button to launch file picker
+        btnAttachFileImage.setOnClickListener(v -> onButtonClicked(btnAttachFileImage, "image/*"));
+        btnAttachFileDti.setOnClickListener(v -> onButtonClicked(btnAttachFileDti, "application/pdf")); // Only PDF for DTI
+        btnAttachFileBir.setOnClickListener(v -> onButtonClicked(btnAttachFileBir, "application/pdf")); // Only PDF for BIR
+
+        return rootView;
+    }
+
+    // This method is triggered when any button is clicked
+    private void onButtonClicked(AppCompatButton button, String mimeType) {
+        currentButton = button; // Store the clicked button
+        openFilePicker(mimeType); // Launch the file picker with the specific MIME type
+    }
+
+    private void openFilePicker(String mimeType) {
+        // Launch the file picker with the provided MIME type (image/* or application/pdf for PDFs)
+        filePickerLauncher.launch(mimeType);
+    }
+
+    // Helper method to extract the file name from the URI
+    private String getFileNameFromUri(Uri uri) {
+        String fileName = null;
+        String[] projection = { MediaStore.Images.Media.DISPLAY_NAME };
+
+        try (Cursor cursor = getContext().getContentResolver().query(uri, projection, null, null, null)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME);
+                fileName = cursor.getString(columnIndex);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return fileName != null ? fileName : "File Selected";
+    }
+
+    // Store the file URI for later use
+    private void storeFileUri(Uri uri) {
+        selectedFileUri = uri; // Store the URI to be used later
+        // You can also store this URI in SharedPreferences or a database if needed
+    }
+
+    // Method to get the selected file URI later (for use)
+    public Uri getSelectedFileUri() {
+        return selectedFileUri;
     }
 }
