@@ -225,46 +225,83 @@ public class VendorCreateAcc extends AppCompatActivity {
                   btncreate4.setEnabled(true);
                   changeButtons(4);
               }
+              else{
+                  Toast.makeText(VendorCreateAcc.this, "Please input shop name", Toast.LENGTH_LONG).show();
+
+              }
             }
         });
 
         btnNext4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri shopHeaderProfileImageUri = vendorViewModel.getShopHeaderProfileImageUri().getValue();
-                Uri dtiFileUri = vendorViewModel.getDtiFileUri().getValue();
-                Uri birFileUri = vendorViewModel.getBirFileUri().getValue();
+                // Get the fragment to access the buttons
+                VendorRegistrationFragment4 fragment = (VendorRegistrationFragment4) getSupportFragmentManager()
+                        .findFragmentByTag("VendorRegistrationFragment4");
 
-                shopHeaderProfileImage = uriToByteArray(shopHeaderProfileImageUri);
-                dtiFile = uriToByteArray(dtiFileUri);
-                birFile = uriToByteArray(birFileUri);
-                status = "open";
+                if (fragment != null) {
+                    View fragmentView = fragment.getView();
+                    if (fragmentView != null) {
+                        // Get buttons
+                        Button btnAttachFile = fragmentView.findViewById(R.id.buttonAttachFileImage);
+                        Button btnAttachDti = fragmentView.findViewById(R.id.buttonAttachFileDti);
+                        Button btnAttachBir = fragmentView.findViewById(R.id.buttonAttachFileBir);
 
-                // Insert user data and get vendorId
-                long vendorId = myDB.insertUsers(VendorCreateAcc.this, username, password, role);
+                        // Check if the text is still "Attach File"
+                        String shopHeaderProfileImageText = btnAttachFile.getText().toString();
+                        String dtiFileText = btnAttachDti.getText().toString();
+                        String birFileText = btnAttachBir.getText().toString();
 
-                if (vendorId == -1) {
-                    Toast.makeText(VendorCreateAcc.this, "User insertion failed", Toast.LENGTH_LONG).show();
-                    return;
-                }
+                        boolean isShopHeaderProfileImageEmpty = shopHeaderProfileImageText.equals("Attach File");
+                        boolean isDtiFileEmpty = dtiFileText.equals("Attach File");
+                        boolean isBirFileEmpty = birFileText.equals("Attach File");
 
-                // Proceed with inserting vendor info and shop info with the retrieved vendorId
-                Boolean checkInsertVendorInfo = myDB.insertVendorInfo(VendorCreateAcc.this, username, fname, mname, lname, exname, bday, gender, mobileNo,
-                        street, barangay, city, province, postal, validId_picture);
-                Boolean checkInsertFruitShopInfo = myDB.insertFruitShopInfo(VendorCreateAcc.this, (int) vendorId, shopName, shopStreet,
-                        shopBarangay, shopCity, shopProvince, shopPostal, shopMobileNo,
-                        shopTelephoneNo, shopEmail, description, storeHours, status,
-                        orderPolicy, reservePolicy, shopProfilePic, dtiFile, birFile);
+                        if (isShopHeaderProfileImageEmpty || isDtiFileEmpty || isBirFileEmpty) {
+                            // If any file is not attached, show a message
+                            Toast.makeText(VendorCreateAcc.this, "Please upload DTI / BIR files / Shop Image.", Toast.LENGTH_LONG).show();
+                        } else {
+                            // Get URIs from ViewModel
+                            Uri shopHeaderProfileImageUri = vendorViewModel.getShopHeaderProfileImageUri().getValue();
+                            Uri dtiFileUri = vendorViewModel.getDtiFileUri().getValue();
+                            Uri birFileUri = vendorViewModel.getBirFileUri().getValue();
 
-                // Check if all insertions were successful
-                if (checkInsertVendorInfo && checkInsertFruitShopInfo && vendorId != -1) {
-                    Intent goLog = new Intent(VendorCreateAcc.this, login.class);
-                    startActivity(goLog);
-                } else {
-                    Toast.makeText(VendorCreateAcc.this, "Record Failed", Toast.LENGTH_LONG).show();
+                            // Convert URIs to byte arrays
+                            shopHeaderProfileImage = uriToByteArray(shopHeaderProfileImageUri);
+                            dtiFile = uriToByteArray(dtiFileUri);
+                            birFile = uriToByteArray(birFileUri);
+
+                            status = "open";
+
+                            // Insert user data and get vendorId
+                            long vendorId = myDB.insertUsers(VendorCreateAcc.this, username, password, role);
+
+                            if (vendorId == -1) {
+                                Toast.makeText(VendorCreateAcc.this, "User insertion failed", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+
+                            // Proceed with inserting vendor info and shop info with the retrieved vendorId
+                            Boolean checkInsertVendorInfo = myDB.insertVendorInfo(VendorCreateAcc.this, username, fname, mname, lname, exname, bday, gender, mobileNo,
+                                    street, barangay, city, province, postal, validId_picture);
+                            Boolean checkInsertFruitShopInfo = myDB.insertFruitShopInfo(VendorCreateAcc.this, (int) vendorId, shopName, shopStreet,
+                                    shopBarangay, shopCity, shopProvince, shopPostal, shopMobileNo,
+                                    shopTelephoneNo, shopEmail, description, storeHours, status,
+                                    orderPolicy, reservePolicy, shopProfilePic, dtiFile, birFile, shopHeaderProfileImage);
+
+                            // Check if all insertions were successful
+                            if (checkInsertVendorInfo && checkInsertFruitShopInfo && vendorId != -1) {
+                                Intent goLog = new Intent(VendorCreateAcc.this, login.class);
+                                startActivity(goLog);
+                            } else {
+                                Toast.makeText(VendorCreateAcc.this, "Record insertion failed", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }
                 }
             }
         });
+
+
 
 
 

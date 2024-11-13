@@ -275,7 +275,7 @@ public class RegistrationFragment2 extends Fragment {
         viewModel.getImageUri().observe(getViewLifecycleOwner(), uri -> {
             if (uri != null) {
                 imageViewUser.setImageURI(uri);  // Set image on the ImageView
-                imageViewUser.setTag(uri);  // Optionally store the URI as a tag
+                imageViewUser.setTag(uri);  //  store the URI as a tag
             }
         });
         viewModel.getBday().observe(getViewLifecycleOwner(), input -> {

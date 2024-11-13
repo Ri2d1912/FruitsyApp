@@ -203,11 +203,11 @@ public class vendorRegFragVM extends ViewModel {
     }
 
     public LiveData<Uri> getBirFileUri() {
-        return dtiFileUri;
+        return birFileUri;
     }
 
     public void setBirFileUri(Uri uri) {
-        dtiFileUri.setValue(uri);
+        birFileUri.setValue(uri);
     }
 
     public LiveData<Uri> getShopHeaderProfileImageUri() {

@@ -67,9 +67,11 @@ public class VendorRegistrationFragment4 extends Fragment {
     // ActivityResultLauncher for camera capture
     private final ActivityResultLauncher<Uri> cameraLauncher =
             registerForActivityResult(new ActivityResultContracts.TakePicture(), isSuccess -> {
-                Uri imageUri = currentButton.getTag() != null ? (Uri) currentButton.getTag() : null;
+                // Get the URI for the image captured by the camera from the button's tag
+                Uri imageUri = (Uri) currentButton.getTag();  // Retrieve the URI stored in the tag
+
                 if (isSuccess && imageUri != null) {
-                    // Set captured image in the current button
+                    // Set the captured image file name on the button
                     currentButton.setText(getFileNameFromUri(imageUri));  // Set file name on the button
                     currentButton.setTag(imageUri);  // Store the URI as a tag on the button
 
@@ -77,19 +79,21 @@ public class VendorRegistrationFragment4 extends Fragment {
                     if (currentButton == btnAttachFileImage) {
                         shopHeaderUri = imageUri;
                         viewModel.setShopHeaderProfileImageUri(shopHeaderUri);
+                        Toast.makeText(getContext(), "Image captured for Shop Header", Toast.LENGTH_SHORT).show();
                     } else if (currentButton == btnAttachFileDti) {
                         dtiUri = imageUri;
                         viewModel.setDtiFileUri(dtiUri);
+                        Toast.makeText(getContext(), "Image captured for DTI File", Toast.LENGTH_SHORT).show();
                     } else if (currentButton == btnAttachFileBir) {
                         birUri = imageUri;
                         viewModel.setBirFileUri(birUri);
+                        Toast.makeText(getContext(), "Image captured for BIR File", Toast.LENGTH_SHORT).show();
                     }
-
-                    Toast.makeText(getContext(), "Image captured with camera", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), "Image capture failed", Toast.LENGTH_SHORT).show();
                 }
             });
+
 
     public VendorRegistrationFragment4() {
         // Required empty public constructor
@@ -141,35 +145,36 @@ public class VendorRegistrationFragment4 extends Fragment {
         imagePickerLauncher.launch("image/*");  // Launch image picker for selecting image from gallery
     }
 
-    // Launch the camera and create a temporary URI for saving the captured image
     private void uploadPhotoWithCamera() {
         // Check if camera permission is granted
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             // If not, request the permission
             requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
         } else {
-            // Permission granted, proceed with opening the camera
-            Uri imageUri = getTempImageUri();  // Get a temporary URI for storing the image
-            if (imageUri != null) {
-                // Set the imageUri to the appropriate URI based on the current button
+            // Create a temporary URI based on the current button
+            Uri tempUri = getTempImageUri();  // Get a temporary URI for storing the image
+
+            if (tempUri != null) {
+                // Set the URI to the appropriate one based on the button clicked
                 if (currentButton == btnAttachFileImage) {
-                    shopHeaderUri = imageUri;
-                    viewModel.setShopHeaderProfileImageUri(shopHeaderUri);
+                    shopHeaderUri = tempUri;
                 } else if (currentButton == btnAttachFileDti) {
-                    dtiUri = imageUri;
-                    viewModel.setDtiFileUri(dtiUri);
+                    dtiUri = tempUri;
                 } else if (currentButton == btnAttachFileBir) {
-                    birUri = imageUri;
-                    viewModel.setBirFileUri(birUri);
+                    birUri = tempUri;
                 }
 
-                // Launch the camera with the URI
-                cameraLauncher.launch(imageUri);  // Launch camera with the URI
+                // Set the URI as a tag on the current button before launching the camera
+                currentButton.setTag(tempUri);
+
+                // Launch the camera with the appropriate URI
+                cameraLauncher.launch(tempUri);
             } else {
                 Toast.makeText(getContext(), "Failed to create image file", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
 
     // Generate a temporary URI for saving a photo captured with the camera
     private Uri getTempImageUri() {
@@ -217,8 +222,28 @@ public class VendorRegistrationFragment4 extends Fragment {
         }
     }
 
-    // Observer method to update the UI based on ViewModel's data
     private void liveData() {
-        // Set observers for the ViewModel data (optional, based on requirements)
+        // Observe and update UI for each image URI
+        viewModel.getShopHeaderProfileImageUri().observe(getViewLifecycleOwner(), uri -> {
+            if (uri != null) {
+                btnAttachFileImage.setText(getFileNameFromUri(uri));
+                btnAttachFileImage.setTag(uri);
+            }
+        });
+
+        viewModel.getDtiFileUri().observe(getViewLifecycleOwner(), uri -> {
+            if (uri != null) {
+                btnAttachFileDti.setText(getFileNameFromUri(uri));
+                btnAttachFileDti.setTag(uri);
+            }
+        });
+
+        viewModel.getBirFileUri().observe(getViewLifecycleOwner(), uri -> {
+            if (uri != null) {
+                btnAttachFileBir.setText(getFileNameFromUri(uri));
+                btnAttachFileBir.setTag(uri);
+            }
+        });
     }
+
 }

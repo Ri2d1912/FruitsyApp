@@ -96,8 +96,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 "    immediate_order_policy TEXT CHECK(immediate_order_policy IN ('Payment Upon Pickup', 'Deposit Required', 'Full Payment in Advance', 'Flexible')),\n" +
                 "    advance_reservation_policy TEXT CHECK(advance_reservation_policy IN ('Payment Upon Pickup', 'Deposit Required', 'Full Payment in Advance', 'Flexible')),\n" +
                 "    Shop_profile_picture BLOB,\n" +
-                "    dti_pdf BLOB,\n" +
-                "    bir_pdf BLOB,\n" +
+                "    shop_header_picture BLOB NOT NULL,\n" +
+                "    dtiImage BLOB NOT NULL,\n" +
+                "    birImage BLOB NOT NULL,\n" +
                 "    FOREIGN KEY (vendor_id) REFERENCES vendors (vendor_id)\n" +
                 ");");
 
@@ -363,7 +364,7 @@ public class DBHelper extends SQLiteOpenHelper {
                                        String shopCity, String shopProvince, String shopPostal, String mobileNumber,
                                        String telephoneNumber, String email, String description, String openingHours,
                                        String status, String immediateOrderPolicy, String advanceReservationPolicy,
-                                       byte[] shopProfilePicture, byte[] dtiImage, byte[] birImage) {
+                                       byte[] shopProfilePicture, byte[] dtiImage, byte[] birImage, byte[] shop_header_picture) {
 
         String registrationDate = new SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.getDefault()).format(new Date());
 
@@ -386,9 +387,10 @@ public class DBHelper extends SQLiteOpenHelper {
             cv.put("status", status);
             cv.put("immediate_order_policy", immediateOrderPolicy);
             cv.put("advance_reservation_policy", advanceReservationPolicy);
-            cv.put("Shop_profile_picture", shopProfilePicture);  // Store as BLOB
-            cv.put("dti_pdf", dtiImage);
-            cv.put("bir_pdf", birImage);
+            cv.put("Shop_profile_picture", shopProfilePicture);
+            cv.put("shop_header_picture", shop_header_picture);  // Store as BLOB
+            cv.put("dtiImage", dtiImage);
+            cv.put("birImage", birImage);
 
             long result = db.insertOrThrow("fruit_shop", null, cv);
 
