@@ -15,59 +15,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <FrameLayout
-            android:id="@+id/profile_shop_name_container"
-            android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:background="@drawable/header"
-            app:layout_constraintHeight_percent="0.4">
-
-            <ImageView
-                android:id="@+id/profile_header_image"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/header_image_curve" />
-
-            <ImageView
-                android:id="@+id/profile_pfp"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="25dp"
-                android:background="@drawable/profile_picture_border"
-                android:clipToOutline="true"
-                android:scaleType="centerCrop" />
-
-            <TextView
-                android:id="@+id/profile_fruitshop_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="130dp"
-                android:layout_marginTop="105dp"
-                android:text="Fruit Shop Name"
-                android:textColor="@color/white"
-                android:textSize="16dp" />
-
-            <TextView
-                android:id="@+id/emailText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="130dp"
-                android:layout_marginTop="130dp"
-                android:background="@drawable/email_curve_square"
-                android:paddingLeft="8dp"
-                android:paddingTop="5dp"
-                android:paddingRight="8dp"
-                android:paddingBottom="5dp"
-                android:text="email@example.com"
-                android:textColor="#EB6C00"
-                android:textSize="8dp"
-                android:textStyle="bold" />
-        </FrameLayout>
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -76,597 +23,604 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp"
                 tools:layout_conversion_absoluteHeight="962dp"
                 tools:layout_conversion_absoluteWidth="411dp">
 
 
-                <LinearLayout
+                <FrameLayout
+                    android:id="@+id/profile_shop_name_container"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingBottom="8dp">
+                    android:layout_height="160dp"
+                    android:background="@drawable/header"
+                    app:layout_constraintHeight_percent="0.4">
+
+                    <ImageView
+                        android:id="@+id/profile_header_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/header_image_curve" />
+
+                    <ImageView
+                        android:id="@+id/profile_pfp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginTop="40dp"
+                        android:background="@drawable/profile_picture_border"
+                        android:clipToOutline="true"
+                        android:scaleType="centerCrop" />
 
                     <TextView
-                        android:id="@+id/shopInformation"
+                        android:id="@+id/profile_fruitshop_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:text="Shop Information"
-                        android:textColor="@color/bottom_sheet_text_color"
-                        android:textSize="14dp"
+                        android:layout_marginStart="130dp"
+                        android:layout_marginTop="105dp"
+                        android:text="Fruit Shop Name"
+                        android:textColor="@color/white"
+                        android:textSize="18dp"
                         android:textStyle="bold" />
 
-                    <ImageButton
-                        android:id="@+id/btn_edit_fruitshop_info"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:background="@android:color/transparent"
-                        android:src="@drawable/icon_edit" />
-
-                </LinearLayout>
-
+                    <TextView
+                        android:id="@+id/emailText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="130dp"
+                        android:layout_marginTop="130dp"
+                        android:background="@drawable/email_curve_square"
+                        android:paddingLeft="8dp"
+                        android:paddingTop="5dp"
+                        android:paddingRight="8dp"
+                        android:paddingBottom="5dp"
+                        android:text="email@example.com"
+                        android:textColor="#EB6C00"
+                        android:textSize="8dp"
+                        android:textStyle="bold" />
+                </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:background="@drawable/profile_info_border"
-                    android:padding="16dp">
+                    android:padding="24dp">
 
-                    <TextView
-                        android:id="@+id/description1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="16dp"
-                        android:text="A one-stop fruit shop catering your healthy needs in the heart of Balanga City, Bataan."
-                        android:textColor="@color/bottom_sheet_text_color"
-                        android:textSize="10dp" /> <!-- Space between description and icon -->
-
-                    <!-- Icon with Address Section -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:orientation="horizontal">
-
-
-                        <ImageView
-                            android:id="@+id/shopIconaddress"
-                            android:layout_width="40dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/icon_location" /> <!-- Icon for shop -->
+                        android:orientation="horizontal"
+                        android:paddingBottom="8dp">
 
                         <TextView
-                            android:id="@+id/shopAddress1"
+                            android:id="@+id/shopInformation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Address"
+                            android:layout_gravity="start"
+                            android:text="Shop Information"
                             android:textColor="@color/bottom_sheet_text_color"
-                            android:textSize="12dp"
+                            android:textSize="14dp"
                             android:textStyle="bold" />
 
+                        <ImageButton
+                            android:id="@+id/btn_edit_fruitshop_info"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:background="@android:color/transparent"
+                            android:src="@drawable/icon_edit" />
 
-                        <!-- Address text next to the icon -->
                     </LinearLayout>
-                    <!-- description of address -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/profile_info_border"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:id="@+id/description1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:text="A one-stop fruit shop catering your healthy needs in the heart of Balanga City, Bataan."
+                            android:textColor="@color/bottom_sheet_text_color"
+                            android:textSize="10dp"
+                            android:justificationMode="inter_word"/>
+
+                        <!-- Icon with Address Section -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
+
+
+                            <ImageView
+                                android:id="@+id/shopIconaddress"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/icon_location" /> <!-- Icon for shop -->
+
+                            <TextView
+                                android:id="@+id/shopAddress1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Address"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp"
+                                android:textStyle="bold" />
+
+
+                            <!-- Address text next to the icon -->
+                        </LinearLayout>
+                        <!-- description of address -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
+
+
+                            <!-- Icon for shop -->
+
+                            <TextView
+                                android:id="@+id/shopDescAddress"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="40dp"
+                                android:text="123 Diamond Street, Tenejero,, Balanga City, Bataan"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp" />
+
+
+                            <!-- Address text next to the icon -->
+                        </LinearLayout>
+
+                        <!-- Icon with store hours Section -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
+
+
+                            <ImageView
+                                android:id="@+id/shopstorehoursIcon"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/clock_icon" /> <!-- Icon for shop -->
+
+                            <TextView
+                                android:id="@+id/shopStorehours"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Store Hourse"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp"
+                                android:textStyle="bold" />
+
+
+                            <!-- Address text next to the icon -->
+                        </LinearLayout>
+                        <!-- description of store hours -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
+
+
+                            <!-- Icon for shop -->
+
+                            <TextView
+                                android:id="@+id/shopstorehoursdescrip"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="40dp"
+                                android:text="8:00AM - 5:00PM"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp" />
+
+
+                            <!-- Address text next to the icon -->
+                        </LinearLayout>
+
+                        <!-- Icon with Contact Number Section -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
+
+
+                            <ImageView
+                                android:id="@+id/shopcallicon"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/icon_phone" /> <!-- Icon for shop -->
+
+                            <TextView
+                                android:id="@+id/shopContact"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Contact Number"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp"
+                                android:textStyle="bold" />
+
+
+                            <!-- Address text next to the icon -->
+                        </LinearLayout>
+                        <!-- description of contact number 2-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
+
+
+                            <TextView
+                                android:id="@+id/shopContactDescrip2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="40dp"
+                                android:text="Mobile Number:"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp" />
+
+
+                            <!-- Address text next to the icon -->
+                        </LinearLayout>
+
+                        <!-- description of contact number -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/shopContactDesc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="40dp"
+                                android:text="Telephone Number:"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp" />
+
+
+                            <!-- Address text next to the icon -->
+                        </LinearLayout>
+
+                        <!-- Icon with Email Section -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
+
+
+                            <ImageView
+                                android:id="@+id/shopEmailIcon"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/icon_email" /> <!-- Icon for shop -->
+
+                            <TextView
+                                android:id="@+id/shopEmail"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Email"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp"
+                                android:textStyle="bold" />
+
+
+                            <!-- Address text next to the icon -->
+                        </LinearLayout>
+                        <!-- description of email -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/shopEmailInfo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="40dp"
+                                android:text="richardfruitshop@gmail.com"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp" />
+
+
+                            <!-- Address text next to the icon -->
+                        </LinearLayout>
+
+
+                        <!-- Icon with Policy Section -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
+
+
+                            <ImageView
+                                android:id="@+id/shoppolicyicon"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/icon_policy" /> <!-- Icon for shop -->
+
+                            <TextView
+                                android:id="@+id/shopPolicy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Policy"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp"
+                                android:textStyle="bold" />
+
+
+                            <!-- Address text next to the icon -->
+                        </LinearLayout>
+                        <!-- description of policy 2-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="12dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/shoppolicyDescrip"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="40dp"
+                                android:text="Order"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp" />
+
+
+                            <!-- Address text next to the icon -->
+                        </LinearLayout>
+
+                        <!-- description of contact number -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/shoppolicyiconnone3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="40dp"
+                                android:text="Reservation"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp" />
+
+                            <!-- Address text next to the icon -->
+                        </LinearLayout>
+
+                    </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:orientation="horizontal">
-
-
-                        <!-- Icon for shop -->
+                        android:orientation="horizontal"
+                        android:paddingTop="24dp"
+                        android:paddingBottom="8dp">
 
                         <TextView
-                            android:id="@+id/shopDescAddress"
+                            android:id="@+id/VendorsInformation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="40dp"
+                            android:layout_gravity="start"
+                            android:text="Vendor's Information"
                             android:textColor="@color/bottom_sheet_text_color"
-                            android:textSize="12dp"
-                            android:text="123 Diamond Street, Tenejero,, Balanga City, Bataan" />
-
-
-                        <!-- Address text next to the icon -->
-                    </LinearLayout>
-
-                    <!-- Icon with store hours Section -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:orientation="horizontal">
-
-
-                        <ImageView
-                            android:id="@+id/shopstorehoursIcon"
-                            android:layout_width="40dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/clock_icon" /> <!-- Icon for shop -->
-
-                        <TextView
-                            android:id="@+id/shopStorehours"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Store Hourse"
-                            android:textColor="@color/bottom_sheet_text_color"
-                            android:textSize="12dp"
+                            android:textSize="14dp"
                             android:textStyle="bold" />
 
-
-                        <!-- Address text next to the icon -->
+                        <ImageButton
+                            android:id="@+id/btn_edit_vendor_info"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:background="@android:color/transparent"
+                            android:src="@drawable/icon_edit" />
                     </LinearLayout>
-                    <!-- description of store hours -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:orientation="horizontal">
-
-
-                        <!-- Icon for shop -->
-
-                        <TextView
-                            android:id="@+id/shopstorehoursdescrip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="40dp"
-                            android:text="8:00AM - 5:00PM"
-                            android:textColor="@color/bottom_sheet_text_color"
-                            android:textSize="12dp" />
-
-
-                        <!-- Address text next to the icon -->
-                    </LinearLayout>
-
-                    <!-- Icon with Contact Number Section -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:orientation="horizontal">
-
-
-                        <ImageView
-                            android:id="@+id/shopcallicon"
-                            android:layout_width="40dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/icon_phone" /> <!-- Icon for shop -->
-
-                        <TextView
-                            android:id="@+id/shopContact"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Contact Number"
-                            android:textColor="@color/bottom_sheet_text_color"
-                            android:textSize="12dp"
-                            android:textStyle="bold" />
-
-
-                        <!-- Address text next to the icon -->
-                    </LinearLayout>
-                    <!-- description of contact number 2-->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:orientation="horizontal">
-
-
-                        <TextView
-                            android:id="@+id/shopContactDescrip2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="40dp"
-                            android:text="Mobile Number:"
-                            android:textColor="@color/bottom_sheet_text_color"
-                            android:textSize="12dp" />
-
-
-                        <!-- Address text next to the icon -->
-                    </LinearLayout>
-
-                    <!-- description of contact number -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/shopContactDesc"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="40dp"
-                            android:text="Telephone Number:"
-                            android:textColor="@color/bottom_sheet_text_color"
-                            android:textSize="12dp" />
-
-
-                        <!-- Address text next to the icon -->
-                    </LinearLayout>
-
-                    <!-- Icon with Email Section -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:orientation="horizontal">
-
-
-                        <ImageView
-                            android:id="@+id/shopEmailIcon"
-                            android:layout_width="40dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/icon_email" /> <!-- Icon for shop -->
-
-                        <TextView
-                            android:id="@+id/shopEmail"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Email"
-                            android:textColor="@color/bottom_sheet_text_color"
-                            android:textSize="12dp"
-                            android:textStyle="bold" />
-
-
-                        <!-- Address text next to the icon -->
-                    </LinearLayout>
-                    <!-- description of email -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/shopEmailInfo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="40dp"
-                            android:text="richardfruitshop@gmail.com"
-                            android:textColor="@color/bottom_sheet_text_color"
-                            android:textSize="12dp" />
-
-
-                        <!-- Address text next to the icon -->
-                    </LinearLayout>
-
-
-                    <!-- Icon with Policy Section -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:orientation="horizontal">
-
-
-                        <ImageView
-                            android:id="@+id/shoppolicyicon"
-                            android:layout_width="40dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/icon_policy" /> <!-- Icon for shop -->
-
-                        <TextView
-                            android:id="@+id/shopPolicy"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Policy"
-                            android:textColor="@color/bottom_sheet_text_color"
-                            android:textSize="12dp"
-                            android:textStyle="bold" />
-
-
-                        <!-- Address text next to the icon -->
-                    </LinearLayout>
-                    <!-- description of policy 2-->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/shoppolicyDescrip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="40dp"
-                            android:text="Order"
-                            android:textColor="@color/bottom_sheet_text_color"
-                            android:textSize="12dp" />
-
-
-                        <!-- Address text next to the icon -->
-                    </LinearLayout>
-
-                    <!-- description of contact number -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/shoppolicyiconnone3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="40dp"
-                            android:text="Reservation"
-                            android:textColor="@color/bottom_sheet_text_color"
-                            android:textSize="12dp" />
-
-                        <!-- Address text next to the icon -->
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp">
-
-                    <TextView
-                        android:id="@+id/VendorsInformation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:text="Vendor's Information"
-                        android:textColor="@color/bottom_sheet_text_color"
-                        android:textSize="14dp"
-                        android:textStyle="bold" />
-
-                    <ImageButton
-                        android:id="@+id/btn_edit_vendor_info"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:background="@android:color/transparent"
-                        android:src="@drawable/icon_edit" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/profile_info_border"
-                    android:orientation="vertical"
-                    android:padding="16dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:background="@drawable/profile_info_border"
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
-
-                        <ImageView
-                            android:id="@+id/vendoraccounticon"
-                            android:layout_width="40dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/icon_vendor_user" /> <!-- Icon for shop -->
-
-                        <TextView
-                            android:id="@+id/vendorName"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Richard Jr L. Caprio"
-                            android:textColor="@color/bottom_sheet_text_color"
-                            android:textSize="12dp"
-                            android:textStyle="bold" />
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
 
 
-                        <!-- Address text next to the icon -->
-                    </LinearLayout>
-                    <!-- description of address -->
+                            <ImageView
+                                android:id="@+id/vendoraccounticon"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/icon_vendor_user" /> <!-- Icon for shop -->
 
-                    <!-- Icon with Address Section -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/vendorName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Richard Jr L. Caprio"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp"
+                                android:textStyle="bold" />
 
 
-                        <ImageView
-                            android:id="@+id/vendorIconaddress"
-                            android:layout_width="40dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/icon_location" /> <!-- Icon for shop -->
+                            <!-- Address text next to the icon -->
+                        </LinearLayout>
+                        <!-- description of address -->
 
-                        <TextView
-                            android:id="@+id/shopAddress"
-                            android:layout_width="wrap_content"
+                        <!-- Icon with Address Section -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Address"
-                            android:textColor="@color/bottom_sheet_text_color"
-                            android:textSize="12dp"
-                            android:textStyle="bold" />
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
 
 
-                        <!-- Address text next to the icon -->
-                    </LinearLayout>
-                    <!-- description of address -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/vendorIconaddress"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/icon_location" /> <!-- Icon for shop -->
+
+                            <TextView
+                                android:id="@+id/shopAddress"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Address"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp"
+                                android:textStyle="bold" />
 
 
-                        <TextView
-                            android:id="@+id/vendorDescAddress"
-                            android:layout_width="wrap_content"
+                            <!-- Address text next to the icon -->
+                        </LinearLayout>
+                        <!-- description of address -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="40dp"
-                            android:textSize="12dp"
-                            android:textColor="@color/bottom_sheet_text_color"
-                            android:text="123 Diamond Street, Tenejero,, Balanga City, Bataan" />
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
 
 
-                        <!-- Address text next to the icon -->
-                    </LinearLayout>
-
-                    <!-- Icon with store hours Section -->
-
-
-                    <!-- Icon with Contact Number Section -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/vendorDescAddress"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="40dp"
+                                android:text="123 Diamond Street, Tenejero,, Balanga City, Bataan"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp" />
 
 
-                        <ImageView
-                            android:id="@+id/vendorcallicon"
-                            android:layout_width="40dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/baseline_add_call_24" /> <!-- Icon for shop -->
+                            <!-- Address text next to the icon -->
+                        </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/vendorContact"
-                            android:layout_width="wrap_content"
+                        <!-- Icon with store hours Section -->
+
+
+                        <!-- Icon with Contact Number Section -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Contact Number"
-                            android:textColor="@color/bottom_sheet_text_color"
-                            android:textSize="12dp"
-                            android:textStyle="bold" />
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
 
 
-                        <!-- Address text next to the icon -->
-                    </LinearLayout>
-                    <!-- description of contact number 2-->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/vendorcallicon"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/baseline_add_call_24" /> <!-- Icon for shop -->
+
+                            <TextView
+                                android:id="@+id/vendorContact"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Contact Number"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp"
+                                android:textStyle="bold" />
 
 
-                        <TextView
-                            android:id="@+id/vednorContactDescrip2"
-                            android:layout_width="wrap_content"
+                            <!-- Address text next to the icon -->
+                        </LinearLayout>
+                        <!-- description of contact number 2-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Mobile Number:"
-                            android:layout_marginStart="40dp"
-                            android:textColor="@color/bottom_sheet_text_color"
-                            android:textSize="12dp" />
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
 
 
-                        <!-- Address text next to the icon -->
-                    </LinearLayout>
+                            <TextView
+                                android:id="@+id/vednorContactDescrip2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="40dp"
+                                android:text="Mobile Number:"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp" />
 
 
-                    <!-- Icon with Email Section -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:orientation="horizontal">
+                            <!-- Address text next to the icon -->
+                        </LinearLayout>
 
 
-                        <ImageView
-                            android:id="@+id/vendorEmailIcon"
-                            android:layout_width="40dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/icon_email" /> <!-- Icon for shop -->
-
-                        <TextView
-                            android:id="@+id/vendorEmail"
-                            android:layout_width="wrap_content"
+                        <!-- Icon with Email Section -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Email"
-                            android:textColor="@color/bottom_sheet_text_color"
-                            android:textSize="12dp"
-                            android:textStyle="bold" />
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
 
 
-                        <!-- Address text next to the icon -->
-                    </LinearLayout>
-                    <!-- description of email -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/vendorEmailIcon"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/icon_email" /> <!-- Icon for shop -->
+
+                            <TextView
+                                android:id="@+id/vendorEmail"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Email"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp"
+                                android:textStyle="bold" />
 
 
-                        <TextView
-                            android:id="@+id/vendorEmailInfo"
-                            android:layout_width="wrap_content"
+                            <!-- Address text next to the icon -->
+                        </LinearLayout>
+                        <!-- description of email -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="40dp"
-                            android:text="richardfruitshop@gmail.com"
-                            android:textColor="@color/bottom_sheet_text_color"
-                            android:textSize="12dp" />
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
 
 
-                        <!-- Address text next to the icon -->
+                            <TextView
+                                android:id="@+id/vendorEmailInfo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="40dp"
+                                android:text="richardfruitshop@gmail.com"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp" />
+
+
+                            <!-- Address text next to the icon -->
+                        </LinearLayout>
+
+
                     </LinearLayout>
-
-
                 </LinearLayout>
 
 
             </LinearLayout>
         </ScrollView>
 
-        <FrameLayout
-            android:id="@+id/profileHeader"
-            android:layout_width="match_parent"
-            android:layout_height="166dp"
-            android:background="@drawable/header"
-            app:layout_constraintHeight_percent="0.4">
-
-            <ImageView
-                android:id="@+id/headerImage"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/header_image_curve" />
-
-            <ImageView
-                android:id="@+id/profilePicture"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="25dp"
-                android:background="@drawable/profile_picture_border"
-                android:clipToOutline="true"
-                android:scaleType="centerCrop" />
-
-            <TextView
-                android:id="@+id/nameText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="130dp"
-                android:layout_marginTop="105dp"
-                android:text="Fruit Shop Name"
-                android:textColor="@color/white"
-                android:textSize="16dp" />
-
-            <TextView
-                android:id="@+id/profile_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="130dp"
-                android:layout_marginTop="130dp"
-                android:background="@drawable/email_curve_square"
-                android:paddingLeft="8dp"
-                android:paddingTop="5dp"
-                android:paddingRight="8dp"
-                android:paddingBottom="5dp"
-                android:text="email@example.com"
-                android:textColor="#EB6C00"
-                android:textSize="8dp"
-                android:textStyle="bold" />
-        </FrameLayout>
     </LinearLayout>
 
 
