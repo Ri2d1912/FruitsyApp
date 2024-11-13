@@ -21,8 +21,7 @@ public class ImageClassifierHelper {
     private static final int DELEGATE_CPU = 0;
     private static final int DELEGATE_GPU = 1;
     private static final int DELEGATE_NNAPI = 2;
-    private static final int MY_CUSTOM_MODEL = 0;
-    private static final int MY_CUSTOM_QUANT_MODEL = 1;
+
 
 
     private float threshold;
@@ -124,17 +123,7 @@ public class ImageClassifierHelper {
                 baseOptionsBuilder.useNnapi();
         }
 
-        String modelName;
-        switch (currentModel) {
-            case MY_CUSTOM_MODEL:
-                modelName = "modelfruit.tflite";
-                break;
-            case MY_CUSTOM_QUANT_MODEL:
-                modelName = "model_quant.tflite";
-                break;
-            default:
-                modelName = "modelfruit.tflite";
-        }
+        String modelName = "FruitsyModel.tflite";
         try {
             imageClassifier =
                     ImageClassifier.createFromFileAndOptions(

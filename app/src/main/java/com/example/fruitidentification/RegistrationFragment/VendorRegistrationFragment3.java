@@ -36,7 +36,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class VendorRegistrationFragment3 extends Fragment {
@@ -190,6 +192,14 @@ public class VendorRegistrationFragment3 extends Fragment {
     }
 
     private void liveData() {
+
+        viewModel.getshopProfileImageUri().observe(getViewLifecycleOwner(), uri -> {
+            if (uri != null) {
+                imgShopProfilePic.setImageURI(uri);
+                imgShopProfilePic.setTag(uri);
+            }
+        });
+
         // Observe and update UI for Shop fields
         viewModel.getShopName().observe(getViewLifecycleOwner(), input -> {
             if (input != null && !input.equals(editShopName.getText().toString())) {
@@ -264,31 +274,46 @@ public class VendorRegistrationFragment3 extends Fragment {
             }
         });
 
+        // Observe the order policy change from ViewModel
         viewModel.getOrderPolicy().observe(getViewLifecycleOwner(), input -> {
             if (input != null && !input.equals(spinnerOrderPolicy.getSelectedItem().toString())) {
-                int position = getPositionInSpinner(spinnerOrderPolicy, input);
-                if (position >= 0) {
-                    spinnerOrderPolicy.setSelection(position);
-                }
+                int position = getOrderPolicyPosition(input); // Get the position based on order policy string
+                spinnerOrderPolicy.setSelection(position); // Set the selected item in the spinner
             }
         });
 
+
+        // Observe the reserve policy change from ViewModel
         viewModel.getReservePolicy().observe(getViewLifecycleOwner(), input -> {
             if (input != null && !input.equals(spinnerReservePolicy.getSelectedItem().toString())) {
-                int position = getPositionInSpinner(spinnerReservePolicy, input);
-                if (position >= 0) {
-                    spinnerReservePolicy.setSelection(position);
-                }
+                int position = getReservePolicyPosition(input); // Get the position based on reserve policy string
+                spinnerReservePolicy.setSelection(position); // Set the selected item in the spinner
             }
         });
+
     }
-    private int getPositionInSpinner(Spinner spinner, String value) {
-        for (int i = 0; i < spinner.getAdapter().getCount(); i++) {
-            if (spinner.getAdapter().getItem(i).toString().equals(value)) {
-                return i;
-            }
-        }
-        return -1; // If not found
+
+    private int getOrderPolicyPosition(String orderPolicy) {
+        // List of order policies (you can also get this from your resources if needed)
+        List<String> orderPolicyList = Arrays.asList(
+                "Payment Upon Pickup",
+                "Deposit Required",
+                "Fullpayment in Advanced",
+                "Flexible"
+        );
+        return orderPolicyList.indexOf(orderPolicy); // Return the position of the selected order policy
+    }
+
+
+    private int getReservePolicyPosition(String reservePolicy) {
+        // List of reserve policies (you can also get this from your resources if needed)
+        List<String> reservePolicyList = Arrays.asList(
+                "Payment Upon Pickup",
+                "Deposit Required",
+                "Fullpayment in Advanced",
+                "Flexible"
+        );
+        return reservePolicyList.indexOf(reservePolicy); // Return the position of the selected reserve policy
     }
 
     private void textWatcher() {
@@ -462,12 +487,5 @@ public class VendorRegistrationFragment3 extends Fragment {
             public void onNothingSelected(AdapterView<?> parentView) {
             }
         });
-
-
-
     }
-
-
-
-
 }

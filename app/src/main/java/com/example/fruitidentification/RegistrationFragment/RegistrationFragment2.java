@@ -36,7 +36,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class RegistrationFragment2 extends Fragment {
@@ -225,19 +227,12 @@ public class RegistrationFragment2 extends Fragment {
             }
         });
 
-        genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                // Get the selected item from the spinner
-                String selectedGender = parentView.getItemAtPosition(position).toString();
 
-                // Update the ViewModel with the selected gender
-                viewModel.setGender(selectedGender);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // Optionally handle case when nothing is selected
+        viewModel.getGender().observe(getViewLifecycleOwner(), input -> {
+            if (input != null && !input.equals(genderSpinner.getSelectedItem().toString())) {
+                // Restore gender selection if needed (spinner update)
+                int position = getGenderPosition(input); // Method to get the position based on gender string
+                genderSpinner.setSelection(position);
             }
         });
 
@@ -277,13 +272,6 @@ public class RegistrationFragment2 extends Fragment {
             }
         });
 
-        viewModel.getGender().observe(getViewLifecycleOwner(), input -> {
-            if (input != null && !input.equals(genderSpinner.getSelectedItem().toString())) {
-                // Restore gender selection if needed (spinner update)
-                // This may involve setting the correct item on the spinner
-            }
-        });
-
         viewModel.getImageUri().observe(getViewLifecycleOwner(), uri -> {
             if (uri != null) {
                 imageViewUser.setImageURI(uri);  // Set image on the ImageView
@@ -296,6 +284,13 @@ public class RegistrationFragment2 extends Fragment {
             }
         });
 
+    }
+
+    private int getGenderPosition(String gender) {
+        // You may need to adjust this based on your spinner's adapter and data
+        // For example, if your adapter is a simple list like ["Male", "Female", "Other"], map the gender to its position
+        List<String> genderList = Arrays.asList("Male", "Female", "Other");
+        return genderList.indexOf(gender);
     }
     private void textWatcher() {
 
@@ -354,6 +349,22 @@ public class RegistrationFragment2 extends Fragment {
 
             @Override
             public void afterTextChanged(android.text.Editable editable) {}
+        });
+
+        genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // Get the selected item from the spinner
+                String selectedGender = parentView.getItemAtPosition(position).toString();
+
+                // Update the ViewModel with the selected gender
+                viewModel.setGender(selectedGender);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Optionally handle case when nothing is selected
+            }
         });
 
         streetField.addTextChangedListener(new android.text.TextWatcher() {

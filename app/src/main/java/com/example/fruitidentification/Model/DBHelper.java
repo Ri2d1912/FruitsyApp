@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -95,6 +96,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "    immediate_order_policy TEXT CHECK(immediate_order_policy IN ('Payment Upon Pickup', 'Deposit Required', 'Full Payment in Advance', 'Flexible')),\n" +
                 "    advance_reservation_policy TEXT CHECK(advance_reservation_policy IN ('Payment Upon Pickup', 'Deposit Required', 'Full Payment in Advance', 'Flexible')),\n" +
                 "    Shop_profile_picture BLOB,\n" +
+                "    dti_pdf BLOB,\n" +
+                "    bir_pdf BLOB,\n" +
                 "    FOREIGN KEY (vendor_id) REFERENCES vendors (vendor_id)\n" +
                 ");");
 
@@ -358,9 +361,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public boolean insertFruitShopInfo(Context context, int vendorId, String shopName, String shopStreet, String shopBarangay,
                                        String shopCity, String shopProvince, String shopPostal, String mobileNumber,
-                                       String telephoneNumber, String email, String description,String openingHours,
+                                       String telephoneNumber, String email, String description, String openingHours,
                                        String status, String immediateOrderPolicy, String advanceReservationPolicy,
-                                       byte[] shopProfilePicture) {
+                                       byte[] shopProfilePicture, byte[] dtiImage, byte[] birImage) {
 
         String registrationDate = new SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.getDefault()).format(new Date());
 
@@ -384,16 +387,21 @@ public class DBHelper extends SQLiteOpenHelper {
             cv.put("immediate_order_policy", immediateOrderPolicy);
             cv.put("advance_reservation_policy", advanceReservationPolicy);
             cv.put("Shop_profile_picture", shopProfilePicture);  // Store as BLOB
+            cv.put("dti_pdf", dtiImage);
+            cv.put("bir_pdf", birImage);
 
             long result = db.insertOrThrow("fruit_shop", null, cv);
 
             return result != -1;
         } catch (Exception e) {
             Toast.makeText(context, "Failed to insert fruit shop info: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.d("VendorRegistration", "Failed to insert fruit shop info: " + e.getMessage());
+
             return false;
         } finally {
             db.close();
         }
     }
+
 
 }

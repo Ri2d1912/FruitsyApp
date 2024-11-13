@@ -56,13 +56,13 @@ public class VendorCreateAcc extends AppCompatActivity {
     String username, password, confirmPassword, role;
     FloatingActionButton imgCamera;
 
-    byte[] validId_picture, shopProfilePic;
+    byte[] validId_picture, shopProfilePic, shopHeaderProfileImage,dtiFile, birFile;
+
     String fname, mname, lname, exname, street, barangay, city, province, postal, mobileNo, gender, bday;
 
     // vendor side
 
     String shopName, shopStreet, shopBarangay, shopCity, shopProvince, shopPostal, shopMobileNo, shopTelephoneNo, shopEmail, storeHours, description, orderPolicy,reservePolicy, status;
-    int vendorId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,19 +219,27 @@ public class VendorCreateAcc extends AppCompatActivity {
                 if (shopProfileImageUri != null) {
                     shopProfilePic = uriToByteArray(shopProfileImageUri);  // Convert image URI to byte array
                 }
-                 status = "open";
-                // Retrieve vendorId from ViewModel or other source
-                 vendorId = 2;
 
-                replaceFragment(new VendorRegistrationFragment4());
-                btncreate3.setEnabled(true);
-                changeButtons(4);
+              if(shopName != null && !shopName.isEmpty()){
+                  replaceFragment(new VendorRegistrationFragment4());
+                  btncreate4.setEnabled(true);
+                  changeButtons(4);
+              }
             }
         });
 
         btnNext4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Uri shopHeaderProfileImageUri = vendorViewModel.getShopHeaderProfileImageUri().getValue();
+                Uri dtiFileUri = vendorViewModel.getDtiFileUri().getValue();
+                Uri birFileUri = vendorViewModel.getBirFileUri().getValue();
+
+                shopHeaderProfileImage = uriToByteArray(shopHeaderProfileImageUri);
+                dtiFile = uriToByteArray(dtiFileUri);
+                birFile = uriToByteArray(birFileUri);
+                status = "open";
+
                 // Insert user data and get vendorId
                 long vendorId = myDB.insertUsers(VendorCreateAcc.this, username, password, role);
 
@@ -246,10 +254,10 @@ public class VendorCreateAcc extends AppCompatActivity {
                 Boolean checkInsertFruitShopInfo = myDB.insertFruitShopInfo(VendorCreateAcc.this, (int) vendorId, shopName, shopStreet,
                         shopBarangay, shopCity, shopProvince, shopPostal, shopMobileNo,
                         shopTelephoneNo, shopEmail, description, storeHours, status,
-                        orderPolicy, reservePolicy, shopProfilePic);
+                        orderPolicy, reservePolicy, shopProfilePic, dtiFile, birFile);
 
                 // Check if all insertions were successful
-                if (checkInsertVendorInfo && checkInsertFruitShopInfo) {
+                if (checkInsertVendorInfo && checkInsertFruitShopInfo && vendorId != -1) {
                     Intent goLog = new Intent(VendorCreateAcc.this, login.class);
                     startActivity(goLog);
                 } else {
@@ -347,6 +355,7 @@ public class VendorCreateAcc extends AppCompatActivity {
                 btnNext.setVisibility(View.GONE);
                 btnNext2.setVisibility(View.VISIBLE);
                 btnNext3.setVisibility(View.GONE);
+                btnNext4.setVisibility(View.GONE);
 
                 break;
 
@@ -369,12 +378,14 @@ public class VendorCreateAcc extends AppCompatActivity {
                 btnNext.setVisibility(View.GONE);
                 btnNext2.setVisibility(View.GONE);
                 btnNext3.setVisibility(View.VISIBLE);
+                btnNext4.setVisibility(View.GONE);
+
                 break;
 
             case 4:
                 labelAccountDetails.setText("Shop Requirements");
 
-                btncreate3.setBackgroundResource(R.drawable.btncreatenavigation);
+                btncreate3.setBackgroundResource(R.drawable.btncreatenavigationtransparent);
                 btncreate3.setTextColor(Color.parseColor("#808080"));
 
                 btncreate2.setBackgroundResource(R.drawable.btncreatenavigationtransparent);
@@ -383,7 +394,7 @@ public class VendorCreateAcc extends AppCompatActivity {
                 btncreate1.setBackgroundResource(R.drawable.btncreatenavigationtransparent);
                 btncreate1.setTextColor(Color.parseColor("#808080"));
 
-                btncreate4.setBackgroundResource(R.drawable.btncreatenavigationtransparent);
+                btncreate4.setBackgroundResource(R.drawable.btncreatenavigation);
                 btncreate4.setTextColor(Color.parseColor("#FFFF00"));
 
                 LayoutbackAndCreate.setVisibility(View.VISIBLE);  // To show the button
@@ -391,7 +402,7 @@ public class VendorCreateAcc extends AppCompatActivity {
                 btnNext.setVisibility(View.GONE);
                 btnNext2.setVisibility(View.GONE);
                 btnNext3.setVisibility(View.GONE);
-                btnNext3.setVisibility(View.VISIBLE);
+                btnNext4.setVisibility(View.VISIBLE);
                 break;
         }
     }

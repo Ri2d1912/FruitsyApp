@@ -18,6 +18,7 @@ package com.example.fruitidentification.fragments;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -80,23 +81,35 @@ public class ClassificationResultAdapter
     }
 
     /** Data structure for items in list */
+    /** Data structure for items in list */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvLabel;
         private final TextView tvScore;
+        private final TextView tvCustomMessage; // New TextView for custom message
 
         public ViewHolder(@NonNull ItemClassificationResultBinding binding) {
             super(binding.getRoot());
             tvLabel = binding.tvLabel;
             tvScore = binding.tvScore;
+            tvCustomMessage = binding.tvCustomMessage; // Bind the new TextView
         }
 
         public void bind(Category category) {
             if (category != null) {
                 tvLabel.setText(category.getLabel());
                 tvScore.setText(String.format(Locale.US, "%.2f", category.getScore()));
+
+                // Check if the category is "banana" and set a custom message
+                if (category.getLabel().equalsIgnoreCase("freshbanana")) {
+                    tvCustomMessage.setText("Banana detected! Here's some info about bananas...");
+                    tvCustomMessage.setVisibility(View.VISIBLE); // Show the message
+                } else {
+                    tvCustomMessage.setVisibility(View.GONE); // Hide the message for non-banana items
+                }
             } else {
                 tvLabel.setText(NO_VALUE);
                 tvScore.setText(NO_VALUE);
+                tvCustomMessage.setVisibility(View.GONE); // Hide the message if category is null
             }
         }
     }

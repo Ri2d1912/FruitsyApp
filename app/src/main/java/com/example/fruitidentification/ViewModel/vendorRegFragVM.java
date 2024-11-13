@@ -10,6 +10,9 @@ public class vendorRegFragVM extends ViewModel {
 
     private MutableLiveData<Uri> validIdImageUri = new MutableLiveData<>();
     private MutableLiveData<Uri> shopProfileImageUri = new MutableLiveData<>();
+    private MutableLiveData<Uri> dtiFileUri = new MutableLiveData<>();
+    private MutableLiveData<Uri> birFileUri = new MutableLiveData<>();
+    private MutableLiveData<Uri> shopHeaderProfileImageUri = new MutableLiveData<>();
 
     private final MutableLiveData<String> username = new MutableLiveData<>();
     private final MutableLiveData<String> password = new MutableLiveData<>();
@@ -190,6 +193,32 @@ public class vendorRegFragVM extends ViewModel {
     public void setshopProfileImageUri(Uri uri) {
         shopProfileImageUri.setValue(uri);
     }
+
+    public LiveData<Uri> getDtiFileUri() {
+        return dtiFileUri;
+    }
+
+    public void setDtiFileUri(Uri uri) {
+        dtiFileUri.setValue(uri);
+    }
+
+    public LiveData<Uri> getBirFileUri() {
+        return dtiFileUri;
+    }
+
+    public void setBirFileUri(Uri uri) {
+        dtiFileUri.setValue(uri);
+    }
+
+    public LiveData<Uri> getShopHeaderProfileImageUri() {
+        return shopHeaderProfileImageUri;
+    }
+
+    public void setShopHeaderProfileImageUri(Uri uri) {
+        shopHeaderProfileImageUri.setValue(uri);
+    }
+
+
     public LiveData<String> getShopName() {
         return shopName;
     }
