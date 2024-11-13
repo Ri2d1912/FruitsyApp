@@ -30,16 +30,16 @@ public class VendorMainActivity extends AppCompatActivity {
                     replaceFragment(new Fragment_vendor_profile());
                     break;
                 case R.id.menu_products:
-                    // Handle products fragment
+                    replaceFragment(new VendorProductsFragment());
                     break;
                 case R.id.menu_orders:
-                    // Handle orders fragment
+                    replaceFragment(new VendorOrdersFragment());
                     break;
                 case R.id.menu_identifier:
                     // Handle identifier fragment
                     break;
                 case R.id.menu_more:
-                    // Handle more fragment
+                    replaceFragment(new VendorMoreFragment());
                     break;
             }
 

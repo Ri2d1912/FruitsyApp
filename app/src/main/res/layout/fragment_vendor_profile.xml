@@ -69,7 +69,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="130dp"
-                        android:layout_marginTop="130dp"
+                        android:layout_marginTop="133dp"
                         android:background="@drawable/email_curve_square"
                         android:paddingLeft="8dp"
                         android:paddingTop="5dp"
@@ -271,6 +271,15 @@
                                 android:textColor="@color/bottom_sheet_text_color"
                                 android:textSize="12dp" />
 
+                            <TextView
+                                android:id="@+id/shopContactContent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:text="09994567231"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp" />
+
 
                             <!-- Address text next to the icon -->
                         </LinearLayout>
@@ -288,6 +297,15 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="40dp"
                                 android:text="Telephone Number:"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp" />
+
+                            <TextView
+                                android:id="@+id/shopContact2Content"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:text="047-2434"
                                 android:textColor="@color/bottom_sheet_text_color"
                                 android:textSize="12dp" />
 
@@ -384,6 +402,15 @@
                                 android:textColor="@color/bottom_sheet_text_color"
                                 android:textSize="12dp" />
 
+                            <TextView
+                                android:id="@+id/shopPolicyOrder"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:text="Payment Upon Pickup"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp" />
+
 
                             <!-- Address text next to the icon -->
                         </LinearLayout>
@@ -396,7 +423,7 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/shoppolicyiconnone3"
+                                android:id="@+id/shopPolicy1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="40dp"
@@ -404,7 +431,16 @@
                                 android:textColor="@color/bottom_sheet_text_color"
                                 android:textSize="12dp" />
 
-                            <!-- Address text next to the icon -->
+                            <TextView
+                                android:id="@+id/shopPolicy2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:text="Deposit Required"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp" />
+
+
                         </LinearLayout>
 
                     </LinearLayout>
@@ -561,8 +597,15 @@
                                 android:textColor="@color/bottom_sheet_text_color"
                                 android:textSize="12dp" />
 
+                            <TextView
+                                android:id="@+id/vendorContactContent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:text="09994567231"
+                                android:textColor="@color/bottom_sheet_text_color"
+                                android:textSize="12dp" />
 
-                            <!-- Address text next to the icon -->
                         </LinearLayout>
 
 
