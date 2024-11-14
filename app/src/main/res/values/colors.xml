@@ -12,5 +12,7 @@
     <color name="white">#FFFFFF</color>
     <color name="orange">#FFA710</color>
     <color name="unselected_gray">#D9D9D9</color>
+    <color name="red_button">#ED3241</color>
+    <color name="container">#E9EFEC</color>
 
 </resources>
