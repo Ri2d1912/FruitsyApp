@@ -378,7 +378,38 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    // --------------------------------------------------- Vendor Side ------------------------------------------------------------
+    // --------------------------------------------------- Vendor Shop Side ------------------------------------------------------------
+
+    public void insertOrUpdateShopLocation(int shopId, double latitude, double longitude, String region, String address, boolean isPrimary) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Prepare content values for the location
+        ContentValues values = new ContentValues();
+        values.put("shop_id", shopId);
+        values.put("latitude", latitude);
+        values.put("longitude", longitude);
+        values.put("region", region);
+        values.put("address", address);
+        values.put("is_primary", isPrimary ? 1 : 0);
+
+        // Check if a location for this shop_id already exists
+        Cursor cursor = db.query("shop_locations", null, "shop_id=?",
+                new String[]{String.valueOf(shopId)}, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            // Location exists, update it without modifying the created_at timestamp
+            db.update("shop_locations", values, "shop_id=?", new String[]{String.valueOf(shopId)});
+        } else {
+            // Location does not exist, insert new and set created_at to current timestamp
+            values.put("created_at", "CURRENT_TIMESTAMP");
+            db.insert("shop_locations", null, values);
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+        db.close();
+    }
 
     public boolean insertVendorInfo(Context context, String username, String firstName, String middleName, String lastName, String extensionName,
                                     String dateOfBirth, String gender, String mobileNumber, String streetAddress, String barangay, String city,
@@ -556,4 +587,7 @@ public class DBHelper extends SQLiteOpenHelper {
         // Return the list of vendorInfo
         return vendorInfo;
     }
+
+
+
 }

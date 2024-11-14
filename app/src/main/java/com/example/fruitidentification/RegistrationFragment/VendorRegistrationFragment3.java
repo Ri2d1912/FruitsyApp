@@ -1,9 +1,6 @@
 package com.example.fruitidentification.RegistrationFragment;
 
 import android.Manifest;
-import android.app.DatePickerDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,32 +13,23 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.fruitidentification.GoogleMapNavigate;
 import com.example.fruitidentification.R;
-import com.example.fruitidentification.ViewModel.regFrag1VM;
 import com.example.fruitidentification.ViewModel.vendorRegFragVM;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.material.textfield.TextInputEditText;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class VendorRegistrationFragment3 extends Fragment {
 
@@ -116,7 +104,7 @@ public class VendorRegistrationFragment3 extends Fragment {
         editShopEmail = view.findViewById(R.id.editShopEmail);
         editStoreHrs = view.findViewById(R.id.editStoreHrs);
         editDesc = view.findViewById(R.id.editDesc);
-        customPinImage = view.findViewById(R.id.customPinImage);
+
         // Initialize Spinners
         spinnerOrderPolicy = view.findViewById(R.id.spinnerOrderPolicy);
         spinnerReservePolicy = view.findViewById(R.id.spinnerReservePolicy);
@@ -125,18 +113,16 @@ public class VendorRegistrationFragment3 extends Fragment {
         imgVendorCamera = view.findViewById(R.id.imgVendorCamera);
         imgShopProfilePic = view.findViewById(R.id.imgShopProfilePic);
 
-        customPinImage = view.findViewById(R.id.customPinImage);
-        customPinImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Step 3: Navigate to GoogleMapNavigate activity
-                Intent intent = new Intent(getActivity(), GoogleMapNavigate.class);
-                startActivity(intent);
-            }
-        });
-        // on click listener
+        // on click listener for camera
         imgVendorCamera.setOnClickListener(v -> showImageSourceDialog());
 
+        // Dynamically add GoogleMapFragment
+        if (savedInstanceState == null) {
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            GoogleMapFragment googleMapFragment = new GoogleMapFragment();
+            transaction.replace(R.id.id_map_container, googleMapFragment);  // This is the container ID in XML
+            transaction.commit();
+        }
 
         liveData();
         textWatcher();
