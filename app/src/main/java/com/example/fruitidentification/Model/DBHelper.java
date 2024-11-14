@@ -380,8 +380,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     // --------------------------------------------------- Vendor Shop Side ------------------------------------------------------------
 
-    public void insertOrUpdateShopLocation(int shopId, double latitude, double longitude, String region, String address, boolean isPrimary) {
+    public Boolean insertOrUpdateShopLocation(int shopId, double latitude, double longitude, String region, String address, boolean isPrimary) {
         SQLiteDatabase db = this.getWritableDatabase();
+        boolean success = false;  // To track success
 
         // Prepare content values for the location
         ContentValues values = new ContentValues();
@@ -398,18 +399,39 @@ public class DBHelper extends SQLiteOpenHelper {
 
         if (cursor != null && cursor.moveToFirst()) {
             // Location exists, update it without modifying the created_at timestamp
-            db.update("shop_locations", values, "shop_id=?", new String[]{String.valueOf(shopId)});
+            int rowsUpdated = db.update("shop_locations", values, "shop_id=?", new String[]{String.valueOf(shopId)});
+            if (rowsUpdated > 0) {
+                success = true;  // Update was successful
+            }
         } else {
             // Location does not exist, insert new and set created_at to current timestamp
             values.put("created_at", "CURRENT_TIMESTAMP");
-            db.insert("shop_locations", null, values);
+            long rowId = db.insert("shop_locations", null, values);
+            if (rowId != -1) {
+                success = true;  // Insert was successful
+            }
         }
 
         if (cursor != null) {
             cursor.close();
         }
         db.close();
+
+        return success;  // Return whether the operation was successful
     }
+
+
+    public int getLatestShopId() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT last_insert_rowid()", null); // This gets the last inserted row ID
+        int shopId = -1;
+        if (cursor.moveToFirst()) {
+            shopId = cursor.getInt(0); // Get the ID of the last inserted row
+        }
+        cursor.close();
+        return shopId;
+    }
+
 
     public boolean insertVendorInfo(Context context, String username, String firstName, String middleName, String lastName, String extensionName,
                                     String dateOfBirth, String gender, String mobileNumber, String streetAddress, String barangay, String city,

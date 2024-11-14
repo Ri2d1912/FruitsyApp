@@ -191,14 +191,16 @@
                 android:textColor="#FFA710"
                 android:textSize="18sp" />
 
-            <!-- Replacing ImageView with GoogleMapFragment -->
+            <!-- Container for map fragment -->
             <FrameLayout
-                android:id="@+id/id_map_container"
-                android:layout_marginTop="16dp"
-                android:layout_width="380dp"
-                android:layout_height="300dp">
-
-
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_gravity="center">
+                <fragment
+                    android:id="@+id/id_map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
             </FrameLayout>
 
             <TextView
