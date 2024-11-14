@@ -1,14 +1,401 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Vendor.VendorProductsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!-- Search Bar with Icon and Hint Text -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="PRODUCTS" />
+        android:orientation="vertical">
 
-</FrameLayout>
+        <FrameLayout
+            android:id="@+id/searchViewContainer"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/header">
+
+            <!-- SearchView placed inside the container -->
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/white_btnbg"
+                android:iconifiedByDefault="false"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:queryBackground="@android:color/white"
+                android:queryHint="Search Product Name" >
+
+            </androidx.appcompat.widget.SearchView>
+        </FrameLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:horizontalSpacing="16dp"
+                android:verticalSpacing="16dp">
+
+                <!-- Card 1 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="250dp"
+                    android:layout_margin="8dp"
+                    android:layout_columnWeight="1"
+                    app:cardBackgroundColor="@color/cardview_light_background"
+                    app:cardElevation="10dp"
+                    app:cardCornerRadius="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:src="@color/cardview_dark_background"
+                            android:scaleType="centerCrop"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Banana"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_margin="8dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="P150"
+                            android:textSize="16sp"
+                            android:layout_margin="8dp"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Card 2 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="250dp"
+                    android:layout_margin="8dp"
+                    android:layout_columnWeight="1"
+                    app:cardBackgroundColor="@color/cardview_light_background"
+                    app:cardElevation="10dp"
+                    app:cardCornerRadius="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:src="@color/cardview_dark_background"
+                            android:scaleType="centerCrop"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Apple"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_margin="8dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="P120"
+                            android:textSize="16sp"
+                            android:layout_margin="8dp"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Card 3 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="250dp"
+                    android:layout_margin="8dp"
+                    android:layout_columnWeight="1"
+                    app:cardBackgroundColor="@color/cardview_light_background"
+                    app:cardElevation="10dp"
+                    app:cardCornerRadius="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:src="@color/cardview_dark_background"
+                            android:scaleType="centerCrop"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mango"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_margin="8dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="P100"
+                            android:textSize="16sp"
+                            android:layout_margin="8dp"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Card 4 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="250dp"
+                    android:layout_margin="8dp"
+                    android:layout_columnWeight="1"
+                    app:cardBackgroundColor="@color/cardview_light_background"
+                    app:cardElevation="10dp"
+                    app:cardCornerRadius="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:src="@color/cardview_dark_background"
+                            android:scaleType="centerCrop"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Grapes"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_margin="8dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="P180"
+                            android:textSize="16sp"
+                            android:layout_margin="8dp"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Card 5 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="250dp"
+                    android:layout_margin="8dp"
+                    android:layout_columnWeight="1"
+                    app:cardBackgroundColor="@color/cardview_light_background"
+                    app:cardElevation="10dp"
+                    app:cardCornerRadius="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:src="@color/cardview_dark_background"
+                            android:scaleType="centerCrop"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Strawberry"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_margin="8dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="P500"
+                            android:textSize="16sp"
+                            android:layout_margin="8dp"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Card 6 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="250dp"
+                    android:layout_margin="8dp"
+                    android:layout_columnWeight="1"
+                    app:cardBackgroundColor="@color/cardview_light_background"
+                    app:cardElevation="10dp"
+                    app:cardCornerRadius="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:src="@color/cardview_dark_background"
+                            android:scaleType="centerCrop"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Grapes"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_margin="8dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="P180"
+                            android:textSize="16sp"
+                            android:layout_margin="8dp"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Card 7 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="250dp"
+                    android:layout_margin="8dp"
+                    android:layout_columnWeight="1"
+                    app:cardBackgroundColor="@color/cardview_light_background"
+                    app:cardElevation="10dp"
+                    app:cardCornerRadius="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:src="@color/cardview_dark_background"
+                            android:scaleType="centerCrop"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Grapes"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_margin="8dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="P180"
+                            android:textSize="16sp"
+                            android:layout_margin="8dp"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Card 8 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="250dp"
+                    android:layout_margin="8dp"
+                    android:layout_columnWeight="1"
+                    app:cardBackgroundColor="@color/cardview_light_background"
+                    app:cardElevation="10dp"
+                    app:cardCornerRadius="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:src="@color/cardview_dark_background"
+                            android:scaleType="centerCrop"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Strawberry"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_margin="8dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="P500"
+                            android:textSize="16sp"
+                            android:layout_margin="8dp"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Card 9 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="250dp"
+                    android:layout_margin="8dp"
+                    android:layout_columnWeight="1"
+                    app:cardBackgroundColor="@color/cardview_light_background"
+                    app:cardElevation="10dp"
+                    app:cardCornerRadius="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:src="@color/cardview_dark_background"
+                            android:scaleType="centerCrop"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Grapes"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_margin="8dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="P180"
+                            android:textSize="16sp"
+                            android:layout_margin="8dp"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </GridLayout>
+
+        </ScrollView>
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
