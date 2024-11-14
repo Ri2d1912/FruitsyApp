@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegistrationFragment.RegistrationFragment3">
+
+    <!-- RegisterLayoutUserName inside the FrameLayout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="335dp"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tag1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="In order to finish creating an account, you have to read Fruitsy’s User Agreement and Privacy Policy"
+            android:textSize="18sp"
+            android:layout_gravity="start"/>
+
+        <TextView
+            android:id="@+id/tag2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="By checking the box below, you confirm that you have read and agree to Fruitsy’s User Agreement and Privacy Policy."
+            android:textSize="18sp"
+            android:layout_marginTop="24dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="24dp">
+
+            <CheckBox
+                android:id="@+id/checkAgree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/checkLabelAgree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="I have read and agree to Fruitsy’s User Agreement and Privacy Policy"
+                android:textSize="18sp"
+                android:textColor="#FFA710"/>
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+</FrameLayout>

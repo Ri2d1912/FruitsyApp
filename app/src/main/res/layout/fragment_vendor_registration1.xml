@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegistrationFragment.VendorRegistrationFragment1">
+
+    <!-- RegisterLayoutUserName inside the FrameLayout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="335dp"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        android:padding="16dp">
+
+        <!-- Username Label -->
+        <TextView
+            android:id="@+id/userLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textColor="#FFA710"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_gravity="start"/>
+
+        <!-- Username EditText -->
+        <EditText
+            android:id="@+id/editVendorUsernameCreate"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:hint="Enter username"
+            android:inputType="text"/>
+
+        <!-- Password Label -->
+        <TextView
+            android:id="@+id/passLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Password"
+            android:textColor="#FFA710"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="start"/>
+
+        <!-- Password EditText -->
+        <EditText
+            android:id="@+id/editVendorPasswordCreate"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:hint="Enter password"
+            android:inputType="textPassword" />
+
+        <!--Confirm Password Label -->
+        <TextView
+            android:id="@+id/ConfirmpassLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirm Password"
+            android:textColor="#FFA710"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="start"/>
+
+        <!-- Password EditText -->
+        <EditText
+            android:id="@+id/editVendorConPasswordCreate"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:hint="Re-enter your password"
+            android:inputType="textPassword" />
+    </LinearLayout>
+
+</FrameLayout>

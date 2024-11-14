@@ -33,11 +33,19 @@
         <item>NNAPI</item>
     </string-array>
 
-    <string-array name="models_spinner_titles">
-        <item>MobileNet V1</item>
-        <item>EfficientNet Lite0</item>
-        <item>EfficientNet Lite1</item>
-        <item>EfficientNet Lite2</item>
+    <string-array name="gender_options">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="orderandreserve_options">
+        <item>Payment Upon Pickup</item>
+        <item>Deposit Required</item>
+        <item>Fullpayment in Advanced</item>
+        <item>Flexible</item>
+
+
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

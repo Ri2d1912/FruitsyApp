@@ -2,20 +2,23 @@ package com.example.fruitidentification;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 public class LandingPage extends AppCompatActivity {
 
+    Button loginButton, signUpButton, guestButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_page);
 
         // Buttons
-        AppCompatButton loginButton = findViewById(R.id.login_btn);
-        AppCompatButton signUpButton = findViewById(R.id.signup_btn);
-        AppCompatButton guestButton = findViewById(R.id.guest_btn);
+         loginButton = findViewById(R.id.login_btn);
+         signUpButton = findViewById(R.id.signup_btn);
+         guestButton = findViewById(R.id.guest_btn);
 
         // Click listener for Login Button
         loginButton.setOnClickListener(view -> {
@@ -24,12 +27,12 @@ public class LandingPage extends AppCompatActivity {
             startActivity(loginIntent);
         });
 
-//        // Click listener for Sign Up Button
-//        signUpButton.setOnClickListener(view -> {
-//            // Navigate to CreateAccountActivity
-//            Intent signUpIntent = new Intent(LandingPage.this, CreateAccountActivity.class);
-//            startActivity(signUpIntent);
-//        });
+        // Click listener for Sign Up Button
+        signUpButton.setOnClickListener(view -> {
+            // Navigate to CreateAccountActivity
+            Intent signUpIntent = new Intent(LandingPage.this, Registration.class);
+            startActivity(signUpIntent);
+        });
 //
 //        // Click listener for Guest Button
 //        guestButton.setOnClickListener(view -> {

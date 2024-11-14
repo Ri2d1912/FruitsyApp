@@ -224,27 +224,6 @@ public class CameraFragment extends Fragment
                         // no-op
                     }
                 });
-
-        // When clicked, change the underlying model used for object
-        // classification
-        fragmentCameraBinding.bottomSheetLayout.spinnerModel
-                .setSelection(0, false);
-        fragmentCameraBinding.bottomSheetLayout.spinnerModel
-                .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView,
-                                               View view,
-                                               int position,
-                                               long id) {
-                        imageClassifierHelper.setCurrentModel(position);
-                        updateControlsUi();
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-                        // no-op
-                    }
-                });
     }
 
     // Update the values displayed in the bottom sheet. Reset classifier.

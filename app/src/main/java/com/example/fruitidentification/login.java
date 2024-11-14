@@ -48,10 +48,10 @@ public class login extends AppCompatActivity {
             }
         });
 
-        forgotPasswordLink.setOnClickListener(new View.OnClickListener() {
+        createAccountLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent goSign = new Intent(login.this, MainActivity.class);
+                Intent goSign = new Intent(login.this, Registration.class);
                 startActivity(goSign);
             }
         });

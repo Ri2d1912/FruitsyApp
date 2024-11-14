@@ -21,10 +21,8 @@ public class ImageClassifierHelper {
     private static final int DELEGATE_CPU = 0;
     private static final int DELEGATE_GPU = 1;
     private static final int DELEGATE_NNAPI = 2;
-    private static final int MODEL_MOBILENETV1 = 0;
-    private static final int MODEL_EFFICIENTNETV0 = 1;
-    private static final int MODEL_EFFICIENTNETV1 = 2;
-    private static final int MODEL_EFFICIENTNETV2 = 3;
+
+
 
     private float threshold;
     private int numThreads;
@@ -125,23 +123,7 @@ public class ImageClassifierHelper {
                 baseOptionsBuilder.useNnapi();
         }
 
-        String modelName;
-        switch (currentModel) {
-            case MODEL_MOBILENETV1:
-                modelName = "mobilenetv1.tflite";
-                break;
-            case MODEL_EFFICIENTNETV0:
-                modelName = "efficientnet-lite0.tflite";
-                break;
-            case MODEL_EFFICIENTNETV1:
-                modelName = "efficientnet-lite1.tflite";
-                break;
-            case MODEL_EFFICIENTNETV2:
-                modelName = "efficientnet-lite2.tflite";
-                break;
-            default:
-                modelName = "mobilenetv1.tflite";
-        }
+        String modelName = "FruitsyModel.tflite";
         try {
             imageClassifier =
                     ImageClassifier.createFromFileAndOptions(
