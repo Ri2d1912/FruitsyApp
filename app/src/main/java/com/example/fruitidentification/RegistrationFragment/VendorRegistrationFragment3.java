@@ -3,6 +3,7 @@ package com.example.fruitidentification.RegistrationFragment;
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.fruitidentification.GoogleMapNavigate;
 import com.example.fruitidentification.R;
 import com.example.fruitidentification.ViewModel.regFrag1VM;
 import com.example.fruitidentification.ViewModel.vendorRegFragVM;
@@ -44,7 +46,7 @@ import java.util.Locale;
 public class VendorRegistrationFragment3 extends Fragment {
 
     private FloatingActionButton imgVendorCamera;
-    private ImageView imgShopProfilePic;
+    private ImageView imgShopProfilePic, customPinImage;
     private Uri shopProfileImageUri = null;
     private EditText editShopName, editShopStreet, editShopBarangay, editShopCity, editShopProvince, editShopPostal, editShopNo, editTelephoneNo, editShopEmail, editStoreHrs, editDesc;
     private Spinner spinnerOrderPolicy, spinnerReservePolicy;
@@ -114,7 +116,7 @@ public class VendorRegistrationFragment3 extends Fragment {
         editShopEmail = view.findViewById(R.id.editShopEmail);
         editStoreHrs = view.findViewById(R.id.editStoreHrs);
         editDesc = view.findViewById(R.id.editDesc);
-
+        customPinImage = view.findViewById(R.id.customPinImage);
         // Initialize Spinners
         spinnerOrderPolicy = view.findViewById(R.id.spinnerOrderPolicy);
         spinnerReservePolicy = view.findViewById(R.id.spinnerReservePolicy);
@@ -123,7 +125,15 @@ public class VendorRegistrationFragment3 extends Fragment {
         imgVendorCamera = view.findViewById(R.id.imgVendorCamera);
         imgShopProfilePic = view.findViewById(R.id.imgShopProfilePic);
 
-
+        customPinImage = view.findViewById(R.id.customPinImage);
+        customPinImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Step 3: Navigate to GoogleMapNavigate activity
+                Intent intent = new Intent(getActivity(), GoogleMapNavigate.class);
+                startActivity(intent);
+            }
+        });
         // on click listener
         imgVendorCamera.setOnClickListener(v -> showImageSourceDialog());
 
@@ -259,12 +269,6 @@ public class VendorRegistrationFragment3 extends Fragment {
         viewModel.getStoreHrs().observe(getViewLifecycleOwner(), input -> {
             if (input != null && !input.equals(editStoreHrs.getText().toString())) {
                 editStoreHrs.setText(input);
-            }
-        });
-
-        viewModel.getEditDesc().observe(getViewLifecycleOwner(), input -> {
-            if (input != null && !input.equals(editDesc.getText().toString())) {
-                editDesc.setText(input);
             }
         });
 

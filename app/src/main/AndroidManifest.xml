@@ -7,6 +7,10 @@
     <dist:module dist:instant="true" /> <!-- Declare features -->
     <uses-feature android:name="android.hardware.camera" /> <!-- Declare permissions -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -20,15 +24,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FruitIdentification"
         tools:targetApi="31">
-
         <activity
-            android:name=".Vendor.VendorMainActivity"
-            android:exported="false">
+            android:name=".GoogleMapNavigate"
+            android:exported="false" >
         </activity>
         <activity
+            android:name=".Vendor.VendorMainActivity"
+            android:exported="false"></activity>
+        <activity
             android:name=".VendorCreateAcc"
-            android:exported="false" />
-        <!-- Other activities -->
+            android:exported="false" /> <!-- Other activities -->
         <activity
             android:name=".CustomerCreateAcc"
             android:exported="false" />
@@ -59,6 +64,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyDCtsu568Ms3xnPizaFFrFqom5sffHki-A" />
+
     </application>
 
 </manifest>
