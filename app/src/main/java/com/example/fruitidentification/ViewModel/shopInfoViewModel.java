@@ -16,10 +16,16 @@ public class shopInfoViewModel {
     private String immediateOrderPolicy;
     private String advanceReservationPolicy;
 
-    public shopInfoViewModel(String shopName, String shopDesc, String shopStreet, String shopBarangay, String shopCity,
+    private byte[] shopHeaderImg;
+    private byte[] shopProfile;
+
+    public shopInfoViewModel(byte[] shopHeaderImg, byte[] shopProfile, String shopName, String shopDesc, String shopStreet, String shopBarangay, String shopCity,
                              String shopProvince, String email, String openingHrs,
                              String mobileNumber, String telephoneNumber,
                              String immediateOrderPolicy, String advanceReservationPolicy) {
+        //this.vendorProfile = vendorProfile;
+        this.shopProfile = shopProfile;
+        this.shopHeaderImg = shopHeaderImg;
         this.openingHrs = openingHrs;
         this.shopDesc = shopDesc;
         this.shopName = shopName;
@@ -32,6 +38,13 @@ public class shopInfoViewModel {
         this.telephoneNumber = telephoneNumber;
         this.immediateOrderPolicy = immediateOrderPolicy;
         this.advanceReservationPolicy = advanceReservationPolicy;
+    }
+    public byte[] getShopProfile() {
+        return shopProfile;
+    }
+
+    public byte[] getShopHeaderImg() {
+        return shopHeaderImg;
     }
 
     public String getShopName() {
