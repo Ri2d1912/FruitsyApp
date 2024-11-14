@@ -42,7 +42,7 @@
     <string-array name="orderandreserve_options">
         <item>Payment Upon Pickup</item>
         <item>Deposit Required</item>
-        <item>Fullpayment in Advanced</item>
+        <item>Full Payment in Advance</item>
         <item>Flexible</item>
 
 

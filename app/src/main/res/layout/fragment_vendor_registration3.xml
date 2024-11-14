@@ -233,7 +233,7 @@
                 android:id="@+id/userLabelEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Telephone Number"
+                android:text="Email"
                 android:textColor="#FFA710"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -271,7 +271,7 @@
                 android:id="@+id/userLabelDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Store Hours"
+                android:text="Description"
                 android:textColor="#FFA710"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -282,7 +282,7 @@
                 android:id="@+id/editDesc"
                 android:layout_width="260dp"
                 android:layout_height="wrap_content"
-                android:hint="Enter shop's store hours"
+                android:hint="Enter shop's description"
                 android:inputType="text"
                 android:layout_marginLeft="24dp"/>
 

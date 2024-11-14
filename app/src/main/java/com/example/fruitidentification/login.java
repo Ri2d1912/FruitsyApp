@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,17 +41,24 @@ public class login extends AppCompatActivity {
                 String checkUsername = editUsername.getText().toString();
                 String checkUserpass = editPassword.getText().toString();
 
-                // Retrieve the password associated with the entered username from the database
+                // Retrieve the password and role associated with the entered username from the database
                 String passwordFromDB = myDB.getPassword(checkUsername);
                 String userrole = myDB.getRole(checkUsername);
 
                 if (passwordFromDB != null && passwordFromDB.equals(checkUserpass)) {
                     // Check the user role
                     if ("customer".equals(userrole)) {
+                        // If the user is a customer, navigate to the landing page
                         Intent goSign = new Intent(login.this, LandingPage.class);
                         startActivity(goSign);
                     } else if ("vendor".equals(userrole)) {
+                        // Retrieve the vendorId associated with the username from the database
+                        long vendorId = myDB.getVendorId(checkUsername);
+                        Log.d("VendorIdCheck", "Retrieved vendorId: " + vendorId);  // Log the value to verify it
+
+                        // Pass the vendorId to VendorMainActivity or other activities as needed
                         Intent goSign = new Intent(login.this, VendorMainActivity.class);
+                        goSign.putExtra("vendorId", vendorId);  // Pass vendorId through Intent
                         startActivity(goSign);
                     }
                 } else {
@@ -59,6 +67,8 @@ public class login extends AppCompatActivity {
                 }
             }
         });
+
+
 
 
         createAccountLink.setOnClickListener(new View.OnClickListener() {
