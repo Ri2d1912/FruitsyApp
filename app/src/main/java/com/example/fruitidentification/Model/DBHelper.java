@@ -226,6 +226,33 @@ public class DBHelper extends SQLiteOpenHelper {
         // Return the retrieved password, or null if the username was not found in the database
         return password;
     }
+    public String getRole(String username) {
+        // Get a readable database instance to perform the query
+        SQLiteDatabase db = this.getReadableDatabase();
+        String role = null;
+        // Define the SQL query to retrieve the password from the user_account table based on the provided username
+        String query = "SELECT role FROM users WHERE username = ?";
+        // Specify the username as the selection argument for the query
+        String[] selectionArgs = { username };
+        // Execute the raw SQL query
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        try {
+            // Check if the cursor contains any results
+            if (cursor != null && cursor.moveToFirst()) {
+                // Retrieve the password from the cursor
+                role = cursor.getString(0);
+            }
+        } finally {
+            // Close the cursor to release resources
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        // Return the retrieved role, or null if the username was not found in the database
+        return role;
+    }
+
 
     public boolean isUsernameExists(String username) {
         // Get a readable database instance to perform the query

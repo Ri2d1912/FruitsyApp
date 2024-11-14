@@ -20,6 +20,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FruitIdentification"
         tools:targetApi="31">
+
+        <activity
+            android:name=".Vendor.VendorMainActivity"
+            android:exported="false">
+        </activity>
         <activity
             android:name=".VendorCreateAcc"
             android:exported="false" />
