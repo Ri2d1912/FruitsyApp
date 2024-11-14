@@ -33,7 +33,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class VendorRegistrationFragment2 extends Fragment {
@@ -188,7 +190,8 @@ public class VendorRegistrationFragment2 extends Fragment {
         viewModel.getGender().observe(getViewLifecycleOwner(), input -> {
             if (input != null && !input.equals(spinnerVendorGender.getSelectedItem().toString())) {
                 // Restore gender selection if needed (spinner update)
-                // This may involve setting the correct item on the spinner
+                int position = getVendorGenderPosition(input); // Method to get the position based on gender string
+                spinnerVendorGender.setSelection(position);
             }
         });
 
@@ -204,6 +207,13 @@ public class VendorRegistrationFragment2 extends Fragment {
                 editVendorBday.setText(input);  // Restore the birthday when the data changes
             }
         });
+    }
+
+    private int getVendorGenderPosition(String gender) {
+        // You may need to adjust this based on your spinner's adapter and data
+        // For example, if your adapter is a simple list like ["Male", "Female", "Other"], map the gender to its position
+        List<String> genderList = Arrays.asList("Male", "Female", "Other");
+        return genderList.indexOf(gender);
     }
 
     private void textWatcher() {

@@ -9,15 +9,12 @@ import com.example.fruitidentification.Model.DBHelper;
 import com.example.fruitidentification.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-    private DBHelper myDB;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityMainBinding activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(activityMainBinding.getRoot());
-
-        myDB =new DBHelper(this);
 
     }
 

@@ -193,9 +193,9 @@ public class CustomerCreateAcc extends AppCompatActivity {
                         Boolean checkInsertCustInfo = myDB.insertCustomerInfo(CustomerCreateAcc.this, username, fname, mname, lname, exname, bday, gender, mobileNo,
                                 street, barangay, city, province, postal, profile_picture);
 
-                        Boolean checkInsertData = myDB.insertUsers(CustomerCreateAcc.this, username, password, role);
+                        long vendorId = myDB.insertUsers(CustomerCreateAcc.this, username, password, role);
 
-                        if (checkInsertCustInfo && checkInsertData) {
+                        if (checkInsertCustInfo && vendorId != -1) {
                             Intent goLog = new Intent(CustomerCreateAcc.this, login.class);
                             startActivity(goLog);
                         } else {

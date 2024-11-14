@@ -184,12 +184,22 @@
             <TextView
                 android:id="@+id/userPinLocation"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pin Location"
-                android:textSize="18sp"
-                android:textColor="#FFA710"
+                android:layout_height="19dp"
+                android:layout_gravity="start"
                 android:layout_marginLeft="24dp"
-                android:layout_gravity="start"/>
+                android:text="Pin Location"
+                android:textColor="#FFA710"
+                android:textSize="18sp" />
+
+            <!-- Replacing ImageView with GoogleMapFragment -->
+            <FrameLayout
+                android:id="@+id/id_map_container"
+                android:layout_marginTop="16dp"
+                android:layout_width="380dp"
+                android:layout_height="300dp">
+
+
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/userLabelMobileNo"
@@ -233,7 +243,7 @@
                 android:id="@+id/userLabelEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Telephone Number"
+                android:text="Email"
                 android:textColor="#FFA710"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -271,7 +281,7 @@
                 android:id="@+id/userLabelDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Store Hours"
+                android:text="Description"
                 android:textColor="#FFA710"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -282,7 +292,7 @@
                 android:id="@+id/editDesc"
                 android:layout_width="260dp"
                 android:layout_height="wrap_content"
-                android:hint="Enter shop's store hours"
+                android:hint="Enter shop's description"
                 android:inputType="text"
                 android:layout_marginLeft="24dp"/>
 

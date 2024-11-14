@@ -31,6 +31,7 @@ import com.example.fruitidentification.RegistrationFragment.RegistrationFragment
 import com.example.fruitidentification.RegistrationFragment.VendorRegistrationFragment1;
 import com.example.fruitidentification.RegistrationFragment.VendorRegistrationFragment2;
 import com.example.fruitidentification.RegistrationFragment.VendorRegistrationFragment3;
+import com.example.fruitidentification.RegistrationFragment.VendorRegistrationFragment4;
 import com.example.fruitidentification.ViewModel.regFrag1VM;
 import com.example.fruitidentification.ViewModel.vendorRegFragVM;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -44,7 +45,7 @@ import java.io.InputStream;
 public class VendorCreateAcc extends AppCompatActivity {
 
     FrameLayout VendorRegisterFrameLayoutUserName;
-    Button btncreate1, btncreate2, btncreate3,btncreate4, btnBack,btnNext,btnNext2,btnNext3;
+    Button btncreate1, btncreate2, btncreate3,btncreate4, btnBack,btnNext,btnNext2,btnNext3, btnNext4;
     TextView labelAccountDetails;
     LinearLayout LayoutbackAndCreate;
     ImageView imageViewUser;
@@ -55,13 +56,13 @@ public class VendorCreateAcc extends AppCompatActivity {
     String username, password, confirmPassword, role;
     FloatingActionButton imgCamera;
 
-    byte[] validId_picture, shopProfilePic;
+    byte[] validId_picture, shopProfilePic, shopHeaderProfileImage,dtiFile, birFile;
+
     String fname, mname, lname, exname, street, barangay, city, province, postal, mobileNo, gender, bday;
 
     // vendor side
 
-    String shopName, shopStreet, shopBarangay, shopCity, shopProvince, shopPostal, shopMobileNo, shopTelephoneNo, shopEmail, storeHours, description, orderPolicy,reservePolicy;
-
+    String shopName, shopStreet, shopBarangay, shopCity, shopProvince, shopPostal, shopMobileNo, shopTelephoneNo, shopEmail, storeHours, description, orderPolicy,reservePolicy, status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +75,13 @@ public class VendorCreateAcc extends AppCompatActivity {
         btncreate1 = findViewById(R.id.btncreate1);
         btncreate2 = findViewById(R.id.btncreate2);
         btncreate3 = findViewById(R.id.btncreate3);
+        btncreate4 = findViewById(R.id.btncreate4);
         btnNext = findViewById(R.id.btnNext);
         btnBack = findViewById(R.id.btnBack);
         btnNext2 = findViewById(R.id.btnNext2);
         btnNext3 = findViewById(R.id.btnNext3);
+        btnNext4 = findViewById(R.id.btnNext4);
+
 
         labelAccountDetails = findViewById(R.id.LabelAccountdetails);
         LayoutbackAndCreate = findViewById(R.id.LayoutbackAndCreate);
@@ -118,6 +122,16 @@ public class VendorCreateAcc extends AppCompatActivity {
             }
         });
 
+        btncreate4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Switch to RegistrationFragment3
+                replaceFragment(new VendorRegistrationFragment4());
+
+                changeButtons(4);
+            }
+        });
+
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,8 +157,6 @@ public class VendorCreateAcc extends AppCompatActivity {
                 }
             }
         });
-
-
 
         btnNext2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,9 +184,9 @@ public class VendorCreateAcc extends AppCompatActivity {
 
                 // Validate required fields
                 if (fname != null && !fname.isEmpty() && lname != null && !lname.isEmpty()) {
-                     replaceFragment(new VendorRegistrationFragment3());
-                     btncreate3.setEnabled(true);
-                     changeButtons(3);
+                    replaceFragment(new VendorRegistrationFragment3());
+                    btncreate3.setEnabled(true);
+                    changeButtons(3);
 
                 } else {
                     // Show an error message if First Name or Last Name is missing
@@ -208,32 +220,89 @@ public class VendorCreateAcc extends AppCompatActivity {
                     shopProfilePic = uriToByteArray(shopProfileImageUri);  // Convert image URI to byte array
                 }
 
-                // Set the status, e.g., "open"
-                String status = "open";
+              if(shopName != null && !shopName.isEmpty()){
+                  replaceFragment(new VendorRegistrationFragment4());
+                  btncreate4.setEnabled(true);
+                  changeButtons(4);
+              }
+              else{
+                  Toast.makeText(VendorCreateAcc.this, "Please input shop name", Toast.LENGTH_LONG).show();
 
-                // Retrieve vendorId from ViewModel or other source
-                int vendorId = 2;  // Ensure vendorId is available
+              }
+            }
+        });
 
-                // Insert data into the database
-                Boolean checkInsertData = myDB.insertUsers(VendorCreateAcc.this, username, password, role);
-                Boolean checkInsertVendorInfo = myDB.insertVendorInfo(VendorCreateAcc.this, username, fname, mname, lname, exname, bday, gender, mobileNo,
-                        street, barangay, city, province, postal, validId_picture);
+        btnNext4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Get the fragment to access the buttons
+                VendorRegistrationFragment4 fragment = (VendorRegistrationFragment4) getSupportFragmentManager()
+                        .findFragmentByTag("VendorRegistrationFragment4");
 
-                // Pass all required data to insertFruitShopInfo, including vendorId
-                Boolean checkInsertFruitShopInfo = myDB.insertFruitShopInfo(VendorCreateAcc.this, vendorId, shopName, shopStreet,
-                        shopBarangay, shopCity, shopProvince, shopPostal, shopMobileNo,
-                        shopTelephoneNo, shopEmail, description, storeHours, status,
-                        orderPolicy, reservePolicy, shopProfilePic);
+                if (fragment != null) {
+                    View fragmentView = fragment.getView();
+                    if (fragmentView != null) {
+                        // Get buttons
+                        Button btnAttachFile = fragmentView.findViewById(R.id.buttonAttachFileImage);
+                        Button btnAttachDti = fragmentView.findViewById(R.id.buttonAttachFileDti);
+                        Button btnAttachBir = fragmentView.findViewById(R.id.buttonAttachFileBir);
 
-                // Check if all insertions were successful
-                if (checkInsertVendorInfo && checkInsertFruitShopInfo && checkInsertData) {
-                    Intent goLog = new Intent(VendorCreateAcc.this, login.class);
-                    startActivity(goLog);
-                } else {
-                    Toast.makeText(VendorCreateAcc.this, "Record Failed", Toast.LENGTH_LONG).show();
+                        // Check if the text is still "Attach File"
+                        String shopHeaderProfileImageText = btnAttachFile.getText().toString();
+                        String dtiFileText = btnAttachDti.getText().toString();
+                        String birFileText = btnAttachBir.getText().toString();
+
+                        boolean isShopHeaderProfileImageEmpty = shopHeaderProfileImageText.equals("Attach File");
+                        boolean isDtiFileEmpty = dtiFileText.equals("Attach File");
+                        boolean isBirFileEmpty = birFileText.equals("Attach File");
+
+                        if (isShopHeaderProfileImageEmpty || isDtiFileEmpty || isBirFileEmpty) {
+                            // If any file is not attached, show a message
+                            Toast.makeText(VendorCreateAcc.this, "Please upload DTI / BIR files / Shop Image.", Toast.LENGTH_LONG).show();
+                        } else {
+                            // Get URIs from ViewModel
+                            Uri shopHeaderProfileImageUri = vendorViewModel.getShopHeaderProfileImageUri().getValue();
+                            Uri dtiFileUri = vendorViewModel.getDtiFileUri().getValue();
+                            Uri birFileUri = vendorViewModel.getBirFileUri().getValue();
+
+                            // Convert URIs to byte arrays
+                            shopHeaderProfileImage = uriToByteArray(shopHeaderProfileImageUri);
+                            dtiFile = uriToByteArray(dtiFileUri);
+                            birFile = uriToByteArray(birFileUri);
+
+                            status = "open";
+
+                            // Insert user data and get vendorId
+                            long vendorId = myDB.insertUsers(VendorCreateAcc.this, username, password, role);
+
+                            if (vendorId == -1) {
+                                Toast.makeText(VendorCreateAcc.this, "User insertion failed", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+
+                            // Proceed with inserting vendor info and shop info with the retrieved vendorId
+                            Boolean checkInsertVendorInfo = myDB.insertVendorInfo(VendorCreateAcc.this, username, fname, mname, lname, exname, bday, gender, mobileNo,
+                                    street, barangay, city, province, postal, validId_picture);
+                            Boolean checkInsertFruitShopInfo = myDB.insertFruitShopInfo(VendorCreateAcc.this, (int) vendorId, shopName, shopStreet,
+                                    shopBarangay, shopCity, shopProvince, shopPostal, shopMobileNo,
+                                    shopTelephoneNo, shopEmail, description, storeHours, status,
+                                    orderPolicy, reservePolicy, shopProfilePic, dtiFile, birFile, shopHeaderProfileImage);
+
+                            // Check if all insertions were successful
+                            if (checkInsertVendorInfo && checkInsertFruitShopInfo && vendorId != -1) {
+                                Intent goLog = new Intent(VendorCreateAcc.this, login.class);
+                                startActivity(goLog);
+                            } else {
+                                Toast.makeText(VendorCreateAcc.this, "Record insertion failed", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }
                 }
             }
         });
+
+
+
 
 
 
@@ -279,6 +348,9 @@ public class VendorCreateAcc extends AppCompatActivity {
         btncreate3.setBackgroundResource(R.drawable.btncreatenavigationtransparent);
         btncreate3.setTextColor(Color.parseColor("#808080"));
 
+        btncreate4.setBackgroundResource(R.drawable.btncreatenavigationtransparent);
+        btncreate4.setTextColor(Color.parseColor("#808080"));
+
         // Update label text based on the clicked button
         switch (clickedBtn) {
             case 1:
@@ -293,12 +365,15 @@ public class VendorCreateAcc extends AppCompatActivity {
 
                 btncreate3.setBackgroundResource(R.drawable.btncreatenavigationtransparent);
                 btncreate3.setTextColor(Color.parseColor("#808080"));
+
+                btncreate4.setBackgroundResource(R.drawable.btncreatenavigationtransparent);
+                btncreate4.setTextColor(Color.parseColor("#808080"));
                 btnNext.setVisibility(View.VISIBLE);
                 LayoutbackAndCreate.setVisibility(View.GONE);
                 break;
 
             case 2:
-                labelAccountDetails.setText("Customer Details");
+                labelAccountDetails.setText("Vendor Details");
 
                 btncreate2.setBackgroundResource(R.drawable.btncreatenavigation);
                 btncreate2.setTextColor(Color.parseColor("#FFFF00"));
@@ -308,15 +383,21 @@ public class VendorCreateAcc extends AppCompatActivity {
 
                 btncreate3.setBackgroundResource(R.drawable.btncreatenavigationtransparent);
                 btncreate3.setTextColor(Color.parseColor("#808080"));
+
+                btncreate4.setBackgroundResource(R.drawable.btncreatenavigationtransparent);
+                btncreate4.setTextColor(Color.parseColor("#808080"));
+
+
                 LayoutbackAndCreate.setVisibility(View.VISIBLE);
                 btnNext.setVisibility(View.GONE);
                 btnNext2.setVisibility(View.VISIBLE);
                 btnNext3.setVisibility(View.GONE);
+                btnNext4.setVisibility(View.GONE);
 
                 break;
 
             case 3:
-                labelAccountDetails.setText("Terms of Agreement");
+                labelAccountDetails.setText("Shop Details");
 
                 btncreate3.setBackgroundResource(R.drawable.btncreatenavigation);
                 btncreate3.setTextColor(Color.parseColor("#FFFF00"));
@@ -326,12 +407,39 @@ public class VendorCreateAcc extends AppCompatActivity {
 
                 btncreate1.setBackgroundResource(R.drawable.btncreatenavigationtransparent);
                 btncreate1.setTextColor(Color.parseColor("#808080"));
+
+                btncreate4.setBackgroundResource(R.drawable.btncreatenavigationtransparent);
+                btncreate4.setTextColor(Color.parseColor("#808080"));
                 LayoutbackAndCreate.setVisibility(View.VISIBLE);  // To show the button
                 LayoutbackAndCreate.setVisibility(View.VISIBLE);
                 btnNext.setVisibility(View.GONE);
                 btnNext2.setVisibility(View.GONE);
                 btnNext3.setVisibility(View.VISIBLE);
+                btnNext4.setVisibility(View.GONE);
 
+                break;
+
+            case 4:
+                labelAccountDetails.setText("Shop Requirements");
+
+                btncreate3.setBackgroundResource(R.drawable.btncreatenavigationtransparent);
+                btncreate3.setTextColor(Color.parseColor("#808080"));
+
+                btncreate2.setBackgroundResource(R.drawable.btncreatenavigationtransparent);
+                btncreate2.setTextColor(Color.parseColor("#808080"));
+
+                btncreate1.setBackgroundResource(R.drawable.btncreatenavigationtransparent);
+                btncreate1.setTextColor(Color.parseColor("#808080"));
+
+                btncreate4.setBackgroundResource(R.drawable.btncreatenavigation);
+                btncreate4.setTextColor(Color.parseColor("#FFFF00"));
+
+                LayoutbackAndCreate.setVisibility(View.VISIBLE);  // To show the button
+                LayoutbackAndCreate.setVisibility(View.VISIBLE);
+                btnNext.setVisibility(View.GONE);
+                btnNext2.setVisibility(View.GONE);
+                btnNext3.setVisibility(View.GONE);
+                btnNext4.setVisibility(View.VISIBLE);
                 break;
         }
     }
