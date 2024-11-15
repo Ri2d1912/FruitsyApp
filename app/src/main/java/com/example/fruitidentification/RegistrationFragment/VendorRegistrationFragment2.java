@@ -210,7 +210,6 @@ public class VendorRegistrationFragment2 extends Fragment {
     }
 
     private int getVendorGenderPosition(String gender) {
-        // You may need to adjust this based on your spinner's adapter and data
         // For example, if your adapter is a simple list like ["Male", "Female", "Other"], map the gender to its position
         List<String> genderList = Arrays.asList("Male", "Female", "Other");
         return genderList.indexOf(gender);

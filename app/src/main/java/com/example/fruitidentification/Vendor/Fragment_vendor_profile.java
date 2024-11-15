@@ -4,11 +4,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,9 +31,11 @@ public class Fragment_vendor_profile extends Fragment {
 
     //Vendor side
     private TextView vendorName, vendorDescAddress, vendorContactContent;
-
     ImageView profile_pfp, profile_header_image;
     private long vendorId; // Variable to hold the vendorId
+
+    ImageButton btn_edit_fruitshop_info, btn_edit_vendor_info;
+    Fragment editInfoFragment = null;
 
     public Fragment_vendor_profile() {
         // Required empty public constructor
@@ -39,7 +44,6 @@ public class Fragment_vendor_profile extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_vendor_profile, container, false);
         myDB = new DBHelper(getActivity());  // Initialize the DBHelper object
 
@@ -49,7 +53,6 @@ public class Fragment_vendor_profile extends Fragment {
         }
 
         // Initialize the TextViews
-        //------------------------------- Shop Info ----------------------
         shopDescAddress = view.findViewById(R.id.shopDescAddress);
         description1 = view.findViewById(R.id.description1);
         shopstorehoursdescrip = view.findViewById(R.id.shopstorehoursdescrip);
@@ -66,17 +69,53 @@ public class Fragment_vendor_profile extends Fragment {
         profile_fruitshop_name = view.findViewById(R.id.profile_fruitshop_name);
         shopUsername = view.findViewById(R.id.shopUserName);
 
-        //------------------------------- Vendor Info ----------------------
+        // Vendor Info
         vendorName = view.findViewById(R.id.vendorName);
         vendorDescAddress = view.findViewById(R.id.vendorDescAddress);
         vendorContactContent = view.findViewById(R.id.vendorContactContent);
+
+        btn_edit_vendor_info = view.findViewById(R.id.btn_edit_vendor_info);
+        btn_edit_fruitshop_info = view.findViewById(R.id.btn_edit_fruitshop_info);
+
+        btn_edit_vendor_info.setOnClickListener(v -> showEditVendorInfo());
+        btn_edit_fruitshop_info.setOnClickListener(v -> showEditShopInfo());
 
         // Load the vendor profile if vendorId is valid
         if (vendorId != -1) {
             loadShopProfile(vendorId);
             loadVendorProfile(vendorId);
         }
+
         return view;
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        // Use the FragmentManager from the activity hosting this fragment
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayout, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    private void showEditVendorInfo() {
+        editInfoFragment = new VendorProfileEditVendorFragment();
+        if (editInfoFragment != null) {
+            Bundle bundle = new Bundle();
+            bundle.putLong("vendorId", vendorId);
+            editInfoFragment.setArguments(bundle);
+            replaceFragment(editInfoFragment);
+        }
+    }
+
+    private void showEditShopInfo() {
+        editInfoFragment = new VendorProfileEditShopFragment();
+        if (editInfoFragment != null) {
+            Bundle bundle = new Bundle();
+            bundle.putLong("vendorId", vendorId);
+            editInfoFragment.setArguments(bundle);
+            replaceFragment(editInfoFragment);
+        }
     }
 
     // Method to load shop profile details

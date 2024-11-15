@@ -7,9 +7,11 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Layout;
 import android.util.Log;
 import android.view.View;
@@ -64,7 +66,6 @@ public class VendorCreateAcc extends AppCompatActivity {
 
     // vendor side
     String shopName, shopStreet, shopBarangay, shopCity, shopProvince, shopPostal, shopMobileNo, shopTelephoneNo, shopEmail, storeHours, description, orderPolicy,reservePolicy, status;
-
     // shop location
     shopLocationViewModel shopLocVIewModel;
     double latitude, longitude;
@@ -306,8 +307,7 @@ public class VendorCreateAcc extends AppCompatActivity {
                                     orderPolicy, reservePolicy, shopProfilePic, dtiFile, birFile, shopHeaderProfileImage);
 
                             // Retrieve the shopId (last inserted row's ID)
-                            int shopId = myDB.getLatestShopId();  // Make sure this method retrieves the last inserted shopId
-
+                            int shopId = myDB.getLatestShopId();
                             // Insert shop location with the retrieved shopId
                             Boolean checkInsertShopLocation = myDB.insertOrUpdateShopLocation(shopId, latitude, longitude, region, pinAddress, isPrimary);
 
@@ -324,24 +324,22 @@ public class VendorCreateAcc extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
-
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Get the current fragment displayed in the FrameLayout
-                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.RegisterFrameLayoutUserName);
+                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.VendorRegisterFrameLayoutUserName);
 
-                if (currentFragment instanceof RegistrationFragment3) {
-                    replaceFragment(new RegistrationFragment2());
+                // Check the type of the current fragment and replace it accordingly
+                if (currentFragment instanceof VendorRegistrationFragment4) {
+                    replaceFragment(new VendorRegistrationFragment3());
+                    changeButtons(3);
+                }
+                else if (currentFragment instanceof VendorRegistrationFragment3) {
+                    replaceFragment(new VendorRegistrationFragment2());
                     changeButtons(2);
-
-                } else if (currentFragment instanceof RegistrationFragment2) {
-                    replaceFragment(new RegistrationFragment1());
+                } else if (currentFragment instanceof VendorRegistrationFragment2) {
+                    replaceFragment(new VendorRegistrationFragment1());
                     changeButtons(1);
                 }
             }
@@ -356,10 +354,28 @@ public class VendorCreateAcc extends AppCompatActivity {
         // Replace the current fragment in the FrameLayout with the new fragment
         // Use the fragment's class name as a tag for reference.
         transaction.replace(R.id.VendorRegisterFrameLayoutUserName, fragment, fragment.getClass().getSimpleName());
+        transaction.addToBackStack(null);
 
         // Commit the transaction to apply the fragment replacement
         transaction.commit();
     }
+
+    private byte[] uriToByteArray(Uri uri) {
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 500, 500, true); // Resize to 500x500 pixels
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream); // Compress to JPEG with 80% quality
+            return stream.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
+
 
     private void changeButtons(int clickedBtn) {
         // Reset all buttons to default state
@@ -467,24 +483,5 @@ public class VendorCreateAcc extends AppCompatActivity {
                 break;
         }
     }
-
-    public byte[] uriToByteArray(Uri uri) {
-        try {
-            // Use 'this' for Activity context
-            InputStream inputStream = getContentResolver().openInputStream(uri);
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
-            int len;
-            while ((len = inputStream.read(buffer)) != -1) {
-                byteArrayOutputStream.write(buffer, 0, len);
-            }
-            // Convert to byte array
-            return byteArrayOutputStream.toByteArray();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
 
 }
