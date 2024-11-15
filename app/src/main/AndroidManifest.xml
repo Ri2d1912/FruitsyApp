@@ -3,6 +3,7 @@
     xmlns:dist="http://schemas.android.com/apk/distribution"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.fruitidentification">
+
     <!-- Enable instant app support -->
     <dist:module dist:instant="true" /> <!-- Declare features -->
     <uses-feature android:name="android.hardware.camera" /> <!-- Declare permissions -->
@@ -24,9 +25,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FruitIdentification"
         tools:targetApi="31">
+
         <activity
             android:name=".Vendor.VendorMainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".VendorCreateAcc"
             android:exported="false" /> <!-- Other activities -->
@@ -52,6 +54,7 @@
             </intent-filter>
 
         </activity>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -65,7 +68,6 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDCtsu568Ms3xnPizaFFrFqom5sffHki-A" />
-
     </application>
 
 </manifest>

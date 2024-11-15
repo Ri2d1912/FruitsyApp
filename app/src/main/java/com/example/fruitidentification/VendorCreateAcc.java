@@ -7,9 +7,11 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Layout;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +35,7 @@ import com.example.fruitidentification.RegistrationFragment.VendorRegistrationFr
 import com.example.fruitidentification.RegistrationFragment.VendorRegistrationFragment3;
 import com.example.fruitidentification.RegistrationFragment.VendorRegistrationFragment4;
 import com.example.fruitidentification.ViewModel.regFrag1VM;
+import com.example.fruitidentification.ViewModel.shopLocationViewModel;
 import com.example.fruitidentification.ViewModel.vendorRegFragVM;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -50,6 +53,7 @@ public class VendorCreateAcc extends AppCompatActivity {
     LinearLayout LayoutbackAndCreate;
     ImageView imageViewUser;
     vendorRegFragVM vendorViewModel;
+
     private DBHelper myDB;
 
     //For userAccount in fragment1
@@ -61,9 +65,12 @@ public class VendorCreateAcc extends AppCompatActivity {
     String fname, mname, lname, exname, street, barangay, city, province, postal, mobileNo, gender, bday;
 
     // vendor side
-
     String shopName, shopStreet, shopBarangay, shopCity, shopProvince, shopPostal, shopMobileNo, shopTelephoneNo, shopEmail, storeHours, description, orderPolicy,reservePolicy, status;
-
+    // shop location
+    shopLocationViewModel shopLocVIewModel;
+    double latitude, longitude;
+    String region, pinAddress;
+    boolean isPrimary;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +94,8 @@ public class VendorCreateAcc extends AppCompatActivity {
         LayoutbackAndCreate = findViewById(R.id.LayoutbackAndCreate);
 
         vendorViewModel = new ViewModelProvider(VendorCreateAcc.this).get(vendorRegFragVM.class);
+        shopLocVIewModel = new ViewModelProvider(VendorCreateAcc.this).get(shopLocationViewModel.class);
+
 
         // Set the default fragment (RegistrationFragment1) when the activity is opened
         replaceFragment(new VendorRegistrationFragment1());
@@ -214,6 +223,13 @@ public class VendorCreateAcc extends AppCompatActivity {
                 orderPolicy = vendorViewModel.getOrderPolicy().getValue();
                 reservePolicy = vendorViewModel.getReservePolicy().getValue();
 
+                // Accessing latitude, longitude, region, etc.
+                 latitude = shopLocVIewModel.getLatitude().getValue();
+                 longitude = shopLocVIewModel.getLongitude().getValue();
+                 region = shopLocVIewModel.getRegion().getValue();
+                 pinAddress = shopLocVIewModel.getAddress().getValue();
+                 isPrimary = shopLocVIewModel.getIsPrimary().getValue();
+
                 // Handle the image selection if it exists in the ViewModel
                 Uri shopProfileImageUri = vendorViewModel.getshopProfileImageUri().getValue();
                 if (shopProfileImageUri != null) {
@@ -280,16 +296,23 @@ public class VendorCreateAcc extends AppCompatActivity {
                                 return;
                             }
 
-                            // Proceed with inserting vendor info and shop info with the retrieved vendorId
+                            // Proceed with inserting vendor info with the retrieved vendorId
                             Boolean checkInsertVendorInfo = myDB.insertVendorInfo(VendorCreateAcc.this, username, fname, mname, lname, exname, bday, gender, mobileNo,
                                     street, barangay, city, province, postal, validId_picture);
+
+                            // Insert fruit shop info and get the inserted row's ID (shopId)
                             Boolean checkInsertFruitShopInfo = myDB.insertFruitShopInfo(VendorCreateAcc.this, (int) vendorId, shopName, shopStreet,
                                     shopBarangay, shopCity, shopProvince, shopPostal, shopMobileNo,
                                     shopTelephoneNo, shopEmail, description, storeHours, status,
                                     orderPolicy, reservePolicy, shopProfilePic, dtiFile, birFile, shopHeaderProfileImage);
 
+                            // Retrieve the shopId (last inserted row's ID)
+                            int shopId = myDB.getLatestShopId();
+                            // Insert shop location with the retrieved shopId
+                            Boolean checkInsertShopLocation = myDB.insertOrUpdateShopLocation(shopId, latitude, longitude, region, pinAddress, isPrimary);
+
                             // Check if all insertions were successful
-                            if (checkInsertVendorInfo && checkInsertFruitShopInfo && vendorId != -1) {
+                            if (checkInsertVendorInfo && checkInsertFruitShopInfo && vendorId != -1 && checkInsertShopLocation) {
                                 Intent goLog = new Intent(VendorCreateAcc.this, login.class);
                                 startActivity(goLog);
                             } else {
@@ -301,23 +324,22 @@ public class VendorCreateAcc extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Get the current fragment displayed in the FrameLayout
-                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.RegisterFrameLayoutUserName);
+                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.VendorRegisterFrameLayoutUserName);
 
-                if (currentFragment instanceof RegistrationFragment3) {
-                    replaceFragment(new RegistrationFragment2());
+                // Check the type of the current fragment and replace it accordingly
+                if (currentFragment instanceof VendorRegistrationFragment4) {
+                    replaceFragment(new VendorRegistrationFragment3());
+                    changeButtons(3);
+                }
+                else if (currentFragment instanceof VendorRegistrationFragment3) {
+                    replaceFragment(new VendorRegistrationFragment2());
                     changeButtons(2);
-
-                } else if (currentFragment instanceof RegistrationFragment2) {
-                    replaceFragment(new RegistrationFragment1());
+                } else if (currentFragment instanceof VendorRegistrationFragment2) {
+                    replaceFragment(new VendorRegistrationFragment1());
                     changeButtons(1);
                 }
             }
@@ -332,10 +354,28 @@ public class VendorCreateAcc extends AppCompatActivity {
         // Replace the current fragment in the FrameLayout with the new fragment
         // Use the fragment's class name as a tag for reference.
         transaction.replace(R.id.VendorRegisterFrameLayoutUserName, fragment, fragment.getClass().getSimpleName());
+        transaction.addToBackStack(null);
 
         // Commit the transaction to apply the fragment replacement
         transaction.commit();
     }
+
+    private byte[] uriToByteArray(Uri uri) {
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 500, 500, true); // Resize to 500x500 pixels
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream); // Compress to JPEG with 80% quality
+            return stream.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
+
 
     private void changeButtons(int clickedBtn) {
         // Reset all buttons to default state
@@ -443,24 +483,5 @@ public class VendorCreateAcc extends AppCompatActivity {
                 break;
         }
     }
-
-    public byte[] uriToByteArray(Uri uri) {
-        try {
-            // Use 'this' for Activity context
-            InputStream inputStream = getContentResolver().openInputStream(uri);
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
-            int len;
-            while ((len = inputStream.read(buffer)) != -1) {
-                byteArrayOutputStream.write(buffer, 0, len);
-            }
-            // Convert to byte array
-            return byteArrayOutputStream.toByteArray();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
 
 }

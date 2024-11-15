@@ -76,7 +76,6 @@ public class VendorMainActivity extends AppCompatActivity {
         profileFragment.setArguments(profileBundle);
         replaceFragment(profileFragment);
     }
-
     // Method to replace fragments
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -84,4 +83,5 @@ public class VendorMainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frameLayout, fragment); // Ensure frameLayout exists
         fragmentTransaction.commit();
     }
+    
 }

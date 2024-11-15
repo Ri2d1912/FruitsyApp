@@ -8,7 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.fruitidentification.ViewModel.dbShopLocationViewModel;
 import com.example.fruitidentification.ViewModel.shopInfoViewModel;
+import com.example.fruitidentification.ViewModel.shopLocationViewModel;
 import com.example.fruitidentification.ViewModel.vendorInfoViewModel;
 
 import java.text.SimpleDateFormat;
@@ -380,8 +382,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     // --------------------------------------------------- Vendor Shop Side ------------------------------------------------------------
 
-    public void insertOrUpdateShopLocation(int shopId, double latitude, double longitude, String region, String address, boolean isPrimary) {
+    public Boolean insertOrUpdateShopLocation(int shopId, double latitude, double longitude, String region, String address, boolean isPrimary) {
         SQLiteDatabase db = this.getWritableDatabase();
+        boolean success = false;  // To track success
 
         // Prepare content values for the location
         ContentValues values = new ContentValues();
@@ -398,17 +401,25 @@ public class DBHelper extends SQLiteOpenHelper {
 
         if (cursor != null && cursor.moveToFirst()) {
             // Location exists, update it without modifying the created_at timestamp
-            db.update("shop_locations", values, "shop_id=?", new String[]{String.valueOf(shopId)});
+            int rowsUpdated = db.update("shop_locations", values, "shop_id=?", new String[]{String.valueOf(shopId)});
+            if (rowsUpdated > 0) {
+                success = true;  // Update was successful
+            }
         } else {
             // Location does not exist, insert new and set created_at to current timestamp
             values.put("created_at", "CURRENT_TIMESTAMP");
-            db.insert("shop_locations", null, values);
+            long rowId = db.insert("shop_locations", null, values);
+            if (rowId != -1) {
+                success = true;  // Insert was successful
+            }
         }
 
         if (cursor != null) {
             cursor.close();
         }
         db.close();
+
+        return success;  // Return whether the operation was successful
     }
 
     public boolean insertVendorInfo(Context context, String username, String firstName, String middleName, String lastName, String extensionName,
@@ -449,6 +460,52 @@ public class DBHelper extends SQLiteOpenHelper {
             db.close();
         }
     }
+
+    public boolean updateVendorInfo(Context context, long vendorId, String firstName, String middleName, String lastName, String extensionName,
+                                    String dateOfBirth, String gender, String mobileNumber, String streetAddress, String barangay, String city,
+                                    String province, String postalCode) {
+
+        Log.d("UpdateVendorInfo", "Updating vendor info with ID: " + vendorId);
+        Log.d("UpdateVendorInfo", "DateOfBirth: " + dateOfBirth);
+        Log.d("UpdateVendorInfo", "Gender: " + gender);
+        // Get a writable database
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            // Prepare the data to be updated
+            ContentValues cv = new ContentValues();
+            cv.put("first_name", firstName);
+            cv.put("middle_name", middleName);
+            cv.put("last_name", lastName);
+            cv.put("extension_name", extensionName);
+            cv.put("date_of_birth", dateOfBirth);
+            cv.put("gender", gender);
+            cv.put("mobile_number", mobileNumber);
+            cv.put("street_address", streetAddress);
+            cv.put("barangay", barangay);
+            cv.put("city", city);
+            cv.put("province", province);
+            cv.put("postal_code", postalCode);
+
+            // Define the selection criteria for the update (vendorId)
+            String selection = "vendor_id = ?";
+            String[] selectionArgs = { String.valueOf(vendorId) };
+
+            // Update the record in the vendors table
+            int rowsAffected = db.update("vendors", cv, selection, selectionArgs);
+
+            // Return true if at least one row was updated
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            // Log the error message
+            Toast.makeText(context, "Failed to update vendor info: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            // Return false to indicate failure
+            return false;
+        } finally {
+            // Close the database connection
+            db.close();
+        }
+    }
+
 
     public boolean insertFruitShopInfo(Context context, int vendorId, String shopName, String shopStreet, String shopBarangay,
                                        String shopCity, String shopProvince, String shopPostal, String mobileNumber,
@@ -495,6 +552,43 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    public boolean updateFruitShopInfo(Context context, long vendorId, String shopName, String shopStreet, String shopBarangay,
+                                       String shopCity, String shopProvince, String shopPostal, String mobileNumber,
+                                       String telephoneNumber, String email, String description, String openingHours,
+                                       String immediateOrderPolicy, String advanceReservationPolicy,
+                                       byte[] shopProfilePicture) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put("shop_name", shopName);
+            cv.put("shop_street", shopStreet);
+            cv.put("shop_barangay", shopBarangay);
+            cv.put("shop_city", shopCity);
+            cv.put("shop_province", shopProvince);
+            cv.put("shop_postal", shopPostal);
+            cv.put("mobile_number", mobileNumber);
+            cv.put("telephone_number", telephoneNumber);
+            cv.put("email", email);
+            cv.put("description", description);
+            cv.put("opening_hours", openingHours);
+            cv.put("immediate_order_policy", immediateOrderPolicy);
+            cv.put("advance_reservation_policy", advanceReservationPolicy);
+            cv.put("Shop_profile_picture", shopProfilePicture);
+
+            // Updating the record where vendor_id matches
+            int result = db.update("fruit_shop", cv, "vendor_id = ?", new String[]{String.valueOf(vendorId)});
+
+            return result > 0; // Returns true if update was successful, otherwise false
+        } catch (Exception e) {
+            Toast.makeText(context, "Failed to update fruit shop info: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.d("VendorUpdate", "Failed to update fruit shop info: " + e.getMessage());
+            return false;
+        } finally {
+            db.close();
+        }
+    }
+
+
     // --------------------------------------------------- Vendor Profile Activity ------------------------------------------------------------
 
     public List<shopInfoViewModel> getFruitShopInfo(long vendorId) {
@@ -502,7 +596,7 @@ public class DBHelper extends SQLiteOpenHelper {
         List<shopInfoViewModel> shopInfo = new ArrayList<>();
 
         // SQL query to select the required fields from the fruit_shop table where vendor_id matches
-        String query = "SELECT shop_name, description, shop_street, shop_barangay, shop_city, shop_province, email, " +
+        String query = "SELECT shop_name, description, shop_street, shop_barangay, shop_city, shop_province, shop_postal, email, " +
                 "mobile_number, telephone_number,opening_hours, " +
                 "immediate_order_policy, advance_reservation_policy, Shop_profile_picture, shop_header_picture " +
                 "FROM fruit_shop WHERE vendor_id = ?";
@@ -521,6 +615,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 String shopBarangay = cursor.getString(cursor.getColumnIndexOrThrow("shop_barangay"));
                 String shopCity = cursor.getString(cursor.getColumnIndexOrThrow("shop_city"));
                 String shopProvince = cursor.getString(cursor.getColumnIndexOrThrow("shop_province"));
+                String shopPostal = cursor.getString(cursor.getColumnIndexOrThrow("shop_postal"));
                 String email = cursor.getString(cursor.getColumnIndexOrThrow("email"));
                 String mobileNumber = cursor.getString(cursor.getColumnIndexOrThrow("mobile_number"));
                 String telephoneNumber = cursor.getString(cursor.getColumnIndexOrThrow("telephone_number"));
@@ -530,7 +625,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
                 // Create a shopInfoViewModel object with the retrieved data
                 shopInfoViewModel shopInfos = new shopInfoViewModel(shopHeaderimg, shopProfile, shopName, shopDesc, shopStreet, shopBarangay, shopCity,
-                        shopProvince, email, mobileNumber, telephoneNumber,openingHrs,
+                        shopProvince,shopPostal, email, mobileNumber, telephoneNumber,openingHrs,
                         immediateOrderPolicy, advanceReservationPolicy);
 
                 // Add the shopInfos object to the list
@@ -554,7 +649,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         List<vendorInfoViewModel> vendorInfo = new ArrayList<>();
         // SQL query to select all fields from vendors table where vendor_id matches
-        String query = "SELECT username, first_name, middle_name, last_name, extension_name, street_address, barangay, city, province, mobile_number " +
+        String query = "SELECT username, first_name, middle_name, last_name, extension_name, gender, date_of_birth, street_address, barangay, city, province, postal_code, mobile_number " +
                 "FROM vendors WHERE vendor_id = ?";
         String[] selectionArgs = { String.valueOf(vendorId) };
         Cursor cursor = db.rawQuery(query, selectionArgs);
@@ -567,15 +662,18 @@ public class DBHelper extends SQLiteOpenHelper {
                 String middleName = cursor.getString(cursor.getColumnIndexOrThrow("middle_name"));
                 String lastName = cursor.getString(cursor.getColumnIndexOrThrow("last_name"));
                 String extensionName = cursor.getString(cursor.getColumnIndexOrThrow("extension_name"));
+                String vendorGender = cursor.getString(cursor.getColumnIndexOrThrow("gender"));
+                String vendorBday = cursor.getString(cursor.getColumnIndexOrThrow("date_of_birth"));
                 String streetAddress = cursor.getString(cursor.getColumnIndexOrThrow("street_address"));
                 String barangay = cursor.getString(cursor.getColumnIndexOrThrow("barangay"));
                 String city = cursor.getString(cursor.getColumnIndexOrThrow("city"));
                 String province = cursor.getString(cursor.getColumnIndexOrThrow("province"));
+                String vendorPostal = cursor.getString(cursor.getColumnIndexOrThrow("postal_code"));
                 String mobileNumber = cursor.getString(cursor.getColumnIndexOrThrow("mobile_number"));
 
                 // Create a vendorInfoViewModel object with the retrieved data
-                vendorInfoViewModel vendorInfos = new vendorInfoViewModel(username, firstName, middleName, lastName, extensionName,
-                        streetAddress, barangay, city, province, mobileNumber);
+                vendorInfoViewModel vendorInfos = new vendorInfoViewModel(username, firstName, middleName, lastName, extensionName,vendorGender,vendorBday,
+                        streetAddress, barangay, city, province,vendorPostal, mobileNumber);
                 // Add the vendorInfos object to the list
                 vendorInfo.add(vendorInfos);
             } while (cursor.moveToNext());
@@ -588,6 +686,83 @@ public class DBHelper extends SQLiteOpenHelper {
         return vendorInfo;
     }
 
+    // --------------------------------------------------- MAP Activity ------------------------------------------------------------
+    // for inotting new map in registration
+    public int getLatestShopId() {
+        int shopId = -1; // Default value if no rows exist
+        SQLiteDatabase db = this.getReadableDatabase();
 
+        // Query to get the maximum shop_id from fruit_shop table
+        Cursor cursor = db.rawQuery("SELECT MAX(shop_id) FROM fruit_shop", null);
+        if (cursor.moveToFirst()) {
+            shopId = cursor.getInt(0); // Get the maximum shop_id
+        }
+        cursor.close();
+        return shopId;
+    }
+
+    public long getShopIdByVendorId(long vendorId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        long shopId = -1;  // Default value if no shop is found
+
+        // SQL query to select the shop_id from the fruit_shop table where vendor_id matches
+        String query = "SELECT shop_id FROM fruit_shop WHERE vendor_id = ?";
+        String[] selectionArgs = { String.valueOf(vendorId) };  // Ensure vendorId is correctly converted to String
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        // Check if the cursor contains data and move to the first row
+        if (cursor != null && cursor.moveToFirst()) {
+            // Retrieve the shop_id from the cursor
+            shopId = cursor.getLong(cursor.getColumnIndexOrThrow("shop_id"));
+
+            // Close the cursor after retrieving data
+            cursor.close();
+        }
+
+        // Close the database connection
+        db.close();
+
+        // Return the shop_id
+        return shopId;
+    }
+
+
+
+    public List<dbShopLocationViewModel> getShopLocation(long shopId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<dbShopLocationViewModel> shopLocations = new ArrayList<>();
+
+        // SQL query to select all fields from shop_locations table where shop_id matches
+        String query = "SELECT * FROM shop_locations WHERE shop_id = ?";
+        String[] selectionArgs = { String.valueOf(shopId) };
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        // Check if the cursor contains data and move to the first row
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                // Retrieve values based on column names in the shop_locations table
+                double latitude = cursor.getDouble(cursor.getColumnIndexOrThrow("latitude"));
+                double longitude = cursor.getDouble(cursor.getColumnIndexOrThrow("longitude"));
+                String region = cursor.getString(cursor.getColumnIndexOrThrow("region"));
+                String address = cursor.getString(cursor.getColumnIndexOrThrow("address"));
+                boolean isPrimary = cursor.getInt(cursor.getColumnIndexOrThrow("is_primary")) > 0;
+
+                // Create a shopLocationViewModel object with the retrieved data
+                dbShopLocationViewModel shopLocation = new dbShopLocationViewModel(latitude, longitude, region, address, isPrimary);
+
+                // Add the shopLocation object to the list
+                shopLocations.add(shopLocation);
+            } while (cursor.moveToNext());
+
+            // Close the cursor after retrieving all data
+            cursor.close();
+        }
+
+        // Close the database connection
+        db.close();
+
+        // Return the list of shopLocations
+        return shopLocations;
+    }
 
 }
