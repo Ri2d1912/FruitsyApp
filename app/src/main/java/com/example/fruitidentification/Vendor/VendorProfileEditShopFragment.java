@@ -18,6 +18,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 
 import com.example.fruitidentification.Model.DBHelper;
 import com.example.fruitidentification.R;
+import com.example.fruitidentification.RegistrationFragment.GoogleMapFragment;
 import com.example.fruitidentification.ViewModel.dbShopLocationViewModel;
 import com.example.fruitidentification.ViewModel.shopInfoViewModel;
 import com.example.fruitidentification.ViewModel.shopLocationViewModel;
@@ -67,6 +69,7 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
     AppCompatButton btnSave, btnCancel;
     FloatingActionButton imgVendorCamera;
     private long vendorId; // Variable to hold the vendorId
+    View overlayView;
 
     public VendorProfileEditShopFragment() {
         // Required empty public constructor
@@ -109,6 +112,7 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
         // Initialize Spinners
         spinnerOrderPolicy = view.findViewById(R.id.spinnerOrderPolicy);
         spinnerReservePolicy = view.findViewById(R.id.spinnerReservePolicy);
+        overlayView = view.findViewById(R.id.overlay_view);
 
         if (vendorId != -1) {
             loadShopProfile(vendorId);
@@ -122,6 +126,28 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
 
         btnSave.setOnClickListener(v -> saveShopInfo());
 
+        overlayView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Check if the fragment container exists and perform the fragment transaction
+                if (getActivity() != null) {
+                    // Access VendorMainActivity and hide BottomNavigationView
+                    VendorMainActivity vendorMainActivity = (VendorMainActivity) getActivity();
+                    if (vendorMainActivity != null) {
+                        vendorMainActivity.hideBottomNavigation();
+                    }
+
+                    // Perform the fragment transaction
+                    FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    GoogleMapFragment googleMapFragment = new GoogleMapFragment();
+
+                    // Replace the current fragment with GoogleMapFragment
+                    fragmentTransaction.replace(R.id.frameContainer, googleMapFragment);
+                    fragmentTransaction.addToBackStack(null); // Optional: Add this to back stack
+                    fragmentTransaction.commit();
+                }
+            }
+        });
 
         return view;
     }
@@ -351,9 +377,6 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
 
         // Display pins from the database
         displayPinsFromDatabase();
-
-        // Set a click listener to capture pinned location
-        mMap.setOnMapClickListener(this::onMapClick);
     }
 
     private void displayPinsFromDatabase() {
@@ -388,91 +411,6 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
                     .snippet(location.getAddress())); // Add address as a snippet
         }
     }
-
-
-
-    private void onMapClick(LatLng latLng) {
-        // Clear any existing markers
-        mMap.clear();
-
-        // Add a marker at the tapped location
-        mMap.addMarker(new MarkerOptions().position(latLng).title("Pinned Location"));
-
-        // Use Geocoder to get the address from the latitude and longitude
-        String address = getAddressFromLatLng(latLng.latitude, latLng.longitude);
-        Toast.makeText(getContext(), "Address: " + address, Toast.LENGTH_LONG).show();
-        String region = getRegionFromLatLng(latLng.latitude, latLng.longitude); // Retrieve region dynamically
-
-        boolean isPrimary = true; // Set this according to your needs
-
-        // Save the location data in the ViewModel
-        shopLocationViewModel viewModel = new ViewModelProvider(requireActivity()).get(shopLocationViewModel.class);
-        viewModel.setLatitude(latLng.latitude);
-        viewModel.setLongitude(latLng.longitude);
-        viewModel.setRegion(region);
-        viewModel.setAddress(address);
-        viewModel.setIsPrimary(isPrimary);
-    }
-
-
-    private String getRegionFromLatLng(double latitude, double longitude) {
-        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-        String region = "Unknown Region"; // Default value
-
-        try {
-            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-            if (addresses != null && !addresses.isEmpty()) {
-                Address address = addresses.get(0);
-                region = address.getAdminArea(); // Admin area can be the region or province
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return region;
-    }
-    private String getAddressFromLatLng(double latitude, double longitude) {
-        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-        StringBuilder addressBuilder = new StringBuilder();
-
-        try {
-            // Get the list of addresses for the given latitude and longitude
-            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-
-            // If geocoder returns a result, get the components
-            if (addresses != null && !addresses.isEmpty()) {
-                Address address = addresses.get(0);
-
-                // Retrieve different address components
-                String street = address.getThoroughfare(); // Street name
-                String barangay = address.getSubLocality(); // Barangay name
-                String city = address.getLocality(); // City name
-                String province = address.getAdminArea(); // Province name
-
-                // Build the full address
-                if (street != null) {
-                    addressBuilder.append(street).append(", ");
-                }
-                if (barangay != null) {
-                    addressBuilder.append(barangay).append(", ");
-                }
-                if (city != null) {
-                    addressBuilder.append(city).append(", ");
-                }
-                if (province != null) {
-                    addressBuilder.append(province);
-                }
-            } else {
-                addressBuilder.append("Unknown Address");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            addressBuilder.append("Error retrieving address");
-        }
-
-        return addressBuilder.toString();
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

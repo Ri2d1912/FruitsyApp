@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.fruitidentification.R;
+import com.example.fruitidentification.Vendor.VendorMainActivity;
 import com.example.fruitidentification.ViewModel.shopLocationViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -61,7 +62,20 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
             mapFragment.getMapAsync(this);
         }
 
-        fillBackNavigation.setOnClickListener(v -> getActivity().onBackPressed());
+        fillBackNavigation.setOnClickListener(v -> {
+            // Check if the activity is an instance of VendorMainActivity
+            if (getActivity() instanceof VendorMainActivity) {
+                VendorMainActivity vendorMainActivity = (VendorMainActivity) getActivity();
+                if (vendorMainActivity != null) {
+                    // Show the BottomNavigationView
+                    vendorMainActivity.showBottomNavigation();
+                }
+            }
+
+            // Call the onBackPressed() method to navigate back
+            getActivity().onBackPressed();
+        });
+
 
         return view;
     }
