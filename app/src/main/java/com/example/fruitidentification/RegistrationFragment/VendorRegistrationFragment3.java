@@ -130,10 +130,10 @@ public class VendorRegistrationFragment3 extends Fragment implements OnMapReadyC
         LatLng defaultLocation = new LatLng(14.6696, 120.5415);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12));
         // Get the latitude, longitude, and other data from ViewModel
-        shopLocationViewModel viewModel = new ViewModelProvider(this).get(shopLocationViewModel.class);
-        Double latitude = viewModel.getLatitude().getValue();
-        Double longitude = viewModel.getLongitude().getValue();
-        String address = viewModel.getAddress().getValue();
+        shopLocationViewModel LocviewModel = new ViewModelProvider(requireActivity()).get(shopLocationViewModel.class);
+        Double latitude = LocviewModel.getLatitude().getValue();
+        Double longitude = LocviewModel.getLongitude().getValue();
+        String address = LocviewModel.getAddress().getValue();
 
         // Set the default location to Balanga City, Bataan if the ViewModel doesn't have a location
         if (latitude != null && longitude != null) {
