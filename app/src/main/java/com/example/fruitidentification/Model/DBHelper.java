@@ -382,7 +382,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     // --------------------------------------------------- Vendor Shop Side ------------------------------------------------------------
 
-    public Boolean insertOrUpdateShopLocation(int shopId, double latitude, double longitude, String region, String address, boolean isPrimary) {
+    public Boolean insertOrUpdateShopLocation(long shopId, double latitude, double longitude, String region, String address, boolean isPrimary) {
         SQLiteDatabase db = this.getWritableDatabase();
         boolean success = false;  // To track success
 

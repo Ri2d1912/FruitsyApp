@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.example.fruitidentification.Model.DBHelper;
 import com.example.fruitidentification.R;
 import com.example.fruitidentification.RegistrationFragment.GoogleMapFragment;
+import com.example.fruitidentification.VendorCreateAcc;
 import com.example.fruitidentification.ViewModel.dbShopLocationViewModel;
 import com.example.fruitidentification.ViewModel.shopInfoViewModel;
 import com.example.fruitidentification.ViewModel.shopLocationViewModel;
@@ -70,6 +71,8 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
     FloatingActionButton imgVendorCamera;
     private long vendorId; // Variable to hold the vendorId
     View overlayView;
+    shopLocationViewModel shopLocVIewModel;
+
 
     public VendorProfileEditShopFragment() {
         // Required empty public constructor
@@ -86,6 +89,7 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_vendor_profile_edit_shop, container, false);
+        shopLocVIewModel = new ViewModelProvider(requireActivity()).get(shopLocationViewModel.class);
 
         // Initialize DBHelper
         myDB = new DBHelper(getActivity());
@@ -167,7 +171,6 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
         shopOpeningHrs = editStoreHrs.getText().toString().trim();
         immediateOrderPolicy = spinnerOrderPolicy.getSelectedItem().toString();
         advanceReservationPolicy = spinnerReservePolicy.getSelectedItem().toString();
-
         // Check if an image is set for the profile picture and convert it to byte array
         if (imgShopProfilePic.getDrawable() != null) {
             Bitmap bitmap = ((BitmapDrawable) imgShopProfilePic.getDrawable()).getBitmap();
@@ -187,7 +190,17 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
                     shopCity, shopProvince, shopPostal, mobileNumber, telephoneNumber, shopEmail, shopDesc,
                     shopOpeningHrs, immediateOrderPolicy, advanceReservationPolicy, shopProfile);
 
-            if (checkUpdate) {
+            double latitude = shopLocVIewModel.getLatitude().getValue();
+            double longitude = shopLocVIewModel.getLongitude().getValue();
+            String region = shopLocVIewModel.getRegion().getValue();
+            String pinAddress = shopLocVIewModel.getAddress().getValue();
+            boolean isPrimary = shopLocVIewModel.getIsPrimary().getValue();
+            long shopId = myDB.getShopIdByVendorId(vendorId);
+
+            boolean checkpUpdateLoc = myDB.insertOrUpdateShopLocation(shopId, latitude, longitude, region, pinAddress, isPrimary);
+
+
+            if (checkUpdate && checkpUpdateLoc) {
                 Toast.makeText(getActivity(), "Vendor information updated successfully", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getActivity(), "Failed to update vendor information", Toast.LENGTH_SHORT).show();
