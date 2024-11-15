@@ -8,8 +8,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.fruitidentification.ViewModel.shopInfoViewModel;
+import com.example.fruitidentification.ViewModel.vendorInfoViewModel;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class DBHelper extends SQLiteOpenHelper {
@@ -226,6 +231,60 @@ public class DBHelper extends SQLiteOpenHelper {
         // Return the retrieved password, or null if the username was not found in the database
         return password;
     }
+    public String getRole(String username) {
+        // Get a readable database instance to perform the query
+        SQLiteDatabase db = this.getReadableDatabase();
+        String role = null;
+        // Define the SQL query to retrieve the password from the user_account table based on the provided username
+        String query = "SELECT role FROM users WHERE username = ?";
+        // Specify the username as the selection argument for the query
+        String[] selectionArgs = { username };
+        // Execute the raw SQL query
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        try {
+            // Check if the cursor contains any results
+            if (cursor != null && cursor.moveToFirst()) {
+                // Retrieve the password from the cursor
+                role = cursor.getString(0);
+            }
+        } finally {
+            // Close the cursor to release resources
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        // Return the retrieved role, or null if the username was not found in the database
+        return role;
+    }
+
+    public long getVendorId(String username) {
+        // Get a readable database instance to perform the query
+        SQLiteDatabase db = this.getReadableDatabase();
+        long vendorID = -1;
+        String query = "SELECT vendor_id FROM vendors WHERE username = ?";
+        // Specify the username as the selection argument for the query
+        String[] selectionArgs = { username };
+        // Execute the raw SQL query
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        try {
+            // Check if the cursor contains any results
+            if (cursor != null && cursor.moveToFirst()) {
+                vendorID = cursor.getLong(0); // getLong(0) retrieves the first column, which is vendor_id
+            }
+        } finally {
+            // Close the cursor to release resources
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        // Return the retrieved vendor ID, or -1 if the username was not found in the database
+        return vendorID;
+    }
+
+
 
     public boolean isUsernameExists(String username) {
         // Get a readable database instance to perform the query
@@ -319,7 +378,38 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    // --------------------------------------------------- Vendor Side ------------------------------------------------------------
+    // --------------------------------------------------- Vendor Shop Side ------------------------------------------------------------
+
+    public void insertOrUpdateShopLocation(int shopId, double latitude, double longitude, String region, String address, boolean isPrimary) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Prepare content values for the location
+        ContentValues values = new ContentValues();
+        values.put("shop_id", shopId);
+        values.put("latitude", latitude);
+        values.put("longitude", longitude);
+        values.put("region", region);
+        values.put("address", address);
+        values.put("is_primary", isPrimary ? 1 : 0);
+
+        // Check if a location for this shop_id already exists
+        Cursor cursor = db.query("shop_locations", null, "shop_id=?",
+                new String[]{String.valueOf(shopId)}, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            // Location exists, update it without modifying the created_at timestamp
+            db.update("shop_locations", values, "shop_id=?", new String[]{String.valueOf(shopId)});
+        } else {
+            // Location does not exist, insert new and set created_at to current timestamp
+            values.put("created_at", "CURRENT_TIMESTAMP");
+            db.insert("shop_locations", null, values);
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+        db.close();
+    }
 
     public boolean insertVendorInfo(Context context, String username, String firstName, String middleName, String lastName, String extensionName,
                                     String dateOfBirth, String gender, String mobileNumber, String streetAddress, String barangay, String city,
@@ -404,6 +494,100 @@ public class DBHelper extends SQLiteOpenHelper {
             db.close();
         }
     }
+
+    // --------------------------------------------------- Vendor Profile Activity ------------------------------------------------------------
+
+    public List<shopInfoViewModel> getFruitShopInfo(long vendorId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<shopInfoViewModel> shopInfo = new ArrayList<>();
+
+        // SQL query to select the required fields from the fruit_shop table where vendor_id matches
+        String query = "SELECT shop_name, description, shop_street, shop_barangay, shop_city, shop_province, email, " +
+                "mobile_number, telephone_number,opening_hours, " +
+                "immediate_order_policy, advance_reservation_policy, Shop_profile_picture, shop_header_picture " +
+                "FROM fruit_shop WHERE vendor_id = ?";
+        String[] selectionArgs = { String.valueOf(vendorId) };  // Ensure vendorId is correctly converted to String
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        // Check if the cursor contains data and move to the first row
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                // Retrieve the relevant columns from the cursor
+                byte[] shopProfile = cursor.getBlob(cursor.getColumnIndexOrThrow("Shop_profile_picture"));
+                byte[] shopHeaderimg = cursor.getBlob(cursor.getColumnIndexOrThrow("shop_header_picture"));
+                String shopName = cursor.getString(cursor.getColumnIndexOrThrow("shop_name"));
+                String shopDesc = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                String shopStreet = cursor.getString(cursor.getColumnIndexOrThrow("shop_street"));
+                String shopBarangay = cursor.getString(cursor.getColumnIndexOrThrow("shop_barangay"));
+                String shopCity = cursor.getString(cursor.getColumnIndexOrThrow("shop_city"));
+                String shopProvince = cursor.getString(cursor.getColumnIndexOrThrow("shop_province"));
+                String email = cursor.getString(cursor.getColumnIndexOrThrow("email"));
+                String mobileNumber = cursor.getString(cursor.getColumnIndexOrThrow("mobile_number"));
+                String telephoneNumber = cursor.getString(cursor.getColumnIndexOrThrow("telephone_number"));
+                String openingHrs = cursor.getString(cursor.getColumnIndexOrThrow("opening_hours"));
+                String immediateOrderPolicy = cursor.getString(cursor.getColumnIndexOrThrow("immediate_order_policy"));
+                String advanceReservationPolicy = cursor.getString(cursor.getColumnIndexOrThrow("advance_reservation_policy"));
+
+                // Create a shopInfoViewModel object with the retrieved data
+                shopInfoViewModel shopInfos = new shopInfoViewModel(shopHeaderimg, shopProfile, shopName, shopDesc, shopStreet, shopBarangay, shopCity,
+                        shopProvince, email, mobileNumber, telephoneNumber,openingHrs,
+                        immediateOrderPolicy, advanceReservationPolicy);
+
+                // Add the shopInfos object to the list
+                shopInfo.add(shopInfos);
+
+            } while (cursor.moveToNext());
+
+            // Close the cursor after retrieving all data
+            cursor.close();
+        }
+
+        // Close the database connection
+        db.close();
+
+        // Return the list of shopInfo
+        return shopInfo;
+    }
+
+
+    public List<vendorInfoViewModel> getVendorInfo(long vendorId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<vendorInfoViewModel> vendorInfo = new ArrayList<>();
+        // SQL query to select all fields from vendors table where vendor_id matches
+        String query = "SELECT username, first_name, middle_name, last_name, extension_name, street_address, barangay, city, province, mobile_number " +
+                "FROM vendors WHERE vendor_id = ?";
+        String[] selectionArgs = { String.valueOf(vendorId) };
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        // Check if the cursor contains data and move to the first row
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String username = cursor.getString(cursor.getColumnIndexOrThrow("username"));
+                String firstName = cursor.getString(cursor.getColumnIndexOrThrow("first_name"));
+                String middleName = cursor.getString(cursor.getColumnIndexOrThrow("middle_name"));
+                String lastName = cursor.getString(cursor.getColumnIndexOrThrow("last_name"));
+                String extensionName = cursor.getString(cursor.getColumnIndexOrThrow("extension_name"));
+                String streetAddress = cursor.getString(cursor.getColumnIndexOrThrow("street_address"));
+                String barangay = cursor.getString(cursor.getColumnIndexOrThrow("barangay"));
+                String city = cursor.getString(cursor.getColumnIndexOrThrow("city"));
+                String province = cursor.getString(cursor.getColumnIndexOrThrow("province"));
+                String mobileNumber = cursor.getString(cursor.getColumnIndexOrThrow("mobile_number"));
+
+                // Create a vendorInfoViewModel object with the retrieved data
+                vendorInfoViewModel vendorInfos = new vendorInfoViewModel(username, firstName, middleName, lastName, extensionName,
+                        streetAddress, barangay, city, province, mobileNumber);
+                // Add the vendorInfos object to the list
+                vendorInfo.add(vendorInfos);
+            } while (cursor.moveToNext());
+            // Close the cursor after retrieving all data
+            cursor.close();
+        }
+        // Close the database connection
+        db.close();
+        // Return the list of vendorInfo
+        return vendorInfo;
+    }
+
 
 
 }

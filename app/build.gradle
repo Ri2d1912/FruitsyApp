@@ -115,9 +115,5 @@ dependencies {
 
     implementation("com.google.android.gms:play-services-maps:19.0.0")
     implementation 'com.google.android.gms:play-services-location:19.0.0'
-    
-    //This will allow you to use the CardView widget in your project.
-    implementation 'androidx.cardview:cardview:1.0.0'
-
 
 }
