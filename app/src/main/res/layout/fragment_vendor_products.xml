@@ -27,12 +27,12 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/white_btnbg"
+                android:background="@drawable/search_background"
                 android:iconifiedByDefault="false"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
                 android:queryBackground="@android:color/white"
-                android:queryHint="Search Product Name" >
+                android:queryHint="Search Product Name">
 
             </androidx.appcompat.widget.SearchView>
         </FrameLayout>
