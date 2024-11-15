@@ -141,6 +141,8 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
                         vendorMainActivity.hideBottomNavigation();
                     }
 
+                    shopLocVIewModel.setShopId(vendorId);
+
                     // Perform the fragment transaction
                     FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                     GoogleMapFragment googleMapFragment = new GoogleMapFragment();
@@ -201,6 +203,7 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
 
 
             if (checkUpdate && checkpUpdateLoc) {
+
                 Toast.makeText(getActivity(), "Vendor information updated successfully", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getActivity(), "Failed to update vendor information", Toast.LENGTH_SHORT).show();

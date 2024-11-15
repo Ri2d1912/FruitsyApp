@@ -10,7 +10,7 @@ public class shopLocationViewModel extends ViewModel {
     private MutableLiveData<String> region = new MutableLiveData<>();
     private MutableLiveData<String> address = new MutableLiveData<>();
     private MutableLiveData<Boolean> isPrimary = new MutableLiveData<>();
-    private MutableLiveData<Integer> shopId = new MutableLiveData<>();
+    private Long shopId;
 
     public void setLatitude(double lat) {
         latitude.setValue(lat);
@@ -32,8 +32,8 @@ public class shopLocationViewModel extends ViewModel {
         this.isPrimary.setValue(isPrimary);
     }
 
-    public void setShopId(int shopId) {
-        this.shopId.setValue(shopId);
+    public void setShopId(Long shopId) {
+        this.shopId = shopId; // Directly assign the value.
     }
 
     public LiveData<Double> getLatitude() {
@@ -56,7 +56,7 @@ public class shopLocationViewModel extends ViewModel {
         return isPrimary;
     }
 
-    public LiveData<Integer> getShopId() {
-        return shopId;
+    public Long getShopId() {
+        return shopId; // Return the plain Long value.
     }
 }

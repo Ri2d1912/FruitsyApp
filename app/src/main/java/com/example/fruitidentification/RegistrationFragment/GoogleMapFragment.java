@@ -11,13 +11,16 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.fruitidentification.Model.DBHelper;
 import com.example.fruitidentification.R;
 import com.example.fruitidentification.Vendor.VendorMainActivity;
+import com.example.fruitidentification.ViewModel.dbShopLocationViewModel;
 import com.example.fruitidentification.ViewModel.shopLocationViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,7 +36,9 @@ import java.util.Locale;
 public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
     private View fillBackNavigation;
     private GoogleMap mMap;
-
+    private DBHelper myDB;
+    long vendorId;
+    shopLocationViewModel viewModel;
     // Request code for location permission
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
@@ -54,6 +59,15 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_google_map, container, false);
 
+        // Initialize DBHelper
+        myDB = new DBHelper(requireActivity());
+
+        // Initialize the ViewModel
+        viewModel = new ViewModelProvider(requireActivity()).get(shopLocationViewModel.class);
+
+        // Assign vendorId only after initializing the ViewModel
+        vendorId = viewModel.getShopId() != null ? viewModel.getShopId() : -1;
+
         fillBackNavigation = view.findViewById(R.id.fillBackNavigation);
 
         // Initialize the SupportMapFragment and set the map async callback
@@ -63,7 +77,6 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
         }
 
         fillBackNavigation.setOnClickListener(v -> {
-            // Check if the activity is an instance of VendorMainActivity
             if (getActivity() instanceof VendorMainActivity) {
                 VendorMainActivity vendorMainActivity = (VendorMainActivity) getActivity();
                 if (vendorMainActivity != null) {
@@ -72,14 +85,12 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
 
-            // Call the onBackPressed() method to navigate back
+            // Navigate back
             getActivity().onBackPressed();
         });
 
-
         return view;
     }
-
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
@@ -100,6 +111,43 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
 
         // Set a click listener to capture pinned location
         mMap.setOnMapClickListener(this::onMapClick);
+        // Display pins from the database
+        if (vendorId != -1) {
+            displayPinsFromDatabase();
+        }
+    }
+
+    private void displayPinsFromDatabase() {
+        // Retrieve shop ID based on vendor ID
+        long shopId = myDB.getShopIdByVendorId(vendorId);
+        Log.d("MapDebug", "Retrieved Shop ID: " + shopId);
+
+        // Call getShopLocation from the myDB instance
+        List<dbShopLocationViewModel> shopLocations = myDB.getShopLocation(shopId);
+        if (shopLocations == null || shopLocations.isEmpty()) {
+            Log.d("MapDebug", "No shop locations found for Shop ID: " + shopId);
+            Toast.makeText(getContext(), "No shop locations to display.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Get the first location to set as the center for the map
+        dbShopLocationViewModel firstLocation = shopLocations.get(0);
+        LatLng firstLocationLatLng = new LatLng(firstLocation.getLatitude(), firstLocation.getLongitude());
+
+        // Zoom to the first shop location
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(firstLocationLatLng, 12));
+
+        // Add markers for each location
+        for (dbShopLocationViewModel location : shopLocations) {
+            Log.d("MapDebug", "Adding location: Lat=" + location.getLatitude() + ", Lng=" + location.getLongitude());
+            LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
+            String title = location.isPrimary() ? "Primary Location" : "Secondary Location";
+
+            mMap.addMarker(new MarkerOptions()
+                    .position(position)
+                    .title(title)
+                    .snippet(location.getAddress())); // Add address as a snippet
+        }
     }
 
     private void onMapClick(LatLng latLng) {
@@ -117,7 +165,6 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
         boolean isPrimary = true; // Set this according to your needs
 
         // Save the location data in the ViewModel
-        shopLocationViewModel viewModel = new ViewModelProvider(requireActivity()).get(shopLocationViewModel.class);
         viewModel.setLatitude(latLng.latitude);
         viewModel.setLongitude(latLng.longitude);
         viewModel.setRegion(region);
