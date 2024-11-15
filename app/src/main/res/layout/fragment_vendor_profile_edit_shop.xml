@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout3"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/container"
+    tools:context=".Vendor.VendorProfileEditVendorFragment">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:isScrollContainer="false">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@color/white"
+                android:layout_marginHorizontal="24dp"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="24dp"
+                android:paddingBottom="120dp">
+
+
+                <TextView
+                    android:id="@+id/userLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Shop Profile picture"
+                    android:textColor="#FFA710"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_gravity="start"/>
+
+                <!-- Container for Profile Image and Camera Icon -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="16dp">
+
+                    <!-- Profile Image -->
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/imgShopProfilePic"
+                        android:layout_width="125dp"
+                        android:layout_height="125dp"
+                        app:shapeAppearanceOverlay="@style/circular"
+                        app:strokeColor="@color/white"
+                        app:strokeWidth="7dp"
+                        android:src="@drawable/upimg"/>
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/imgVendorCamera"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-42dp"
+                        android:layout_gravity="end"
+                        app:srcCompat="@drawable/camera"
+                        android:clickable="true" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/userLabelShopName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Shop Name"
+                    android:textColor="#FFA710"
+                    android:textSize="18sp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_gravity="start"/>
+
+                <EditText
+                    android:id="@+id/editShopName"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter your shop name"
+                    android:inputType="text"
+                    android:layout_marginLeft="24dp"/>
+
+                <TextView
+                    android:id="@+id/userLabelAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Address"
+                    android:textColor="#FFA710"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="start"/>
+
+                <TextView
+                    android:id="@+id/userLabelStreet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Street"
+                    android:textColor="#FFA710"
+                    android:textSize="18sp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_gravity="start"/>
+
+                <EditText
+                    android:id="@+id/editStreet"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter your street"
+                    android:inputType="text"
+                    android:layout_marginLeft="24dp"/>
+
+                <TextView
+                    android:id="@+id/userLabelBarangay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Barangay"
+                    android:textColor="#FFA710"
+                    android:textSize="18sp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_gravity="start"/>
+
+                <EditText
+                    android:id="@+id/editBarangay"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter your barangay"
+                    android:inputType="text"
+                    android:layout_marginLeft="24dp"/>
+
+                <TextView
+                    android:id="@+id/userLabelCity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="City"
+                    android:textColor="#FFA710"
+                    android:textSize="18sp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_gravity="start"/>
+
+                <EditText
+                    android:id="@+id/editCity"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter your city"
+                    android:inputType="text"
+                    android:layout_marginLeft="24dp"/>
+
+                <TextView
+                    android:id="@+id/userLabelProvince"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Province"
+                    android:textColor="#FFA710"
+                    android:textSize="18sp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_gravity="start"/>
+
+                <EditText
+                    android:id="@+id/editProvince"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter your province"
+                    android:inputType="text"
+                    android:layout_marginLeft="24dp"/>
+
+                <TextView
+                    android:id="@+id/userLabelPostal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Postal"
+                    android:textColor="#FFA710"
+                    android:textSize="18sp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_gravity="start"/>
+
+                <EditText
+                    android:id="@+id/editPostal"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter your postal code"
+                    android:inputType="text"
+                    android:layout_marginLeft="24dp"/>
+
+                <TextView
+                    android:id="@+id/userPinLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="19dp"
+                    android:layout_gravity="start"
+                    android:layout_marginLeft="24dp"
+                    android:text="Pin Location"
+                    android:textColor="#FFA710"
+                    android:textSize="18sp" />
+
+                <!-- Replacing ImageView with GoogleMapFragment -->
+                <FrameLayout
+                    android:id="@+id/id_map_container"
+                    android:layout_marginTop="16dp"
+                    android:layout_width="380dp"
+                    android:layout_height="300dp">
+
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/userLabelMobileNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mobile Number"
+                    android:textColor="#FFA710"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="start"/>
+
+                <EditText
+                    android:id="@+id/editMobileNo"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter your mobile number"
+                    android:inputType="text"
+                    android:layout_marginLeft="24dp"/>
+
+                <TextView
+                    android:id="@+id/userLabelTelephoneNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Telephone Number"
+                    android:textColor="#FFA710"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="start"/>
+
+                <EditText
+                    android:id="@+id/editTelephoneNo"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter your Telephone number"
+                    android:inputType="text"
+                    android:layout_marginLeft="24dp"/>
+
+                <TextView
+                    android:id="@+id/userLabelEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email"
+                    android:textColor="#FFA710"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="start"/>
+
+                <EditText
+                    android:id="@+id/editShopEmail"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter shop's email"
+                    android:inputType="text"
+                    android:layout_marginLeft="24dp"/>
+
+                <TextView
+                    android:id="@+id/userLabelStoreHrs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Store Hours"
+                    android:textColor="#FFA710"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="start"/>
+
+                <EditText
+                    android:id="@+id/editStoreHrs"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter shop's store hours"
+                    android:inputType="text"
+                    android:layout_marginLeft="24dp"/>
+
+                <TextView
+                    android:id="@+id/userLabelDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Description"
+                    android:textColor="#FFA710"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="start"/>
+
+                <EditText
+                    android:id="@+id/editDesc"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter shop's description"
+                    android:inputType="text"
+                    android:layout_marginLeft="24dp"/>
+
+                <TextView
+                    android:id="@+id/userLabelOrderPolicy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Order Policy"
+                    android:textColor="#FFA710"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="start"/>
+
+                <Spinner
+                    android:id="@+id/spinnerOrderPolicy"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:entries="@array/orderandreserve_options"/>
+
+                <TextView
+                    android:id="@+id/userLabelReservePolicy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reservation Policy"
+                    android:textColor="#FFA710"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="start"/>
+
+                <Spinner
+                    android:id="@+id/spinnerReservePolicy"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:entries="@array/orderandreserve_options"/>
+
+
+            </LinearLayout>
+        </ScrollView>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="93dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/rounded_bottom_nav"
+        android:orientation="horizontal"
+        android:paddingHorizontal="32dp"
+        android:paddingVertical="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCancel"
+            android:layout_width="176dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_primary_red"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="16dp" />
+
+        <!-- Divider View to create gap -->
+        <View
+            android:layout_width="16dp"
+            android:layout_height="wrap_content" />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSave"
+            android:layout_width="176dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_primary_orange"
+            android:text="Save"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
