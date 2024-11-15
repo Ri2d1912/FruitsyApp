@@ -9,6 +9,7 @@ public class shopInfoViewModel {
     private String shopBarangay;
     private String shopCity;
     private String shopProvince;
+    private String shopPostal;
     private String email;
     private String mobileNumber;
     private String telephoneNumber;
@@ -20,7 +21,7 @@ public class shopInfoViewModel {
     private byte[] shopProfile;
 
     public shopInfoViewModel(byte[] shopHeaderImg, byte[] shopProfile, String shopName, String shopDesc, String shopStreet, String shopBarangay, String shopCity,
-                             String shopProvince, String email, String openingHrs,
+                             String shopProvince,String shopPostal, String email, String openingHrs,
                              String mobileNumber, String telephoneNumber,
                              String immediateOrderPolicy, String advanceReservationPolicy) {
         //this.vendorProfile = vendorProfile;
@@ -32,6 +33,7 @@ public class shopInfoViewModel {
         this.shopStreet = shopStreet;
         this.shopBarangay = shopBarangay;
         this.shopCity = shopCity;
+        this.shopPostal = shopPostal;
         this.shopProvince = shopProvince;
         this.email = email;
         this.mobileNumber = mobileNumber;
@@ -67,6 +69,9 @@ public class shopInfoViewModel {
     }
 
     public String getShopProvince() {
+        return shopProvince;
+    }
+    public String getShopPostal() {
         return shopProvince;
     }
 

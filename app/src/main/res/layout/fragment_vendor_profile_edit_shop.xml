@@ -204,14 +204,17 @@
                     android:textSize="18sp" />
 
                 <!-- Replacing ImageView with GoogleMapFragment -->
-                <FrameLayout
-                    android:id="@+id/id_map_container"
-                    android:layout_marginTop="16dp"
-                    android:layout_width="380dp"
-                    android:layout_height="300dp">
-
-
-                </FrameLayout>
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="8dp"
+                        android:layout_height="300dp"
+                        android:layout_gravity="center">
+                        <fragment
+                            android:id="@+id/id_map"
+                            android:name="com.google.android.gms.maps.SupportMapFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </FrameLayout>
 
                 <TextView
                     android:id="@+id/userLabelMobileNo"

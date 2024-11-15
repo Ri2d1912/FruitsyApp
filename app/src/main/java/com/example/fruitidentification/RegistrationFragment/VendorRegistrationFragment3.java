@@ -142,12 +142,9 @@ public class VendorRegistrationFragment3 extends Fragment implements OnMapReadyC
         Toast.makeText(getContext(), "Address: " + address, Toast.LENGTH_LONG).show();
         String region = getRegionFromLatLng(latLng.latitude, latLng.longitude); // Retrieve region dynamically
 
-        int shopId = 1; // You can set this dynamically
         boolean isPrimary = true; // Set this according to your needs
-
         // Save the location data in the ViewModel
         shopLocationViewModel viewModel = new ViewModelProvider(requireActivity()).get(shopLocationViewModel.class);
-        viewModel.setShopId(shopId);
         viewModel.setLatitude(latLng.latitude);
         viewModel.setLongitude(latLng.longitude);
         viewModel.setRegion(region);
