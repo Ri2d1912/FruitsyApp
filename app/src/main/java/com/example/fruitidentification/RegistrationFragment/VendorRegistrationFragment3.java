@@ -113,7 +113,7 @@ public class VendorRegistrationFragment3 extends Fragment implements OnMapReadyC
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12));  // Zoom level adjusted for the area
 
         // Add a marker at the default location
-        mMap.addMarker(new MarkerOptions().position(defaultLocation).title("Marker in Balanga City"));
+        mMap.addMarker(new MarkerOptions().position(defaultLocation).title("Balanga City"));
 
         // Optionally, enable zoom controls
         mMap.getUiSettings().setZoomControlsEnabled(true);
