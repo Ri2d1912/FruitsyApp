@@ -4,13 +4,19 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -37,6 +43,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -48,6 +56,12 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
     private EditText editShopName, editStreet, editBarangay, editCity,
             editProvince, editPostal, editMobileNo, editTelephoneNo,
             editShopEmail, editStoreHrs, editDesc;
+    private Uri shopProfileImageUri = null;
+
+
+    String fruitShopName, shopDesc, shopEmail, shopStreet, shopBarangay, shopCity, shopProvince,
+            shopPostal, mobileNumber, telephoneNumber, shopOpeningHrs, immediateOrderPolicy, advanceReservationPolicy;
+    byte[] shopProfile;
     private Spinner spinnerOrderPolicy, spinnerReservePolicy;
     ShapeableImageView imgShopProfilePic;
     AppCompatButton btnSave, btnCancel;
@@ -78,6 +92,8 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
         }
         // Initialize EditTexts
         editShopName = view.findViewById(R.id.editShopName);
+        editDesc = view.findViewById(R.id.editDesc);
+        editShopEmail = view.findViewById(R.id.editShopEmail);
         editStreet = view.findViewById(R.id.editStreet);
         editBarangay = view.findViewById(R.id.editBarangay);
         editCity = view.findViewById(R.id.editCity);
@@ -85,14 +101,11 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
         editPostal = view.findViewById(R.id.editPostal);
         editMobileNo = view.findViewById(R.id.editMobileNo);
         editTelephoneNo = view.findViewById(R.id.editTelephoneNo);
-        editShopEmail = view.findViewById(R.id.editShopEmail);
         editStoreHrs = view.findViewById(R.id.editStoreHrs);
-        editDesc = view.findViewById(R.id.editDesc);
         imgShopProfilePic = view.findViewById(R.id.imgShopProfilePic);
         btnSave = view.findViewById(R.id.btnSave);
         btnCancel = view.findViewById(R.id.btnCancel);
         imgVendorCamera = view.findViewById(R.id.imgVendorCamera);
-
         // Initialize Spinners
         spinnerOrderPolicy = view.findViewById(R.id.spinnerOrderPolicy);
         spinnerReservePolicy = view.findViewById(R.id.spinnerReservePolicy);
@@ -105,9 +118,221 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
+        imgVendorCamera.setOnClickListener(v -> showImageSourceDialog());
+
+        btnSave.setOnClickListener(v -> saveShopInfo());
+
 
         return view;
     }
+
+    private void saveShopInfo() {
+        // Capture the updated values from the input fields
+        fruitShopName = editShopName.getText().toString().trim();
+        shopDesc = editDesc.getText().toString().trim();
+        shopEmail = editShopEmail.getText().toString().trim();
+        shopStreet = editStreet.getText().toString().trim();
+        shopBarangay = editBarangay.getText().toString().trim();
+        shopCity = editCity.getText().toString().trim();
+        shopProvince = editProvince.getText().toString().trim();
+        shopPostal = editPostal.getText().toString().trim();
+        mobileNumber = editMobileNo.getText().toString().trim();
+        telephoneNumber = editTelephoneNo.getText().toString().trim();
+        shopOpeningHrs = editStoreHrs.getText().toString().trim();
+        immediateOrderPolicy = spinnerOrderPolicy.getSelectedItem().toString();
+        advanceReservationPolicy = spinnerReservePolicy.getSelectedItem().toString();
+
+        // Check if an image is set for the profile picture and convert it to byte array
+        if (imgShopProfilePic.getDrawable() != null) {
+            Bitmap bitmap = ((BitmapDrawable) imgShopProfilePic.getDrawable()).getBitmap();
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            shopProfile = byteArrayOutputStream.toByteArray();
+        } else {
+            shopProfile = null; // If no image is set
+        }
+
+        // Validate if required fields are not empty
+        if (fruitShopName.isEmpty()) {
+            Toast.makeText(getActivity(), "Please Input Shop name", Toast.LENGTH_LONG).show();
+        } else {
+            // Call your database method to update the vendor info
+            boolean checkUpdate = myDB.updateFruitShopInfo(getActivity(), vendorId, fruitShopName, shopStreet, shopBarangay,
+                    shopCity, shopProvince, shopPostal, mobileNumber, telephoneNumber, shopEmail, shopDesc,
+                    shopOpeningHrs, immediateOrderPolicy, advanceReservationPolicy, shopProfile);
+
+            if (checkUpdate) {
+                Toast.makeText(getActivity(), "Vendor information updated successfully", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "Failed to update vendor information", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
+    private void loadShopProfile(long vendorId) {
+        // Query the database to get the shop information using vendorId
+        List<shopInfoViewModel> shopDetails = myDB.getFruitShopInfo(vendorId);
+
+        if (shopDetails != null && !shopDetails.isEmpty()) {
+            // Assuming we display the first entry in the list
+            shopInfoViewModel shopInfo = shopDetails.get(0);
+
+            // Retrieve and set the shop information
+            fruitShopName = shopInfo.getShopName();
+            shopDesc = shopInfo.getShopDesc();
+            shopEmail = shopInfo.getEmail();
+            shopStreet = shopInfo.getShopStreet();
+            shopBarangay = shopInfo.getShopBarangay();
+            shopCity = shopInfo.getShopCity();
+            shopProvince = shopInfo.getShopProvince();
+            shopPostal = shopInfo.getShopPostal();
+            mobileNumber = shopInfo.getMobileNumber();
+            telephoneNumber = shopInfo.getTelephoneNumber();
+            shopOpeningHrs = shopInfo.getOpeningHrs();
+            immediateOrderPolicy = shopInfo.getImmediateOrderPolicy();
+            advanceReservationPolicy = shopInfo.getAdvanceReservationPolicy();
+            shopProfile = shopInfo.getShopProfile();
+
+            // Set the image for shop profile if available
+            if (shopProfile != null) {
+                Bitmap bitmapShopProfile = BitmapFactory.decodeByteArray(shopProfile, 0, shopProfile.length);
+                imgShopProfilePic.setImageBitmap(bitmapShopProfile);
+            }
+            editShopName.setText(fruitShopName);
+            editDesc.setText(shopDesc);
+            editShopEmail.setText(shopEmail);
+            editStreet.setText(shopStreet);
+            editBarangay.setText(shopBarangay);
+            editCity.setText(shopCity);
+            editProvince.setText(shopProvince);
+            editPostal.setText(shopPostal);
+            editMobileNo.setText(mobileNumber);
+            editTelephoneNo.setText(telephoneNumber);
+            editStoreHrs.setText(shopOpeningHrs);
+
+
+            ArrayAdapter<CharSequence> orderPolicyAdapter = ArrayAdapter.createFromResource(getActivity(),
+                    R.array.orderandreserve_options, android.R.layout.simple_spinner_item);
+            orderPolicyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerOrderPolicy.setAdapter(orderPolicyAdapter);
+            if (immediateOrderPolicy != null) {
+                int orderPolicyPosition = orderPolicyAdapter.getPosition(immediateOrderPolicy);
+                spinnerOrderPolicy.setSelection(orderPolicyPosition);
+            }
+
+            ArrayAdapter<CharSequence> reservePolicyAdapter = ArrayAdapter.createFromResource(getActivity(),
+                    R.array.orderandreserve_options, android.R.layout.simple_spinner_item);
+            reservePolicyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerReservePolicy.setAdapter(reservePolicyAdapter);
+            if (advanceReservationPolicy != null) {
+                int reservePolicyPosition = reservePolicyAdapter.getPosition(advanceReservationPolicy);
+                spinnerReservePolicy.setSelection(reservePolicyPosition);
+            }
+
+
+        } else {
+            Log.e("Fragment_vendor_profile", "No vendor details found for vendorId: " + vendorId);
+            Toast.makeText(getActivity(), "No shop information found", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // -------------------------------- Image Function --------------------------
+
+    // ActivityResultLauncher for gallery selection
+    private final ActivityResultLauncher<String> imagePickerLauncher =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                if (uri != null) {
+                    shopProfileImageUri = uri;  // Store the image URI
+                    imgShopProfilePic.setImageURI(shopProfileImageUri);  // Set selected image in ImageView
+                    imgShopProfilePic.setTag(shopProfileImageUri);
+                } else {
+                    Toast.makeText(getContext(), "Image selection canceled", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+    // ActivityResultLauncher for camera capture
+    private final ActivityResultLauncher<Uri> cameraLauncher =
+            registerForActivityResult(new ActivityResultContracts.TakePicture(), isSuccess -> {
+                if (isSuccess && shopProfileImageUri != null) {
+                    imgShopProfilePic.setImageURI(shopProfileImageUri);  // Set captured image in ImageView
+                    imgShopProfilePic.setTag(shopProfileImageUri);  // Store the URI as tag
+                } else {
+                    Toast.makeText(getContext(), "Image capture failed", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+    // ActivityResultLauncher to request camera permission
+    private final ActivityResultLauncher<String> cameraPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    // Permission granted, proceed with launching the camera
+                    launchCamera();
+                } else {
+                    // Permission denied, notify the user
+                    Toast.makeText(getContext(), "Camera permission is required to take photos", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+    // Show dialog to choose between camera or gallery
+    private void showImageSourceDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Choose Image Source")
+                .setItems(new String[]{"Take Photo", "Choose from Gallery"}, (dialog, which) -> {
+                    if (which == 0) {
+                        // Check for camera permission before launching the camera
+                        checkCameraPermission();
+                    } else {
+                        // Launch the gallery to select an image
+                        launchGallery();
+                    }
+                });
+        builder.create().show();
+    }
+
+    // Launch the gallery
+    private void launchGallery() {
+        imagePickerLauncher.launch("image/*");  // Launch image picker for selecting image from gallery
+    }
+
+    // Check for camera permission and request it if not granted
+    private void checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            // Permission is granted, proceed with launching the camera
+            launchCamera();
+        } else {
+            // Request camera permission
+            cameraPermissionLauncher.launch(Manifest.permission.CAMERA);
+        }
+    }
+
+    // Launch the camera to take a photo
+    private void launchCamera() {
+        shopProfileImageUri = getTempImageUri();  // Get a temporary URI for storing the image
+        if (shopProfileImageUri != null) {
+            cameraLauncher.launch(shopProfileImageUri);
+        } else {
+            Toast.makeText(getContext(), "Failed to create image file", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Generate a temporary URI for saving a photo captured with the camera
+    private Uri getTempImageUri() {
+        try {
+            // Create a temporary image file in the cache directory
+            File tempFile = File.createTempFile("temp_image", ".jpg", requireContext().getCacheDir());
+
+            // Return the URI using FileProvider
+            return FileProvider.getUriForFile(requireContext(), requireContext().getPackageName() + ".fileprovider", tempFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
 
     // -------------------------------- Map Function --------------------------
 
@@ -163,7 +388,6 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
                     .snippet(location.getAddress())); // Add address as a snippet
         }
     }
-
 
 
 
@@ -264,70 +488,4 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
         }
     }
 
-    private void loadShopProfile(long vendorId) {
-        // Query the database to get the shop information using vendorId
-        List<shopInfoViewModel> shopDetails = myDB.getFruitShopInfo(vendorId);
-
-        if (shopDetails != null && !shopDetails.isEmpty()) {
-            // Assuming we display the first entry in the list
-            shopInfoViewModel shopInfo = shopDetails.get(0);
-
-            // Retrieve and set the shop information
-            String fruitShopName = shopInfo.getShopName();
-            String shopDesc = shopInfo.getShopDesc();
-            String shopEmail = shopInfo.getEmail();
-            String shopStreet = shopInfo.getShopStreet();
-            String shopBarangay = shopInfo.getShopBarangay();
-            String shopCity = shopInfo.getShopCity();
-            String shopProvince = shopInfo.getShopProvince();
-            String shopPostal = shopInfo.getShopPostal();
-            String mobileNumber = shopInfo.getMobileNumber();
-            String telephoneNumber = shopInfo.getTelephoneNumber();
-            String shopOpeningHrs = shopInfo.getOpeningHrs();
-            String immediateOrderPolicy = shopInfo.getImmediateOrderPolicy();
-            String advanceReservationPolicy = shopInfo.getAdvanceReservationPolicy();
-            byte[] shopProfile = shopInfo.getShopProfile();
-
-            // Set the image for shop profile if available
-            if (shopProfile != null) {
-                Bitmap bitmapShopProfile = BitmapFactory.decodeByteArray(shopProfile, 0, shopProfile.length);
-                imgShopProfilePic.setImageBitmap(bitmapShopProfile);
-            }
-
-            // Set the text fields with retrieved data
-            editShopName.setText(fruitShopName);
-            editStreet.setText(shopStreet);
-            editBarangay.setText(shopBarangay);
-            editCity.setText(shopCity);
-            editProvince.setText(shopProvince);
-            editPostal.setText(shopPostal);
-            editMobileNo.setText(mobileNumber);
-            editTelephoneNo.setText(telephoneNumber);
-            editShopEmail.setText(shopEmail);
-            editStoreHrs.setText(shopOpeningHrs);
-            editDesc.setText(shopDesc);
-
-            ArrayAdapter<CharSequence> orderPolicyAdapter = ArrayAdapter.createFromResource(getActivity(),
-                    R.array.orderandreserve_options, android.R.layout.simple_spinner_item);
-            orderPolicyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerOrderPolicy.setAdapter(orderPolicyAdapter);
-            if (immediateOrderPolicy != null) {
-                int orderPolicyPosition = orderPolicyAdapter.getPosition(immediateOrderPolicy);
-                spinnerOrderPolicy.setSelection(orderPolicyPosition);
-            }
-
-            ArrayAdapter<CharSequence> reservePolicyAdapter = ArrayAdapter.createFromResource(getActivity(),
-                    R.array.orderandreserve_options, android.R.layout.simple_spinner_item);
-            reservePolicyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerReservePolicy.setAdapter(reservePolicyAdapter);
-            if (advanceReservationPolicy != null) {
-                int reservePolicyPosition = reservePolicyAdapter.getPosition(advanceReservationPolicy);
-                spinnerReservePolicy.setSelection(reservePolicyPosition);
-            }
-
-        } else {
-            Log.e("Fragment_vendor_profile", "No vendor details found for vendorId: " + vendorId);
-            Toast.makeText(getActivity(), "No shop information found", Toast.LENGTH_SHORT).show();
-        }
-    }
 }

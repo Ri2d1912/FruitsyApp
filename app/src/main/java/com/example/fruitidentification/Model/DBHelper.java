@@ -552,6 +552,43 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    public boolean updateFruitShopInfo(Context context, long vendorId, String shopName, String shopStreet, String shopBarangay,
+                                       String shopCity, String shopProvince, String shopPostal, String mobileNumber,
+                                       String telephoneNumber, String email, String description, String openingHours,
+                                       String immediateOrderPolicy, String advanceReservationPolicy,
+                                       byte[] shopProfilePicture) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put("shop_name", shopName);
+            cv.put("shop_street", shopStreet);
+            cv.put("shop_barangay", shopBarangay);
+            cv.put("shop_city", shopCity);
+            cv.put("shop_province", shopProvince);
+            cv.put("shop_postal", shopPostal);
+            cv.put("mobile_number", mobileNumber);
+            cv.put("telephone_number", telephoneNumber);
+            cv.put("email", email);
+            cv.put("description", description);
+            cv.put("opening_hours", openingHours);
+            cv.put("immediate_order_policy", immediateOrderPolicy);
+            cv.put("advance_reservation_policy", advanceReservationPolicy);
+            cv.put("Shop_profile_picture", shopProfilePicture);
+
+            // Updating the record where vendor_id matches
+            int result = db.update("fruit_shop", cv, "vendor_id = ?", new String[]{String.valueOf(vendorId)});
+
+            return result > 0; // Returns true if update was successful, otherwise false
+        } catch (Exception e) {
+            Toast.makeText(context, "Failed to update fruit shop info: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.d("VendorUpdate", "Failed to update fruit shop info: " + e.getMessage());
+            return false;
+        } finally {
+            db.close();
+        }
+    }
+
+
     // --------------------------------------------------- Vendor Profile Activity ------------------------------------------------------------
 
     public List<shopInfoViewModel> getFruitShopInfo(long vendorId) {
