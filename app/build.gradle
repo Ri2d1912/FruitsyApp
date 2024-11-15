@@ -20,6 +20,7 @@ plugins {
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs'
     id 'de.undercouch.download'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -57,7 +58,7 @@ android {
     sourceSets {
         main {
             java {
-                srcDirs 'src\\main\\java', 'src\\main\\java\\Model', 'src\\main\\java\\RegistrationFragment', 'src\\main\\java\\ViewModel', 'src\\main\\java\\Vendor'
+                srcDirs 'src\\main\\java', 'src\\main\\java\\Model', 'src\\main\\java\\RegistrationFragment', 'src\\main\\java\\ViewModel', 'src\\main\\java\\Vendor', 'src\\main\\java\\MapFragment'
             }
             res {
                 srcDirs 'src\\main\\res', 'src\\main\\res\\CameraLayoutFragment'
