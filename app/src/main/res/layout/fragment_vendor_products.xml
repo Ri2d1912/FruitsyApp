@@ -35,7 +35,44 @@
                 android:queryHint="Search Product Name">
 
             </androidx.appcompat.widget.SearchView>
+
         </FrameLayout>
+
+
+
+        <!-- tab navigation container -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+
+
+            <Button
+                android:id="@+id/btnLive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Live"
+                android:backgroundTint="@color/orange" />
+
+            <Button
+                android:id="@+id/btnSoldOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sold Out"
+                android:backgroundTint="@color/unselected_gray"
+                android:layout_marginStart="16dp" />
+
+            <Button
+                android:id="@+id/btnDelisted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delisted"
+                android:backgroundTint="@color/unselected_gray"
+                android:layout_marginStart="16dp" />
+        </LinearLayout>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -396,6 +433,18 @@
 
         </ScrollView>
     </LinearLayout>
+
+    <!-- Floating Action Button, positioned to overlap -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:contentDescription="Add Product"
+        android:src="@drawable/ic_add"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:backgroundTint="@color/orange" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
