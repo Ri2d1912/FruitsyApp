@@ -54,6 +54,7 @@ public class VendorRegistrationFragment3 extends Fragment implements OnMapReadyC
     private Spinner spinnerOrderPolicy, spinnerReservePolicy;
 
     private vendorRegFragVM viewModel;
+    private shopLocationViewModel LocviewModel;
 
     public VendorRegistrationFragment3() {
         // Required empty public constructor
@@ -65,6 +66,8 @@ public class VendorRegistrationFragment3 extends Fragment implements OnMapReadyC
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_vendor_registration3, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(vendorRegFragVM.class);
+        LocviewModel = new ViewModelProvider(requireActivity()).get(shopLocationViewModel.class);
+
         myDB = new DBHelper(getContext());
 
         // Initialize views
@@ -129,34 +132,22 @@ public class VendorRegistrationFragment3 extends Fragment implements OnMapReadyC
         mMap = googleMap;
         LatLng defaultLocation = new LatLng(14.6696, 120.5415);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12));
-        // Get the latitude, longitude, and other data from ViewModel
-        shopLocationViewModel LocviewModel = new ViewModelProvider(requireActivity()).get(shopLocationViewModel.class);
-        Double latitude = LocviewModel.getLatitude().getValue();
-        Double longitude = LocviewModel.getLongitude().getValue();
-        String address = LocviewModel.getAddress().getValue();
+        // Disable gestures if required
+        mMap.getUiSettings().setAllGesturesEnabled(false);
+    }
 
-        // Set the default location to Balanga City, Bataan if the ViewModel doesn't have a location
-        if (latitude != null && longitude != null) {
+
+    private void updateMap(Double latitude, Double longitude, String address) {
+        if (mMap != null) {
             LatLng location = new LatLng(latitude, longitude);
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 12));
-
-            // Add a marker at the new location
+            mMap.clear(); // Clear old markers
             mMap.addMarker(new MarkerOptions()
                     .position(location)
                     .title("Pinned Location")
-                    .snippet(address));  // Optional: Add address as snippet for extra info
-
-        }
-
-        // Disable gestures
-        mMap.getUiSettings().setAllGesturesEnabled(false);
-
-        // Disable location marker (if unnecessary in this view)
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mMap.setMyLocationEnabled(false);
+                    .snippet(address)); // Optional snippet
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 12));
         }
     }
-
 
 
 
@@ -274,6 +265,24 @@ public class VendorRegistrationFragment3 extends Fragment implements OnMapReadyC
 
 
     private void liveData() {
+
+        LocviewModel.getLatitude().observe(getViewLifecycleOwner(), lat -> {
+            if (lat != null && LocviewModel.getLongitude().getValue() != null) {
+                updateMap(lat, LocviewModel.getLongitude().getValue(), LocviewModel.getAddress().getValue());
+            }
+        });
+
+        LocviewModel.getLongitude().observe(getViewLifecycleOwner(), lng -> {
+            if (lng != null && LocviewModel.getLatitude().getValue() != null) {
+                updateMap(LocviewModel.getLatitude().getValue(), lng, LocviewModel.getAddress().getValue());
+            }
+        });
+
+        LocviewModel.getAddress().observe(getViewLifecycleOwner(), addr -> {
+            if (addr != null && LocviewModel.getLatitude().getValue() != null && LocviewModel.getLongitude().getValue() != null) {
+                updateMap(LocviewModel.getLatitude().getValue(), LocviewModel.getLongitude().getValue(), addr);
+            }
+        });
 
         viewModel.getshopProfileImageUri().observe(getViewLifecycleOwner(), uri -> {
             if (uri != null) {

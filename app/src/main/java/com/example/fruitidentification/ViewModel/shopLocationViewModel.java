@@ -59,4 +59,10 @@ public class shopLocationViewModel extends ViewModel {
     public Long getShopId() {
         return shopId; // Return the plain Long value.
     }
+
+    public void updateLocation(double lat, double lng, String addr) {
+        latitude.setValue(lat);
+        longitude.setValue(lng);
+        address.setValue(addr);
+    }
 }
