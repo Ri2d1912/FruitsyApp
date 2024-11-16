@@ -72,7 +72,6 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
     private long vendorId; // Variable to hold the vendorId
     View overlayView;
     shopLocationViewModel shopLocVIewModel;
-
     public VendorProfileEditShopFragment() {
         // Required empty public constructor
     }
@@ -153,6 +152,26 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
                 }
             }
         });
+
+        shopLocVIewModel.getLatitude().observe(getViewLifecycleOwner(), lat -> {
+            if (lat != null && shopLocVIewModel.getLongitude().getValue() != null) {
+                updateMap(lat, shopLocVIewModel.getLongitude().getValue(), shopLocVIewModel.getAddress().getValue());
+            }
+        });
+
+        shopLocVIewModel.getLongitude().observe(getViewLifecycleOwner(), lng -> {
+            if (lng != null && shopLocVIewModel.getLatitude().getValue() != null) {
+                updateMap(shopLocVIewModel.getLatitude().getValue(), lng, shopLocVIewModel.getAddress().getValue());
+            }
+        });
+
+        shopLocVIewModel.getAddress().observe(getViewLifecycleOwner(), addr -> {
+            if (addr != null && shopLocVIewModel.getLatitude().getValue() != null && shopLocVIewModel.getLongitude().getValue() != null) {
+                updateMap(shopLocVIewModel.getLatitude().getValue(), shopLocVIewModel.getLongitude().getValue(), addr);
+            }
+        });
+
+
 
         return view;
     }
@@ -377,21 +396,28 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
 
     // -------------------------------- Map Function --------------------------
 
+    @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Optionally, enable zoom controls
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-
-        // Check for location permission and enable my location feature
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mMap.setMyLocationEnabled(true);
-        } else {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
-        }
-
-        // Display pins from the database
+        LatLng defaultLocation = new LatLng(14.6696, 120.5415);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12));
+        // Disable gestures if required
+        mMap.getUiSettings().setAllGesturesEnabled(false);
         displayPinsFromDatabase();
+
+    }
+
+
+    private void updateMap(Double latitude, Double longitude, String address) {
+        if (mMap != null) {
+            LatLng location = new LatLng(latitude, longitude);
+            mMap.clear(); // Clear old markers
+            mMap.addMarker(new MarkerOptions()
+                    .position(location)
+                    .title("Pinned Location")
+                    .snippet(address)); // Optional snippet
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 12));
+        }
     }
 
     private void displayPinsFromDatabase() {
