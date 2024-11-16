@@ -73,7 +73,6 @@ public class VendorProfileEditShopFragment extends Fragment implements OnMapRead
     View overlayView;
     shopLocationViewModel shopLocVIewModel;
 
-
     public VendorProfileEditShopFragment() {
         // Required empty public constructor
     }
