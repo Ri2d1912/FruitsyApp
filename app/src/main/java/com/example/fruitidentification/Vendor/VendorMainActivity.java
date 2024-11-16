@@ -2,6 +2,7 @@ package com.example.fruitidentification.Vendor;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -10,11 +11,13 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.fruitidentification.R;
 import com.example.fruitidentification.databinding.ActivityVendorMainBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class VendorMainActivity extends AppCompatActivity {
 
     private ActivityVendorMainBinding binding;
     private long vendorId;  // Variable to hold vendorId
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +26,9 @@ public class VendorMainActivity extends AppCompatActivity {
         // Initialize ViewBinding
         binding = ActivityVendorMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         // Retrieve vendorId from Intent
         vendorId = getIntent().getLongExtra("vendorId", -1);  // Default value -1 if vendorId is not found
@@ -82,6 +88,19 @@ public class VendorMainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment); // Ensure frameLayout exists
         fragmentTransaction.commit();
+    }
+
+    public void hideBottomNavigation() {
+        if (bottomNavigationView != null) {
+            bottomNavigationView.setVisibility(View.GONE); // Hide the BottomNavigationView
+        }
+    }
+
+    // Method to show the BottomNavigationView when needed
+    public void showBottomNavigation() {
+        if (bottomNavigationView != null) {
+            bottomNavigationView.setVisibility(View.VISIBLE); // Show the BottomNavigationView
+        }
     }
     
 }

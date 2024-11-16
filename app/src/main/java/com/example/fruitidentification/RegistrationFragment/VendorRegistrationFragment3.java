@@ -1,11 +1,11 @@
 package com.example.fruitidentification.RegistrationFragment;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,13 +41,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 public class VendorRegistrationFragment3 extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private DBHelper myDB;
-
+    View overlayView;
     private FloatingActionButton imgVendorCamera;
     private ImageView imgShopProfilePic;
     private Uri shopProfileImageUri = null;
@@ -80,10 +79,10 @@ public class VendorRegistrationFragment3 extends Fragment implements OnMapReadyC
         editShopEmail = view.findViewById(R.id.editShopEmail);
         editStoreHrs = view.findViewById(R.id.editStoreHrs);
         editDesc = view.findViewById(R.id.editDesc);
-
         // Initialize Spinners
         spinnerOrderPolicy = view.findViewById(R.id.spinnerOrderPolicy);
         spinnerReservePolicy = view.findViewById(R.id.spinnerReservePolicy);
+        overlayView = view.findViewById(R.id.overlay_view);
 
         // Initialize ImageView and FloatingActionButton
         imgVendorCamera = view.findViewById(R.id.imgVendorCamera);
@@ -98,6 +97,26 @@ public class VendorRegistrationFragment3 extends Fragment implements OnMapReadyC
             mapFragment.getMapAsync(this);
         }
 
+        overlayView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Check if the fragment container exists and perform the fragment transaction
+                if (getActivity() != null) {
+                    FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+                    // Create a new instance of GoogleMapFragment
+                    GoogleMapFragment googleMapFragment = new GoogleMapFragment();
+
+                    // Replace the current fragment with GoogleMapFragment
+                    fragmentTransaction.replace(R.id.fragmentContainer, googleMapFragment);
+                    fragmentTransaction.addToBackStack(null); // Optional: Add this to back stack
+                    fragmentTransaction.commit();
+                }
+            }
+        });
+
+
+
         liveData();
         textWatcher();
         return view;
@@ -105,110 +124,41 @@ public class VendorRegistrationFragment3 extends Fragment implements OnMapReadyC
 
     // -------------------------------- Map Function --------------------------
 
+    @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
+        LatLng defaultLocation = new LatLng(14.6696, 120.5415);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12));
+        // Get the latitude, longitude, and other data from ViewModel
+        shopLocationViewModel LocviewModel = new ViewModelProvider(requireActivity()).get(shopLocationViewModel.class);
+        Double latitude = LocviewModel.getLatitude().getValue();
+        Double longitude = LocviewModel.getLongitude().getValue();
+        String address = LocviewModel.getAddress().getValue();
 
-        // Set the default location to Balanga City, Bataan
-        LatLng defaultLocation = new LatLng(14.6696, 120.5415);  // Coordinates for Balanga City, Bataan
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12));  // Zoom level adjusted for the area
+        // Set the default location to Balanga City, Bataan if the ViewModel doesn't have a location
+        if (latitude != null && longitude != null) {
+            LatLng location = new LatLng(latitude, longitude);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 12));
 
-        // Add a marker at the default location
-        mMap.addMarker(new MarkerOptions().position(defaultLocation).title("Balanga City"));
+            // Add a marker at the new location
+            mMap.addMarker(new MarkerOptions()
+                    .position(location)
+                    .title("Pinned Location")
+                    .snippet(address));  // Optional: Add address as snippet for extra info
 
-        // Optionally, enable zoom controls
-        mMap.getUiSettings().setZoomControlsEnabled(true);
+        }
 
-        // Check for location permission and enable my location feature
+        // Disable gestures
+        mMap.getUiSettings().setAllGesturesEnabled(false);
+
+        // Disable location marker (if unnecessary in this view)
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mMap.setMyLocationEnabled(true);
-        } else {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            mMap.setMyLocationEnabled(false);
         }
-
-        // Set a click listener to capture pinned location
-        mMap.setOnMapClickListener(this::onMapClick);
     }
 
 
-    private void onMapClick(LatLng latLng) {
-        // Clear any existing markers
-        mMap.clear();
 
-        // Add a marker at the tapped location
-        mMap.addMarker(new MarkerOptions().position(latLng).title("Pinned Location"));
-
-        // Use Geocoder to get the address from the latitude and longitude
-        String address = getAddressFromLatLng(latLng.latitude, latLng.longitude);
-        Toast.makeText(getContext(), "Address: " + address, Toast.LENGTH_LONG).show();
-        String region = getRegionFromLatLng(latLng.latitude, latLng.longitude); // Retrieve region dynamically
-
-        boolean isPrimary = true; // Set this according to your needs
-        // Save the location data in the ViewModel
-        shopLocationViewModel viewModel = new ViewModelProvider(requireActivity()).get(shopLocationViewModel.class);
-        viewModel.setLatitude(latLng.latitude);
-        viewModel.setLongitude(latLng.longitude);
-        viewModel.setRegion(region);
-        viewModel.setAddress(address);
-        viewModel.setIsPrimary(isPrimary);
-    }
-
-    private String getRegionFromLatLng(double latitude, double longitude) {
-        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-        String region = "Unknown Region"; // Default value
-
-        try {
-            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-            if (addresses != null && !addresses.isEmpty()) {
-                Address address = addresses.get(0);
-                region = address.getAdminArea(); // Admin area can be the region or province
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return region;
-    }
-    private String getAddressFromLatLng(double latitude, double longitude) {
-        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-        StringBuilder addressBuilder = new StringBuilder();
-
-        try {
-            // Get the list of addresses for the given latitude and longitude
-            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-
-            // If geocoder returns a result, get the components
-            if (addresses != null && !addresses.isEmpty()) {
-                Address address = addresses.get(0);
-
-                // Retrieve different address components
-                String street = address.getThoroughfare(); // Street name
-                String barangay = address.getSubLocality(); // Barangay name
-                String city = address.getLocality(); // City name
-                String province = address.getAdminArea(); // Province name
-
-                // Build the full address
-                if (street != null) {
-                    addressBuilder.append(street).append(", ");
-                }
-                if (barangay != null) {
-                    addressBuilder.append(barangay).append(", ");
-                }
-                if (city != null) {
-                    addressBuilder.append(city).append(", ");
-                }
-                if (province != null) {
-                    addressBuilder.append(province);
-                }
-            } else {
-                addressBuilder.append("Unknown Address");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            addressBuilder.append("Error retrieving address");
-        }
-
-        return addressBuilder.toString();
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
